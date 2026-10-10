@@ -1,0 +1,89 @@
+{
+  "cases" : [
+    {
+      "agreementJson" : "{\"agreement\":{\"claimant\":{\"value\":\"00000000-0000-4000-8000-000000000601\"},\"contract\":{\"digest\":{\"algorithm\":\"sha-256\",\"hex\":\"7a85539c4ac64a34187acb580df0cbf8cf0ca712350060221ec9e6c32cb16a11\"},\"id\":\"invoice-processing\",\"version\":\"1.0.0\"},\"id\":{\"value\":\"00000000-0000-4000-8000-000000000701\"},\"openClaimLimit\":20,\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"respondWithinSeconds\":1209600,\"respondent\":{\"value\":\"00000000-0000-4000-8000-000000000602\"},\"scope\":{\"identity\":[\"invoice\"],\"operation\":\"process\",\"scope\":\"invoice-processing\"},\"tenant\":{\"value\":\"tenant-a\"},\"unitKey\":{\"algorithm\":\"sha-256\",\"hex\":\"46e493a605f1bb35ec3e29f0a4d2c15742fe864378543876c8909cb024e90bf3\"},\"validFrom\":{\"value\":\"2026-01-01T00:00:00Z\"},\"validUntil\":{\"value\":\"2027-01-01T00:00:00Z\"}},\"signatures\":{\"claimant\":{\"encoded\":\"GMwMbs/YVVSsZjpKcoIFN46JFelE+7iapzqw8pViSMB3t6iMuBf7bVktd5OZB/f8ZIFtI5FrMosW6SUU6o8CCA==\",\"keyId\":\"test-claimant-1\",\"scheme\":\"Ed25519\"},\"respondent\":{\"encoded\":\"xDtUSECSWJsAAGGvQ9YMaZF7K2Z4JDCAJx68GYXtPjL77BByh8x5+NKnXRX2GyFnd1hRutHXnaEqlUh//HusDg==\",\"keyId\":\"test-respondent-1\",\"scheme\":\"Ed25519\"}}}",
+      "claimJson" : "{\"claim\":{\"agreement\":{\"algorithm\":\"sha-256\",\"hex\":\"128f37d91606c45e9fd60f47cb3eefa327ff8dffabc2d56dc30ae553004b01d6\"},\"claimedAt\":{\"value\":\"2026-10-01T10:05:00Z\"},\"id\":{\"value\":\"00000000-0000-4000-8000-000000000501\"},\"inputs\":{\"algorithm\":\"sha-256\",\"hex\":\"576ea1554852369298e6008d3250620d3b26b0240c890806c62c7a86571f60d0\"},\"protocol\":\"verified-claim-registration-v1\",\"unit\":{\"algorithm\":\"hmac-sha-256\",\"hex\":\"f39ed66067a61c3da619c6b4d29fc77a0ec1256d4fe70e5710bfc5a97037e310\"}},\"signature\":{\"encoded\":\"ByxSebY36ryhDM0ndaBD/k/eFDc8hENMOddYBaIBKeRRW/8AAlzodFarjHM1K40ipp8vYq+oDE5Hi35UjmTyAA==\",\"keyId\":\"test-claimant-1\",\"scheme\":\"Ed25519\"}}",
+      "description" : "The claim's unit is the nullifier of its invoice under the parties' key.",
+      "expected" : {
+        "accept" : true
+      },
+      "inputsJson" : "{\"cutoff\":\"1767225600\",\"invoice\":\"INV-1001\"}",
+      "name" : "unit-belongs-to-inputs",
+      "unitKeyHex" : "2121212121212121212121212121212121212121212121212121212121212121"
+    },
+    {
+      "agreementJson" : "{\"agreement\":{\"claimant\":{\"value\":\"00000000-0000-4000-8000-000000000601\"},\"contract\":{\"digest\":{\"algorithm\":\"sha-256\",\"hex\":\"7a85539c4ac64a34187acb580df0cbf8cf0ca712350060221ec9e6c32cb16a11\"},\"id\":\"invoice-processing\",\"version\":\"1.0.0\"},\"id\":{\"value\":\"00000000-0000-4000-8000-000000000701\"},\"openClaimLimit\":20,\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"respondWithinSeconds\":1209600,\"respondent\":{\"value\":\"00000000-0000-4000-8000-000000000602\"},\"scope\":{\"identity\":[\"invoice\"],\"operation\":\"process\",\"scope\":\"invoice-processing\"},\"tenant\":{\"value\":\"tenant-a\"},\"unitKey\":{\"algorithm\":\"sha-256\",\"hex\":\"46e493a605f1bb35ec3e29f0a4d2c15742fe864378543876c8909cb024e90bf3\"},\"validFrom\":{\"value\":\"2026-01-01T00:00:00Z\"},\"validUntil\":{\"value\":\"2027-01-01T00:00:00Z\"}},\"signatures\":{\"claimant\":{\"encoded\":\"GMwMbs/YVVSsZjpKcoIFN46JFelE+7iapzqw8pViSMB3t6iMuBf7bVktd5OZB/f8ZIFtI5FrMosW6SUU6o8CCA==\",\"keyId\":\"test-claimant-1\",\"scheme\":\"Ed25519\"},\"respondent\":{\"encoded\":\"xDtUSECSWJsAAGGvQ9YMaZF7K2Z4JDCAJx68GYXtPjL77BByh8x5+NKnXRX2GyFnd1hRutHXnaEqlUh//HusDg==\",\"keyId\":\"test-respondent-1\",\"scheme\":\"Ed25519\"}}}",
+      "claimJson" : "{\"claim\":{\"agreement\":{\"algorithm\":\"sha-256\",\"hex\":\"128f37d91606c45e9fd60f47cb3eefa327ff8dffabc2d56dc30ae553004b01d6\"},\"claimedAt\":{\"value\":\"2026-10-01T10:05:00Z\"},\"id\":{\"value\":\"00000000-0000-4000-8000-000000000501\"},\"inputs\":{\"algorithm\":\"sha-256\",\"hex\":\"576ea1554852369298e6008d3250620d3b26b0240c890806c62c7a86571f60d0\"},\"protocol\":\"verified-claim-registration-v1\",\"unit\":{\"algorithm\":\"hmac-sha-256\",\"hex\":\"f39ed66067a61c3da619c6b4d29fc77a0ec1256d4fe70e5710bfc5a97037e310\"}},\"signature\":{\"encoded\":\"ByxSebY36ryhDM0ndaBD/k/eFDc8hENMOddYBaIBKeRRW/8AAlzodFarjHM1K40ipp8vYq+oDE5Hi35UjmTyAA==\",\"keyId\":\"test-claimant-1\",\"scheme\":\"Ed25519\"}}",
+      "description" : "The unit key is not 32 bytes of lowercase hex.",
+      "expected" : {
+        "accept" : false,
+        "error" : "MALFORMED"
+      },
+      "inputsJson" : "{\"cutoff\":\"1767225600\",\"invoice\":\"INV-1001\"}",
+      "name" : "not-a-key",
+      "unitKeyHex" : "zz"
+    },
+    {
+      "agreementJson" : "{\"agreement\":{\"claimant\":{\"value\":\"00000000-0000-4000-8000-000000000601\"},\"contract\":{\"digest\":{\"algorithm\":\"sha-256\",\"hex\":\"7a85539c4ac64a34187acb580df0cbf8cf0ca712350060221ec9e6c32cb16a11\"},\"id\":\"invoice-processing\",\"version\":\"1.0.0\"},\"id\":{\"value\":\"00000000-0000-4000-8000-000000000701\"},\"openClaimLimit\":21,\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"respondWithinSeconds\":1209600,\"respondent\":{\"value\":\"00000000-0000-4000-8000-000000000602\"},\"scope\":{\"identity\":[\"invoice\"],\"operation\":\"process\",\"scope\":\"invoice-processing\"},\"tenant\":{\"value\":\"tenant-a\"},\"unitKey\":{\"algorithm\":\"sha-256\",\"hex\":\"46e493a605f1bb35ec3e29f0a4d2c15742fe864378543876c8909cb024e90bf3\"},\"validFrom\":{\"value\":\"2026-01-01T00:00:00Z\"},\"validUntil\":{\"value\":\"2027-01-01T00:00:00Z\"}},\"signatures\":{\"claimant\":{\"encoded\":\"H+5HZbssK10wYP++tKPAfF6ZInZQ89s8IZ8lk7y8/FieIbqZklMyitoj5YSnSb3uTSq9LVUaJoSfSlxwY6GHBA==\",\"keyId\":\"test-claimant-1\",\"scheme\":\"Ed25519\"},\"respondent\":{\"encoded\":\"Zr1o6bdUQuhsS7k7prSeKvXlPWoSuhyn/dKB02CXebFk681kBDa65IxTyzpckJG0QBG0uEGNA62d+MCCvdecBw==\",\"keyId\":\"test-respondent-1\",\"scheme\":\"Ed25519\"}}}",
+      "claimJson" : "{\"claim\":{\"agreement\":{\"algorithm\":\"sha-256\",\"hex\":\"128f37d91606c45e9fd60f47cb3eefa327ff8dffabc2d56dc30ae553004b01d6\"},\"claimedAt\":{\"value\":\"2026-10-01T10:05:00Z\"},\"id\":{\"value\":\"00000000-0000-4000-8000-000000000501\"},\"inputs\":{\"algorithm\":\"sha-256\",\"hex\":\"576ea1554852369298e6008d3250620d3b26b0240c890806c62c7a86571f60d0\"},\"protocol\":\"verified-claim-registration-v1\",\"unit\":{\"algorithm\":\"hmac-sha-256\",\"hex\":\"f39ed66067a61c3da619c6b4d29fc77a0ec1256d4fe70e5710bfc5a97037e310\"}},\"signature\":{\"encoded\":\"ByxSebY36ryhDM0ndaBD/k/eFDc8hENMOddYBaIBKeRRW/8AAlzodFarjHM1K40ipp8vYq+oDE5Hi35UjmTyAA==\",\"keyId\":\"test-claimant-1\",\"scheme\":\"Ed25519\"}}",
+      "description" : "The claim names another agreement than the one given.",
+      "expected" : {
+        "accept" : false,
+        "error" : "AGREEMENT_MISMATCH"
+      },
+      "inputsJson" : "{\"cutoff\":\"1767225600\",\"invoice\":\"INV-1001\"}",
+      "name" : "claim-under-another-agreement",
+      "unitKeyHex" : "2121212121212121212121212121212121212121212121212121212121212121"
+    },
+    {
+      "agreementJson" : "{\"agreement\":{\"claimant\":{\"value\":\"00000000-0000-4000-8000-000000000601\"},\"contract\":{\"digest\":{\"algorithm\":\"sha-256\",\"hex\":\"7a85539c4ac64a34187acb580df0cbf8cf0ca712350060221ec9e6c32cb16a11\"},\"id\":\"invoice-processing\",\"version\":\"1.0.0\"},\"id\":{\"value\":\"00000000-0000-4000-8000-000000000701\"},\"openClaimLimit\":20,\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"respondWithinSeconds\":1209600,\"respondent\":{\"value\":\"00000000-0000-4000-8000-000000000602\"},\"scope\":{\"identity\":[\"invoice\"],\"operation\":\"process\",\"scope\":\"invoice-processing\"},\"tenant\":{\"value\":\"tenant-a\"},\"unitKey\":{\"algorithm\":\"sha-256\",\"hex\":\"46e493a605f1bb35ec3e29f0a4d2c15742fe864378543876c8909cb024e90bf3\"},\"validFrom\":{\"value\":\"2026-01-01T00:00:00Z\"},\"validUntil\":{\"value\":\"2027-01-01T00:00:00Z\"}},\"signatures\":{\"claimant\":{\"encoded\":\"GMwMbs/YVVSsZjpKcoIFN46JFelE+7iapzqw8pViSMB3t6iMuBf7bVktd5OZB/f8ZIFtI5FrMosW6SUU6o8CCA==\",\"keyId\":\"test-claimant-1\",\"scheme\":\"Ed25519\"},\"respondent\":{\"encoded\":\"xDtUSECSWJsAAGGvQ9YMaZF7K2Z4JDCAJx68GYXtPjL77BByh8x5+NKnXRX2GyFnd1hRutHXnaEqlUh//HusDg==\",\"keyId\":\"test-respondent-1\",\"scheme\":\"Ed25519\"}}}",
+      "claimJson" : "{\"claim\":{\"agreement\":{\"algorithm\":\"sha-256\",\"hex\":\"128f37d91606c45e9fd60f47cb3eefa327ff8dffabc2d56dc30ae553004b01d6\"},\"claimedAt\":{\"value\":\"2026-10-01T10:05:00Z\"},\"id\":{\"value\":\"00000000-0000-4000-8000-000000000501\"},\"inputs\":{\"algorithm\":\"sha-256\",\"hex\":\"576ea1554852369298e6008d3250620d3b26b0240c890806c62c7a86571f60d0\"},\"protocol\":\"verified-claim-registration-v1\",\"unit\":{\"algorithm\":\"hmac-sha-256\",\"hex\":\"f39ed66067a61c3da619c6b4d29fc77a0ec1256d4fe70e5710bfc5a97037e310\"}},\"signature\":{\"encoded\":\"ByxSebY36ryhDM0ndaBD/k/eFDc8hENMOddYBaIBKeRRW/8AAlzodFarjHM1K40ipp8vYq+oDE5Hi35UjmTyAA==\",\"keyId\":\"test-claimant-1\",\"scheme\":\"Ed25519\"}}",
+      "description" : "A key whose commitment is not the agreement's unit key.",
+      "expected" : {
+        "accept" : false,
+        "error" : "UNIT_KEY_MISMATCH"
+      },
+      "inputsJson" : "{\"cutoff\":\"1767225600\",\"invoice\":\"INV-1001\"}",
+      "name" : "another-unit-key",
+      "unitKeyHex" : "2222222222222222222222222222222222222222222222222222222222222222"
+    },
+    {
+      "agreementJson" : "{\"agreement\":{\"claimant\":{\"value\":\"00000000-0000-4000-8000-000000000601\"},\"contract\":{\"digest\":{\"algorithm\":\"sha-256\",\"hex\":\"7a85539c4ac64a34187acb580df0cbf8cf0ca712350060221ec9e6c32cb16a11\"},\"id\":\"invoice-processing\",\"version\":\"1.0.0\"},\"id\":{\"value\":\"00000000-0000-4000-8000-000000000701\"},\"openClaimLimit\":20,\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"respondWithinSeconds\":1209600,\"respondent\":{\"value\":\"00000000-0000-4000-8000-000000000602\"},\"scope\":{\"identity\":[\"invoice\"],\"operation\":\"process\",\"scope\":\"invoice-processing\"},\"tenant\":{\"value\":\"tenant-a\"},\"unitKey\":{\"algorithm\":\"sha-256\",\"hex\":\"46e493a605f1bb35ec3e29f0a4d2c15742fe864378543876c8909cb024e90bf3\"},\"validFrom\":{\"value\":\"2026-01-01T00:00:00Z\"},\"validUntil\":{\"value\":\"2027-01-01T00:00:00Z\"}},\"signatures\":{\"claimant\":{\"encoded\":\"GMwMbs/YVVSsZjpKcoIFN46JFelE+7iapzqw8pViSMB3t6iMuBf7bVktd5OZB/f8ZIFtI5FrMosW6SUU6o8CCA==\",\"keyId\":\"test-claimant-1\",\"scheme\":\"Ed25519\"},\"respondent\":{\"encoded\":\"xDtUSECSWJsAAGGvQ9YMaZF7K2Z4JDCAJx68GYXtPjL77BByh8x5+NKnXRX2GyFnd1hRutHXnaEqlUh//HusDg==\",\"keyId\":\"test-respondent-1\",\"scheme\":\"Ed25519\"}}}",
+      "claimJson" : "{\"claim\":{\"agreement\":{\"algorithm\":\"sha-256\",\"hex\":\"128f37d91606c45e9fd60f47cb3eefa327ff8dffabc2d56dc30ae553004b01d6\"},\"claimedAt\":{\"value\":\"2026-10-01T10:05:00Z\"},\"id\":{\"value\":\"00000000-0000-4000-8000-000000000501\"},\"inputs\":{\"algorithm\":\"sha-256\",\"hex\":\"576ea1554852369298e6008d3250620d3b26b0240c890806c62c7a86571f60d0\"},\"protocol\":\"verified-claim-registration-v1\",\"unit\":{\"algorithm\":\"hmac-sha-256\",\"hex\":\"f39ed66067a61c3da619c6b4d29fc77a0ec1256d4fe70e5710bfc5a97037e310\"}},\"signature\":{\"encoded\":\"ByxSebY36ryhDM0ndaBD/k/eFDc8hENMOddYBaIBKeRRW/8AAlzodFarjHM1K40ipp8vYq+oDE5Hi35UjmTyAA==\",\"keyId\":\"test-claimant-1\",\"scheme\":\"Ed25519\"}}",
+      "description" : "Inputs other than those the claim committed to.",
+      "expected" : {
+        "accept" : false,
+        "error" : "INPUTS_MISMATCH"
+      },
+      "inputsJson" : "{\"cutoff\":\"1767225600\",\"invoice\":\"INV-1002\"}",
+      "name" : "other-inputs",
+      "unitKeyHex" : "2121212121212121212121212121212121212121212121212121212121212121"
+    },
+    {
+      "agreementJson" : "{\"agreement\":{\"claimant\":{\"value\":\"00000000-0000-4000-8000-000000000601\"},\"contract\":{\"digest\":{\"algorithm\":\"sha-256\",\"hex\":\"7a85539c4ac64a34187acb580df0cbf8cf0ca712350060221ec9e6c32cb16a11\"},\"id\":\"invoice-processing\",\"version\":\"1.0.0\"},\"id\":{\"value\":\"00000000-0000-4000-8000-000000000701\"},\"openClaimLimit\":20,\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"respondWithinSeconds\":1209600,\"respondent\":{\"value\":\"00000000-0000-4000-8000-000000000602\"},\"scope\":{\"identity\":[\"invoice\"],\"operation\":\"process\",\"scope\":\"invoice-processing\"},\"tenant\":{\"value\":\"tenant-a\"},\"unitKey\":{\"algorithm\":\"sha-256\",\"hex\":\"46e493a605f1bb35ec3e29f0a4d2c15742fe864378543876c8909cb024e90bf3\"},\"validFrom\":{\"value\":\"2026-01-01T00:00:00Z\"},\"validUntil\":{\"value\":\"2027-01-01T00:00:00Z\"}},\"signatures\":{\"claimant\":{\"encoded\":\"GMwMbs/YVVSsZjpKcoIFN46JFelE+7iapzqw8pViSMB3t6iMuBf7bVktd5OZB/f8ZIFtI5FrMosW6SUU6o8CCA==\",\"keyId\":\"test-claimant-1\",\"scheme\":\"Ed25519\"},\"respondent\":{\"encoded\":\"xDtUSECSWJsAAGGvQ9YMaZF7K2Z4JDCAJx68GYXtPjL77BByh8x5+NKnXRX2GyFnd1hRutHXnaEqlUh//HusDg==\",\"keyId\":\"test-respondent-1\",\"scheme\":\"Ed25519\"}}}",
+      "claimJson" : "{\"claim\":{\"agreement\":{\"algorithm\":\"sha-256\",\"hex\":\"128f37d91606c45e9fd60f47cb3eefa327ff8dffabc2d56dc30ae553004b01d6\"},\"claimedAt\":{\"value\":\"2026-10-01T10:05:00Z\"},\"id\":{\"value\":\"00000000-0000-4000-8000-000000000501\"},\"inputs\":{\"algorithm\":\"sha-256\",\"hex\":\"a1af9b0702e24219062d18b335128de73cc46d66a9cabd6789da2167dab38c5e\"},\"protocol\":\"verified-claim-registration-v1\",\"unit\":{\"algorithm\":\"hmac-sha-256\",\"hex\":\"f39ed66067a61c3da619c6b4d29fc77a0ec1256d4fe70e5710bfc5a97037e310\"}},\"signature\":{\"encoded\":\"IQjV6es0xHm3r82zKkoycu6DqTzOxy+5giJVInB4Ah9gTY6hEdbIyouBRTUJ19IP2tZv9J6bKk5JNBdne2+5AA==\",\"keyId\":\"test-claimant-1\",\"scheme\":\"Ed25519\"}}",
+      "description" : "The claim's inputs do not include the invoice the scope identifies units by.",
+      "expected" : {
+        "accept" : false,
+        "error" : "MISSING_INPUT"
+      },
+      "inputsJson" : "{\"cutoff\":\"1767225600\"}",
+      "name" : "identifying-input-missing",
+      "unitKeyHex" : "2121212121212121212121212121212121212121212121212121212121212121"
+    },
+    {
+      "agreementJson" : "{\"agreement\":{\"claimant\":{\"value\":\"00000000-0000-4000-8000-000000000601\"},\"contract\":{\"digest\":{\"algorithm\":\"sha-256\",\"hex\":\"7a85539c4ac64a34187acb580df0cbf8cf0ca712350060221ec9e6c32cb16a11\"},\"id\":\"invoice-processing\",\"version\":\"1.0.0\"},\"id\":{\"value\":\"00000000-0000-4000-8000-000000000701\"},\"openClaimLimit\":20,\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"respondWithinSeconds\":1209600,\"respondent\":{\"value\":\"00000000-0000-4000-8000-000000000602\"},\"scope\":{\"identity\":[\"invoice\"],\"operation\":\"process\",\"scope\":\"invoice-processing\"},\"tenant\":{\"value\":\"tenant-a\"},\"unitKey\":{\"algorithm\":\"sha-256\",\"hex\":\"46e493a605f1bb35ec3e29f0a4d2c15742fe864378543876c8909cb024e90bf3\"},\"validFrom\":{\"value\":\"2026-01-01T00:00:00Z\"},\"validUntil\":{\"value\":\"2027-01-01T00:00:00Z\"}},\"signatures\":{\"claimant\":{\"encoded\":\"GMwMbs/YVVSsZjpKcoIFN46JFelE+7iapzqw8pViSMB3t6iMuBf7bVktd5OZB/f8ZIFtI5FrMosW6SUU6o8CCA==\",\"keyId\":\"test-claimant-1\",\"scheme\":\"Ed25519\"},\"respondent\":{\"encoded\":\"xDtUSECSWJsAAGGvQ9YMaZF7K2Z4JDCAJx68GYXtPjL77BByh8x5+NKnXRX2GyFnd1hRutHXnaEqlUh//HusDg==\",\"keyId\":\"test-respondent-1\",\"scheme\":\"Ed25519\"}}}",
+      "claimJson" : "{\"claim\":{\"agreement\":{\"algorithm\":\"sha-256\",\"hex\":\"128f37d91606c45e9fd60f47cb3eefa327ff8dffabc2d56dc30ae553004b01d6\"},\"claimedAt\":{\"value\":\"2026-10-01T10:05:00Z\"},\"id\":{\"value\":\"00000000-0000-4000-8000-000000000501\"},\"inputs\":{\"algorithm\":\"sha-256\",\"hex\":\"576ea1554852369298e6008d3250620d3b26b0240c890806c62c7a86571f60d0\"},\"protocol\":\"verified-claim-registration-v1\",\"unit\":{\"algorithm\":\"hmac-sha-256\",\"hex\":\"8c34b2a2ed6c97f84b29a5ab68af7a36e51311b689002486de84030f5fbcf411\"}},\"signature\":{\"encoded\":\"vq33VLteheVtcIsIAX7iOveDCYpg3YmSskTBXNx4xD5KC45/PFVeBL9sjc6nYKCIRq843ri2E1SQ1uoLtw75Bw==\",\"keyId\":\"test-claimant-1\",\"scheme\":\"Ed25519\"}}",
+      "description" : "The claim is for INV-1001 but its unit is that of INV-1002: the respondent can refuse it as WrongUnit.",
+      "expected" : {
+        "accept" : false,
+        "error" : "UNIT_MISMATCH"
+      },
+      "inputsJson" : "{\"cutoff\":\"1767225600\",\"invoice\":\"INV-1001\"}",
+      "name" : "unit-of-another-invoice",
+      "unitKeyHex" : "2121212121212121212121212121212121212121212121212121212121212121"
+    }
+  ],
+  "description" : "Checks of a claim's unit against its inputs, by holders of the unit key.",
+  "protocol" : "verified-claim-registration-v1"
+}
