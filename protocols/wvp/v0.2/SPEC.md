@@ -6,7 +6,7 @@ Version 0.2 is [version 0.1](../v0.1/SPEC.md) with one change of substance: the 
 
 Everything this document does not restate is as in v0.1: the package container, canonical form, signed [evidence statements](../../../docs/spec/evidence-statement-v1.md), trust registries, the order of checks, the refusal codes, issuer signatures and what verification does not establish. A v0.1 package is not a v0.2 package and the reverse; each verifier refuses the other's.
 
-Implementation status: two verifiers, Scala (`verified verify`) and JavaScript (`tooling/evidence-conformance.mjs`), agree on the vectors in `test-vectors/wvp/v0.2`, decisions included. A verified package can be recorded in the ledger as a work record and exported with it (section 7). No flow in the product produces v0.2 packages; they are submitted. The data in the vectors and the example is synthetic.
+Implementation status: two verifiers, Scala (`verified-reference verify`) and JavaScript (`tooling/evidence-conformance.mjs`), agree on the vectors in `test-vectors/wvp/v0.2`, decisions included. A verified package can be recorded in the ledger as a work record and exported with it (section 7). No flow in the product produces v0.2 packages; they are submitted. The data in the vectors and the example is synthetic.
 
 ## 1. Components
 

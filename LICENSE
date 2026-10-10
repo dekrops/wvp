@@ -1,0 +1,16 @@
+Work Verification Protocol: specifications and conformance vectors
+Copyright 2026 Krops GmbH
+
+This repository is published under two licenses.
+
+1. Specifications and other prose, meaning every Markdown (.md) file, are
+   licensed under the Creative Commons Attribution 4.0 International
+   License (CC BY 4.0). See LICENSE-CC-BY-4.0.txt, or
+   https://creativecommons.org/licenses/by/4.0/legalcode.
+
+2. Conformance vectors, examples and every other file, are licensed under
+   the Apache License, Version 2.0. See LICENSE-APACHE-2.0.txt, or
+   https://www.apache.org/licenses/LICENSE-2.0.
+
+All data in the vectors and examples is synthetic. The keys in them are
+public test keys: never trust or provision them.
