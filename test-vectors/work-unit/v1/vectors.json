@@ -1,0 +1,245 @@
+{
+  "cases" : [
+    {
+      "description" : "One invoice processed under the invoice-processing scope.",
+      "identityCanonical" : "[\"work-unit-1\",\"tenant-a\",\"invoice-processing\",\"process\",[\"INV-1001\"]]",
+      "key" : "tenant-a-2026-1",
+      "name" : "base",
+      "nullifier" : {
+        "algorithm" : "hmac-sha-256",
+        "hex" : "528682fc3ea80d3b3efd70ac4e274aefd712fa6501ef4edba95408022d63428f"
+      },
+      "scope" : {
+        "identity" : [
+          "invoice"
+        ],
+        "operation" : "process",
+        "scope" : "invoice-processing"
+      },
+      "tenant" : "tenant-a",
+      "values" : [
+        "INV-1001"
+      ]
+    },
+    {
+      "description" : "The same unit again, as a retry or under a later contract version of the same scope: the same nullifier.",
+      "identityCanonical" : "[\"work-unit-1\",\"tenant-a\",\"invoice-processing\",\"process\",[\"INV-1001\"]]",
+      "key" : "tenant-a-2026-1",
+      "name" : "same-unit-again",
+      "nullifier" : {
+        "algorithm" : "hmac-sha-256",
+        "hex" : "528682fc3ea80d3b3efd70ac4e274aefd712fa6501ef4edba95408022d63428f"
+      },
+      "scope" : {
+        "identity" : [
+          "invoice"
+        ],
+        "operation" : "process",
+        "scope" : "invoice-processing"
+      },
+      "tenant" : "tenant-a",
+      "values" : [
+        "INV-1001"
+      ]
+    },
+    {
+      "description" : "Another invoice: another unit.",
+      "identityCanonical" : "[\"work-unit-1\",\"tenant-a\",\"invoice-processing\",\"process\",[\"INV-1002\"]]",
+      "key" : "tenant-a-2026-1",
+      "name" : "another-invoice",
+      "nullifier" : {
+        "algorithm" : "hmac-sha-256",
+        "hex" : "cfbd4bb563c45d02ec2bf04f7376032b041c8cd58faf188172011e98e34e3ce4"
+      },
+      "scope" : {
+        "identity" : [
+          "invoice"
+        ],
+        "operation" : "process",
+        "scope" : "invoice-processing"
+      },
+      "tenant" : "tenant-a",
+      "values" : [
+        "INV-1002"
+      ]
+    },
+    {
+      "description" : "Posting the same invoice is other work than processing it: another unit.",
+      "identityCanonical" : "[\"work-unit-1\",\"tenant-a\",\"invoice-processing\",\"post\",[\"INV-1001\"]]",
+      "key" : "tenant-a-2026-1",
+      "name" : "another-operation",
+      "nullifier" : {
+        "algorithm" : "hmac-sha-256",
+        "hex" : "9484c50429cf64bd6a36fe96e98255cda30442705452fc5506ef7bdf22ac346c"
+      },
+      "scope" : {
+        "identity" : [
+          "invoice"
+        ],
+        "operation" : "post",
+        "scope" : "invoice-processing"
+      },
+      "tenant" : "tenant-a",
+      "values" : [
+        "INV-1001"
+      ]
+    },
+    {
+      "description" : "The same invoice number for another tenant is another unit, even under one key.",
+      "identityCanonical" : "[\"work-unit-1\",\"tenant-b\",\"invoice-processing\",\"process\",[\"INV-1001\"]]",
+      "key" : "tenant-a-2026-1",
+      "name" : "another-tenant-same-key",
+      "nullifier" : {
+        "algorithm" : "hmac-sha-256",
+        "hex" : "6181f04ec1d96777fe96d2d516f3f9b59cdb842e53b327522eb279b24347b300"
+      },
+      "scope" : {
+        "identity" : [
+          "invoice"
+        ],
+        "operation" : "process",
+        "scope" : "invoice-processing"
+      },
+      "tenant" : "tenant-b",
+      "values" : [
+        "INV-1001"
+      ]
+    },
+    {
+      "description" : "Another tenant, with its own key.",
+      "identityCanonical" : "[\"work-unit-1\",\"tenant-b\",\"invoice-processing\",\"process\",[\"INV-1001\"]]",
+      "key" : "tenant-b-2026-1",
+      "name" : "another-tenant",
+      "nullifier" : {
+        "algorithm" : "hmac-sha-256",
+        "hex" : "d126265ec6b4ce24ecda8717f4bac9b46f734d637fb054a4f704c24bacd07c24"
+      },
+      "scope" : {
+        "identity" : [
+          "invoice"
+        ],
+        "operation" : "process",
+        "scope" : "invoice-processing"
+      },
+      "tenant" : "tenant-b",
+      "values" : [
+        "INV-1001"
+      ]
+    },
+    {
+      "description" : "The same unit under the tenant's next key: another nullifier. Detection across a rotation needs every committed key (specification, section 5).",
+      "identityCanonical" : "[\"work-unit-1\",\"tenant-a\",\"invoice-processing\",\"process\",[\"INV-1001\"]]",
+      "key" : "tenant-a-2026-2",
+      "name" : "rotated-key",
+      "nullifier" : {
+        "algorithm" : "hmac-sha-256",
+        "hex" : "c0d1b6d201afb0867da27fac12d8f77a726dce6b0866d2ef40433c9c9fc0107c"
+      },
+      "scope" : {
+        "identity" : [
+          "invoice"
+        ],
+        "operation" : "process",
+        "scope" : "invoice-processing"
+      },
+      "tenant" : "tenant-a",
+      "values" : [
+        "INV-1001"
+      ]
+    },
+    {
+      "description" : "Values are compared exactly: 'INV-01001' is not 'INV-1001'.",
+      "identityCanonical" : "[\"work-unit-1\",\"tenant-a\",\"invoice-processing\",\"process\",[\"INV-01001\"]]",
+      "key" : "tenant-a-2026-1",
+      "name" : "leading-zero",
+      "nullifier" : {
+        "algorithm" : "hmac-sha-256",
+        "hex" : "18aa279deab35ff61f87ad26da3246773dffa34aaa2789f1697202a6e17c7246"
+      },
+      "scope" : {
+        "identity" : [
+          "invoice"
+        ],
+        "operation" : "process",
+        "scope" : "invoice-processing"
+      },
+      "tenant" : "tenant-a",
+      "values" : [
+        "INV-01001"
+      ]
+    },
+    {
+      "description" : "When the scope names the source system, the same number in two systems is two units.",
+      "identityCanonical" : "[\"work-unit-1\",\"tenant-a\",\"invoice-processing\",\"process\",[\"sap-s4\",\"INV-1001\"]]",
+      "key" : "tenant-a-2026-1",
+      "name" : "two-sources",
+      "nullifier" : {
+        "algorithm" : "hmac-sha-256",
+        "hex" : "e93191c81708add270c3390669128f0fd3e11319d7fb32cbbeab4ba3e4a48694"
+      },
+      "scope" : {
+        "identity" : [
+          "erp",
+          "invoice"
+        ],
+        "operation" : "process",
+        "scope" : "invoice-processing"
+      },
+      "tenant" : "tenant-a",
+      "values" : [
+        "sap-s4",
+        "INV-1001"
+      ]
+    },
+    {
+      "description" : "The same number in the other system.",
+      "identityCanonical" : "[\"work-unit-1\",\"tenant-a\",\"invoice-processing\",\"process\",[\"sap-ecc\",\"INV-1001\"]]",
+      "key" : "tenant-a-2026-1",
+      "name" : "two-sources-other",
+      "nullifier" : {
+        "algorithm" : "hmac-sha-256",
+        "hex" : "3967336b99eedbad76c9ad8572c2ca092afda31af8387130015791a9e75aa3d6"
+      },
+      "scope" : {
+        "identity" : [
+          "erp",
+          "invoice"
+        ],
+        "operation" : "process",
+        "scope" : "invoice-processing"
+      },
+      "tenant" : "tenant-a",
+      "values" : [
+        "sap-ecc",
+        "INV-1001"
+      ]
+    }
+  ],
+  "keys" : [
+    {
+      "commitment" : {
+        "algorithm" : "sha-256",
+        "hex" : "f05471db14a1872d9ff2ba9de171ce2a1a4d950e9b1d92c53c34baa932517373"
+      },
+      "id" : "tenant-a-2026-1",
+      "secretHex" : "0101010101010101010101010101010101010101010101010101010101010101"
+    },
+    {
+      "commitment" : {
+        "algorithm" : "sha-256",
+        "hex" : "c6082fed71eed4db79f357648a33bdf86bbcc8826cf48dc9e3a33867465a6010"
+      },
+      "id" : "tenant-a-2026-2",
+      "secretHex" : "0202020202020202020202020202020202020202020202020202020202020202"
+    },
+    {
+      "commitment" : {
+        "algorithm" : "sha-256",
+        "hex" : "136ec545eb01be24ad79a6de6b25543c9e7dc5a9129b0bece343251ea76a8161"
+      },
+      "id" : "tenant-b-2026-1",
+      "secretHex" : "0303030303030303030303030303030303030303030303030303030303030303"
+    }
+  ],
+  "version" : "work-unit-1"
+}

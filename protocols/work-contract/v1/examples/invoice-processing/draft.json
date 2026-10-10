@@ -1,0 +1,450 @@
+{
+  "language": "work-contract-1",
+  "identity": {
+    "id": "invoice-processing",
+    "version": "1.0.0"
+  },
+  "inputs": {
+    "invoice": {
+      "type": "text"
+    },
+    "cutoff": {
+      "type": "time"
+    }
+  },
+  "kinds": {
+    "invoice": {
+      "key": [
+        "number"
+      ],
+      "fields": {
+        "number": {
+          "type": "text"
+        },
+        "purchaseOrder": {
+          "type": "text"
+        },
+        "variance": {
+          "type": "money",
+          "currency": "EUR",
+          "scale": 2,
+          "optional": true
+        }
+      }
+    },
+    "purchaseOrder": {
+      "key": [
+        "number"
+      ],
+      "fields": {
+        "number": {
+          "type": "text"
+        },
+        "released": {
+          "type": "bool"
+        }
+      }
+    },
+    "posting": {
+      "key": [
+        "document"
+      ],
+      "fields": {
+        "document": {
+          "type": "text"
+        },
+        "invoice": {
+          "type": "text"
+        },
+        "at": {
+          "type": "time"
+        }
+      }
+    },
+    "reversal": {
+      "key": [
+        "document"
+      ],
+      "fields": {
+        "document": {
+          "type": "text"
+        },
+        "posting": {
+          "type": "text"
+        },
+        "at": {
+          "type": "time"
+        }
+      }
+    },
+    "approval": {
+      "key": [
+        "id"
+      ],
+      "fields": {
+        "id": {
+          "type": "text"
+        },
+        "invoice": {
+          "type": "text"
+        },
+        "approver": {
+          "type": "text"
+        },
+        "at": {
+          "type": "time"
+        }
+      }
+    },
+    "authorization": {
+      "key": [
+        "principal",
+        "role"
+      ],
+      "fields": {
+        "principal": {
+          "type": "text"
+        },
+        "role": {
+          "type": "text"
+        },
+        "since": {
+          "type": "time"
+        }
+      }
+    }
+  },
+  "evidence": {
+    "conflicts": "unknown",
+    "sources": {
+      "invoice": [
+        "sap-s4"
+      ],
+      "purchaseOrder": [
+        "sap-s4"
+      ],
+      "posting": [
+        "sap-s4"
+      ],
+      "reversal": [
+        "sap-s4"
+      ],
+      "approval": [
+        "sap-s4"
+      ],
+      "authorization": [
+        "identity-directory"
+      ]
+    }
+  },
+  "policy": {
+    "tolerance": {
+      "policy": {
+        "id": "ap-variance-tolerance",
+        "version": "3"
+      },
+      "type": {
+        "type": "money",
+        "currency": "EUR",
+        "scale": 2
+      },
+      "value": "5000"
+    },
+    "approverRole": {
+      "policy": {
+        "id": "ap-approval-authority",
+        "version": "1"
+      },
+      "type": {
+        "type": "text"
+      },
+      "value": "invoice-approver"
+    }
+  },
+  "evaluation": {
+    "semantics": "kleene-1",
+    "cutoff": "cutoff"
+  },
+  "requires": [
+    {
+      "id": "APPROVAL_RECORDED",
+      "predicate": {
+        "exists": "a",
+        "in": "approval",
+        "where": {
+          "cmp": "eq",
+          "left": {
+            "var": "a",
+            "field": "invoice"
+          },
+          "right": {
+            "input": "invoice"
+          }
+        }
+      }
+    },
+    {
+      "id": "INVOICE_RECORDED",
+      "predicate": {
+        "exists": "inv",
+        "in": "invoice",
+        "where": {
+          "cmp": "eq",
+          "left": {
+            "var": "inv",
+            "field": "number"
+          },
+          "right": {
+            "input": "invoice"
+          }
+        }
+      }
+    },
+    {
+      "id": "POSTED",
+      "predicate": {
+        "exists": "p",
+        "in": "posting",
+        "where": {
+          "and": [
+            {
+              "cmp": "eq",
+              "left": {
+                "var": "p",
+                "field": "invoice"
+              },
+              "right": {
+                "input": "invoice"
+              }
+            },
+            {
+              "cmp": "le",
+              "left": {
+                "var": "p",
+                "field": "at"
+              },
+              "right": {
+                "input": "cutoff"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "PROCESSED",
+      "predicate": {
+        "exists": "p",
+        "in": "posting",
+        "where": {
+          "and": [
+            {
+              "cmp": "eq",
+              "left": {
+                "var": "p",
+                "field": "invoice"
+              },
+              "right": {
+                "input": "invoice"
+              }
+            },
+            {
+              "cmp": "le",
+              "left": {
+                "var": "p",
+                "field": "at"
+              },
+              "right": {
+                "input": "cutoff"
+              }
+            },
+            {
+              "not": {
+                "exists": "r",
+                "in": "reversal",
+                "where": {
+                  "and": [
+                    {
+                      "cmp": "eq",
+                      "left": {
+                        "var": "r",
+                        "field": "posting"
+                      },
+                      "right": {
+                        "var": "p",
+                        "field": "document"
+                      }
+                    },
+                    {
+                      "cmp": "le",
+                      "left": {
+                        "var": "r",
+                        "field": "at"
+                      },
+                      "right": {
+                        "input": "cutoff"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "exists": "a",
+              "in": "approval",
+              "where": {
+                "and": [
+                  {
+                    "cmp": "eq",
+                    "left": {
+                      "var": "a",
+                      "field": "invoice"
+                    },
+                    "right": {
+                      "input": "invoice"
+                    }
+                  },
+                  {
+                    "cmp": "le",
+                    "left": {
+                      "var": "a",
+                      "field": "at"
+                    },
+                    "right": {
+                      "var": "p",
+                      "field": "at"
+                    }
+                  },
+                  {
+                    "exists": "z",
+                    "in": "authorization",
+                    "where": {
+                      "and": [
+                        {
+                          "cmp": "eq",
+                          "left": {
+                            "var": "z",
+                            "field": "principal"
+                          },
+                          "right": {
+                            "var": "a",
+                            "field": "approver"
+                          }
+                        },
+                        {
+                          "cmp": "eq",
+                          "left": {
+                            "var": "z",
+                            "field": "role"
+                          },
+                          "right": {
+                            "param": "approverRole"
+                          }
+                        },
+                        {
+                          "cmp": "le",
+                          "left": {
+                            "var": "z",
+                            "field": "since"
+                          },
+                          "right": {
+                            "var": "a",
+                            "field": "at"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "PURCHASE_ORDER_RELEASED",
+      "predicate": {
+        "exists": "inv",
+        "in": "invoice",
+        "where": {
+          "and": [
+            {
+              "cmp": "eq",
+              "left": {
+                "var": "inv",
+                "field": "number"
+              },
+              "right": {
+                "input": "invoice"
+              }
+            },
+            {
+              "exists": "po",
+              "in": "purchaseOrder",
+              "where": {
+                "and": [
+                  {
+                    "cmp": "eq",
+                    "left": {
+                      "var": "po",
+                      "field": "number"
+                    },
+                    "right": {
+                      "var": "inv",
+                      "field": "purchaseOrder"
+                    }
+                  },
+                  {
+                    "cmp": "eq",
+                    "left": {
+                      "var": "po",
+                      "field": "released"
+                    },
+                    "right": {
+                      "lit": true,
+                      "of": {
+                        "type": "bool"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "VARIANCE_WITHIN_TOLERANCE",
+      "predicate": {
+        "forall": "inv",
+        "in": "invoice",
+        "holds": {
+          "or": [
+            {
+              "cmp": "ne",
+              "left": {
+                "var": "inv",
+                "field": "number"
+              },
+              "right": {
+                "input": "invoice"
+              }
+            },
+            {
+              "cmp": "le",
+              "left": {
+                "var": "inv",
+                "field": "variance"
+              },
+              "right": {
+                "param": "tolerance"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

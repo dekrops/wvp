@@ -1,0 +1,493 @@
+{
+  "acknowledgements" : [
+    {
+      "answer" : "SAP S/4HANA declares the reversal documents for the posting complete as of the extraction time.",
+      "code" : "C_COMPLETENESS",
+      "path" : "requires/PROCESSED"
+    },
+    {
+      "answer" : "SAP S/4HANA declares the invoice records for the invoice number complete.",
+      "code" : "C_COMPLETENESS",
+      "path" : "requires/VARIANCE_WITHIN_TOLERANCE"
+    }
+  ],
+  "approvals" : [
+    {
+      "approvedAt" : "1764547200",
+      "party" : "buyer.example",
+      "role" : "accounts-payable-owner"
+    },
+    {
+      "approvedAt" : "1764633600",
+      "party" : "vendor.example",
+      "role" : "service-owner"
+    }
+  ],
+  "artifact" : "work-contract-artifact-1",
+  "contract" : {
+    "evaluation" : {
+      "cutoff" : "cutoff",
+      "semantics" : "kleene-1"
+    },
+    "evidence" : {
+      "conflicts" : "unknown",
+      "sources" : {
+        "approval" : [
+          "sap-s4"
+        ],
+        "authorization" : [
+          "identity-directory"
+        ],
+        "invoice" : [
+          "sap-s4"
+        ],
+        "posting" : [
+          "sap-s4"
+        ],
+        "purchaseOrder" : [
+          "sap-s4"
+        ],
+        "reversal" : [
+          "sap-s4"
+        ]
+      }
+    },
+    "identity" : {
+      "id" : "invoice-processing",
+      "version" : "1.0.0"
+    },
+    "inputs" : {
+      "cutoff" : {
+        "type" : "time"
+      },
+      "invoice" : {
+        "type" : "text"
+      }
+    },
+    "kinds" : {
+      "approval" : {
+        "fields" : {
+          "approver" : {
+            "type" : "text"
+          },
+          "at" : {
+            "type" : "time"
+          },
+          "id" : {
+            "type" : "text"
+          },
+          "invoice" : {
+            "type" : "text"
+          }
+        },
+        "key" : [
+          "id"
+        ]
+      },
+      "authorization" : {
+        "fields" : {
+          "principal" : {
+            "type" : "text"
+          },
+          "role" : {
+            "type" : "text"
+          },
+          "since" : {
+            "type" : "time"
+          }
+        },
+        "key" : [
+          "principal",
+          "role"
+        ]
+      },
+      "invoice" : {
+        "fields" : {
+          "number" : {
+            "type" : "text"
+          },
+          "purchaseOrder" : {
+            "type" : "text"
+          },
+          "variance" : {
+            "currency" : "EUR",
+            "optional" : true,
+            "scale" : 2,
+            "type" : "money"
+          }
+        },
+        "key" : [
+          "number"
+        ]
+      },
+      "posting" : {
+        "fields" : {
+          "at" : {
+            "type" : "time"
+          },
+          "document" : {
+            "type" : "text"
+          },
+          "invoice" : {
+            "type" : "text"
+          }
+        },
+        "key" : [
+          "document"
+        ]
+      },
+      "purchaseOrder" : {
+        "fields" : {
+          "number" : {
+            "type" : "text"
+          },
+          "released" : {
+            "type" : "bool"
+          }
+        },
+        "key" : [
+          "number"
+        ]
+      },
+      "reversal" : {
+        "fields" : {
+          "at" : {
+            "type" : "time"
+          },
+          "document" : {
+            "type" : "text"
+          },
+          "posting" : {
+            "type" : "text"
+          }
+        },
+        "key" : [
+          "document"
+        ]
+      }
+    },
+    "language" : "work-contract-1",
+    "policy" : {
+      "approverRole" : {
+        "policy" : {
+          "id" : "ap-approval-authority",
+          "version" : "1"
+        },
+        "type" : {
+          "type" : "text"
+        },
+        "value" : "invoice-approver"
+      },
+      "tolerance" : {
+        "policy" : {
+          "id" : "ap-variance-tolerance",
+          "version" : "3"
+        },
+        "type" : {
+          "currency" : "EUR",
+          "scale" : 2,
+          "type" : "money"
+        },
+        "value" : "5000"
+      }
+    },
+    "requires" : [
+      {
+        "id" : "APPROVAL_RECORDED",
+        "predicate" : {
+          "exists" : "a",
+          "in" : "approval",
+          "where" : {
+            "cmp" : "eq",
+            "left" : {
+              "field" : "invoice",
+              "var" : "a"
+            },
+            "right" : {
+              "input" : "invoice"
+            }
+          }
+        }
+      },
+      {
+        "id" : "INVOICE_RECORDED",
+        "predicate" : {
+          "exists" : "inv",
+          "in" : "invoice",
+          "where" : {
+            "cmp" : "eq",
+            "left" : {
+              "field" : "number",
+              "var" : "inv"
+            },
+            "right" : {
+              "input" : "invoice"
+            }
+          }
+        }
+      },
+      {
+        "id" : "POSTED",
+        "predicate" : {
+          "exists" : "p",
+          "in" : "posting",
+          "where" : {
+            "and" : [
+              {
+                "cmp" : "eq",
+                "left" : {
+                  "field" : "invoice",
+                  "var" : "p"
+                },
+                "right" : {
+                  "input" : "invoice"
+                }
+              },
+              {
+                "cmp" : "le",
+                "left" : {
+                  "field" : "at",
+                  "var" : "p"
+                },
+                "right" : {
+                  "input" : "cutoff"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id" : "PROCESSED",
+        "predicate" : {
+          "exists" : "p",
+          "in" : "posting",
+          "where" : {
+            "and" : [
+              {
+                "cmp" : "eq",
+                "left" : {
+                  "field" : "invoice",
+                  "var" : "p"
+                },
+                "right" : {
+                  "input" : "invoice"
+                }
+              },
+              {
+                "cmp" : "le",
+                "left" : {
+                  "field" : "at",
+                  "var" : "p"
+                },
+                "right" : {
+                  "input" : "cutoff"
+                }
+              },
+              {
+                "not" : {
+                  "exists" : "r",
+                  "in" : "reversal",
+                  "where" : {
+                    "and" : [
+                      {
+                        "cmp" : "eq",
+                        "left" : {
+                          "field" : "posting",
+                          "var" : "r"
+                        },
+                        "right" : {
+                          "field" : "document",
+                          "var" : "p"
+                        }
+                      },
+                      {
+                        "cmp" : "le",
+                        "left" : {
+                          "field" : "at",
+                          "var" : "r"
+                        },
+                        "right" : {
+                          "input" : "cutoff"
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "exists" : "a",
+                "in" : "approval",
+                "where" : {
+                  "and" : [
+                    {
+                      "cmp" : "eq",
+                      "left" : {
+                        "field" : "invoice",
+                        "var" : "a"
+                      },
+                      "right" : {
+                        "input" : "invoice"
+                      }
+                    },
+                    {
+                      "cmp" : "le",
+                      "left" : {
+                        "field" : "at",
+                        "var" : "a"
+                      },
+                      "right" : {
+                        "field" : "at",
+                        "var" : "p"
+                      }
+                    },
+                    {
+                      "exists" : "z",
+                      "in" : "authorization",
+                      "where" : {
+                        "and" : [
+                          {
+                            "cmp" : "eq",
+                            "left" : {
+                              "field" : "principal",
+                              "var" : "z"
+                            },
+                            "right" : {
+                              "field" : "approver",
+                              "var" : "a"
+                            }
+                          },
+                          {
+                            "cmp" : "eq",
+                            "left" : {
+                              "field" : "role",
+                              "var" : "z"
+                            },
+                            "right" : {
+                              "param" : "approverRole"
+                            }
+                          },
+                          {
+                            "cmp" : "le",
+                            "left" : {
+                              "field" : "since",
+                              "var" : "z"
+                            },
+                            "right" : {
+                              "field" : "at",
+                              "var" : "a"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id" : "PURCHASE_ORDER_RELEASED",
+        "predicate" : {
+          "exists" : "inv",
+          "in" : "invoice",
+          "where" : {
+            "and" : [
+              {
+                "cmp" : "eq",
+                "left" : {
+                  "field" : "number",
+                  "var" : "inv"
+                },
+                "right" : {
+                  "input" : "invoice"
+                }
+              },
+              {
+                "exists" : "po",
+                "in" : "purchaseOrder",
+                "where" : {
+                  "and" : [
+                    {
+                      "cmp" : "eq",
+                      "left" : {
+                        "field" : "number",
+                        "var" : "po"
+                      },
+                      "right" : {
+                        "field" : "purchaseOrder",
+                        "var" : "inv"
+                      }
+                    },
+                    {
+                      "cmp" : "eq",
+                      "left" : {
+                        "field" : "released",
+                        "var" : "po"
+                      },
+                      "right" : {
+                        "lit" : true,
+                        "of" : {
+                          "type" : "bool"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id" : "VARIANCE_WITHIN_TOLERANCE",
+        "predicate" : {
+          "forall" : "inv",
+          "holds" : {
+            "or" : [
+              {
+                "cmp" : "ne",
+                "left" : {
+                  "field" : "number",
+                  "var" : "inv"
+                },
+                "right" : {
+                  "input" : "invoice"
+                }
+              },
+              {
+                "cmp" : "le",
+                "left" : {
+                  "field" : "variance",
+                  "var" : "inv"
+                },
+                "right" : {
+                  "param" : "tolerance"
+                }
+              }
+            ]
+          },
+          "in" : "invoice"
+        }
+      }
+    ]
+  },
+  "digest" : {
+    "algorithm" : "sha-256",
+    "hex" : "7a85539c4ac64a34187acb580df0cbf8cf0ca712350060221ec9e6c32cb16a11"
+  },
+  "presentation" : {
+    "requirements" : {
+      "APPROVAL_RECORDED" : "An approval of the invoice is on record.",
+      "INVOICE_RECORDED" : "The invoice exists in the system of record.",
+      "POSTED" : "The invoice was posted at or before the cutoff.",
+      "PROCESSED" : "A posting at or before the cutoff was not reversed by the cutoff and was preceded by an approval from a principal who held the approver role when approving.",
+      "PURCHASE_ORDER_RELEASED" : "The invoice refers to a released purchase order.",
+      "VARIANCE_WITHIN_TOLERANCE" : "The recorded variance does not exceed the tolerance."
+    },
+    "summary" : "An invoice counts as processed when a standing posting exists at the cutoff, preceded by an approval from an authorized principal, against a released purchase order and within the variance tolerance.",
+    "title" : "Invoice processing"
+  }
+}

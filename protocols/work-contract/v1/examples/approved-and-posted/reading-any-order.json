@@ -1,0 +1,133 @@
+{
+  "language": "work-contract-1",
+  "identity": {
+    "id": "approved-and-posted.any-order",
+    "version": "1"
+  },
+  "inputs": {
+    "invoice": {
+      "type": "text"
+    },
+    "cutoff": {
+      "type": "time"
+    }
+  },
+  "kinds": {
+    "approval": {
+      "key": [
+        "id"
+      ],
+      "fields": {
+        "id": {
+          "type": "text"
+        },
+        "invoice": {
+          "type": "text"
+        },
+        "approver": {
+          "type": "text"
+        },
+        "at": {
+          "type": "time"
+        }
+      }
+    },
+    "posting": {
+      "key": [
+        "document"
+      ],
+      "fields": {
+        "document": {
+          "type": "text"
+        },
+        "invoice": {
+          "type": "text"
+        },
+        "at": {
+          "type": "time"
+        }
+      }
+    }
+  },
+  "evidence": {
+    "conflicts": "unknown",
+    "sources": {
+      "approval": [
+        "sap-s4"
+      ],
+      "posting": [
+        "sap-s4"
+      ]
+    }
+  },
+  "policy": {},
+  "evaluation": {
+    "semantics": "kleene-1",
+    "cutoff": "cutoff"
+  },
+  "requires": [
+    {
+      "id": "PROCESSED",
+      "predicate": {
+        "and": [
+          {
+            "exists": "a",
+            "in": "approval",
+            "where": {
+              "and": [
+                {
+                  "cmp": "eq",
+                  "left": {
+                    "var": "a",
+                    "field": "invoice"
+                  },
+                  "right": {
+                    "input": "invoice"
+                  }
+                },
+                {
+                  "cmp": "le",
+                  "left": {
+                    "var": "a",
+                    "field": "at"
+                  },
+                  "right": {
+                    "input": "cutoff"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "exists": "p",
+            "in": "posting",
+            "where": {
+              "and": [
+                {
+                  "cmp": "eq",
+                  "left": {
+                    "var": "p",
+                    "field": "invoice"
+                  },
+                  "right": {
+                    "input": "invoice"
+                  }
+                },
+                {
+                  "cmp": "le",
+                  "left": {
+                    "var": "p",
+                    "field": "at"
+                  },
+                  "right": {
+                    "input": "cutoff"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "description" : "Step 1 is missing between steps 0 and 2.",
+  "expected" : {
+    "accept" : false,
+    "error" : "CHAIN_GAP"
+  },
+  "input" : {
+    "anchor" : null,
+    "statements" : [
+      "{\"signature\":{\"encoded\":\"+0ZH83KaVMXhw1iTEL0TmhQXK+mtSaD+2zl+2A1eazGSTMkzj54Y+dVighMk1NdZ6tv+u+sJCCN8+CdiNxw/Aw==\",\"keyId\":\"test-erp-gateway-1\",\"scheme\":\"Ed25519\"},\"statement\":{\"chain\":{\"previous\":null,\"sequence\":0,\"stream\":\"sap-demo/sales-orders\"},\"id\":{\"value\":\"00000000-0000-4000-8000-000000000001\"},\"issuer\":{\"value\":\"00000000-0000-4000-8000-000000000101\"},\"kind\":{\"StateTransition\":{}},\"observedAt\":{\"value\":\"2026-10-01T10:00:00Z\"},\"payload\":{\"algorithm\":\"sha-256\",\"hex\":\"254f976a942ae124b4fdc0c322784d856e5745b1ff1f6d7833c9d3f2f0a779bc\"},\"protocol\":\"verified-evidence-statement-v1\",\"source\":{\"observationId\":\"observation-1\",\"system\":\"sap-demo\"},\"subject\":{\"key\":\"ORDER-123\",\"kind\":\"SalesOrder\",\"system\":\"sap-demo\"},\"tenant\":{\"value\":\"tenant-a\"}}}",
+      "{\"signature\":{\"encoded\":\"lmi0TaI0Be+B4LCD9THFQ1LAYw2AwcOGFLHciRxqVX1wQc/Aa/rLMTB+0eDNR9loFk/Pk32ejIHSQoNLOnJ6Ag==\",\"keyId\":\"test-erp-gateway-1\",\"scheme\":\"Ed25519\"},\"statement\":{\"chain\":{\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"64ab6e78738f2bf314ff3cda067188f0bd081e49183e6f32e23403a64ffb69cf\"},\"sequence\":2,\"stream\":\"sap-demo/sales-orders\"},\"id\":{\"value\":\"00000000-0000-4000-8000-000000000003\"},\"issuer\":{\"value\":\"00000000-0000-4000-8000-000000000101\"},\"kind\":{\"StateTransition\":{}},\"observedAt\":{\"value\":\"2026-10-01T10:00:00Z\"},\"payload\":{\"algorithm\":\"sha-256\",\"hex\":\"254f976a942ae124b4fdc0c322784d856e5745b1ff1f6d7833c9d3f2f0a779bc\"},\"protocol\":\"verified-evidence-statement-v1\",\"source\":{\"observationId\":\"observation-3\",\"system\":\"sap-demo\"},\"subject\":{\"key\":\"ORDER-123\",\"kind\":\"SalesOrder\",\"system\":\"sap-demo\"},\"tenant\":{\"value\":\"tenant-a\"}}}"
+    ]
+  },
+  "kind" : "chain",
+  "name" : "chain-gap",
+  "protocol" : "verified-evidence-statement-v1",
+  "registry" : {
+    "keys" : [
+      {
+        "algorithm" : "Ed25519",
+        "issuer" : {
+          "value" : "00000000-0000-4000-8000-000000000101"
+        },
+        "keyId" : "test-erp-gateway-1",
+        "publicKey" : "MCowBQYDK2VwAyEAiojj3XQJ8ZX9UtstPLpdcspnCb8dlBIb83SIAbQPb1w=",
+        "revokedAt" : null,
+        "sources" : [
+          "sap-demo"
+        ],
+        "tenant" : {
+          "value" : "tenant-a"
+        },
+        "validFrom" : {
+          "value" : "2026-01-01T00:00:00Z"
+        },
+        "validUntil" : null
+      },
+      {
+        "algorithm" : "Ed25519",
+        "issuer" : {
+          "value" : "00000000-0000-4000-8000-000000000102"
+        },
+        "keyId" : "test-agent-1",
+        "publicKey" : "MCowBQYDK2VwAyEAgTl3Dqh9F19Wo1Rmw0x+zMuNipG07jeiXfYPW4/Js5Q=",
+        "revokedAt" : null,
+        "sources" : [
+          "agent-runtime"
+        ],
+        "tenant" : {
+          "value" : "tenant-a"
+        },
+        "validFrom" : {
+          "value" : "2026-01-01T00:00:00Z"
+        },
+        "validUntil" : null
+      },
+      {
+        "algorithm" : "Ed25519",
+        "issuer" : {
+          "value" : "00000000-0000-4000-8000-000000000101"
+        },
+        "keyId" : "test-erp-gateway-b",
+        "publicKey" : "MCowBQYDK2VwAyEA7UkoxijRwsbq6QM4kFmVYSlZJzpcY/k2NsFGFKyHN9E=",
+        "revokedAt" : null,
+        "sources" : [
+          "sap-demo"
+        ],
+        "tenant" : {
+          "value" : "tenant-b"
+        },
+        "validFrom" : {
+          "value" : "2026-01-01T00:00:00Z"
+        },
+        "validUntil" : null
+      },
+      {
+        "algorithm" : "Ed25519",
+        "issuer" : {
+          "value" : "00000000-0000-4000-8000-000000000101"
+        },
+        "keyId" : "test-erp-gateway-revoked",
+        "publicKey" : "MCowBQYDK2VwAyEAypOsFwUYcHHWe4PH/w7+gQjo7EUwV113JoeTM9vavnw=",
+        "revokedAt" : {
+          "value" : "2026-09-30T00:00:00Z"
+        },
+        "sources" : [
+          "sap-demo"
+        ],
+        "tenant" : {
+          "value" : "tenant-a"
+        },
+        "validFrom" : {
+          "value" : "2026-01-01T00:00:00Z"
+        },
+        "validUntil" : null
+      }
+    ]
+  }
+}

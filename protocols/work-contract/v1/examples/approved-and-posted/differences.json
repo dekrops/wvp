@@ -1,0 +1,74 @@
+[
+  {
+    "outcomes" : {
+      "any-order" : "SUPPORTED",
+      "approval-first" : "SUPPORTED",
+      "approval-first-and-standing" : "UNDETERMINED"
+    },
+    "scenario" : "reversal not declared complete"
+  },
+  {
+    "outcomes" : {
+      "any-order" : "SUPPORTED",
+      "approval-first" : "CONTRADICTED",
+      "approval-first-and-standing" : "CONTRADICTED"
+    },
+    "scenario" : "f3-posting.at just before 1766125600"
+  },
+  {
+    "outcomes" : {
+      "any-order" : "SUPPORTED",
+      "approval-first" : "CONTRADICTED",
+      "approval-first-and-standing" : "CONTRADICTED"
+    },
+    "scenario" : "f4-approval.at just after 1766225600"
+  },
+  {
+    "outcomes" : {
+      "any-order" : "SUPPORTED",
+      "approval-first" : "CONTRADICTED",
+      "approval-first-and-standing" : "CONTRADICTED"
+    },
+    "scenario" : "f4-approval.at just before 1767225600"
+  },
+  {
+    "outcomes" : {
+      "any-order" : "SUPPORTED",
+      "approval-first" : "SUPPORTED",
+      "approval-first-and-standing" : "CONTRADICTED"
+    },
+    "scenario" : "f6-reversal.at just before 1766125600"
+  },
+  {
+    "outcomes" : {
+      "any-order" : "SUPPORTED",
+      "approval-first" : "SUPPORTED",
+      "approval-first-and-standing" : "CONTRADICTED"
+    },
+    "scenario" : "f6-reversal.at just after 1766125600"
+  },
+  {
+    "outcomes" : {
+      "any-order" : "SUPPORTED",
+      "approval-first" : "SUPPORTED",
+      "approval-first-and-standing" : "CONTRADICTED"
+    },
+    "scenario" : "f6-reversal.at just before 1766225600"
+  },
+  {
+    "outcomes" : {
+      "any-order" : "SUPPORTED",
+      "approval-first" : "SUPPORTED",
+      "approval-first-and-standing" : "CONTRADICTED"
+    },
+    "scenario" : "f6-reversal.at just after 1766225600"
+  },
+  {
+    "outcomes" : {
+      "any-order" : "SUPPORTED",
+      "approval-first" : "SUPPORTED",
+      "approval-first-and-standing" : "CONTRADICTED"
+    },
+    "scenario" : "f6-reversal.at just before 1767225600"
+  }
+]

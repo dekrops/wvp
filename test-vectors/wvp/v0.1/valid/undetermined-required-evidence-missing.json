@@ -1,0 +1,114 @@
+{
+  "description" : "The only evidence is an authentic agent trace. The contract requires a state transition, so nothing is determined.",
+  "expected" : {
+    "accept" : true,
+    "decision" : "UNDETERMINED",
+    "integrity" : true,
+    "issuerSignature" : "absent",
+    "statements" : 1
+  },
+  "name" : "undetermined-required-evidence-missing",
+  "packageJson" : "{\"files\":[{\"content\":{\"claimant\":{\"value\":\"00000000-0000-4000-8000-000000000102\"},\"contractId\":{\"value\":\"00000000-0000-4000-8000-000000000201\"},\"evidence\":[{\"value\":\"00000000-0000-4000-8000-000000000011\"}],\"id\":{\"value\":\"00000000-0000-4000-8000-000000000502\"},\"occurredAt\":{\"value\":\"2026-10-01T10:00:00Z\"},\"outcome\":{\"OrderReached\":{\"state\":{\"Shipped\":{}}}},\"provenance\":{\"causedBy\":[],\"ingestedAt\":{\"value\":\"2026-10-01T10:05:00Z\"},\"observedAt\":{\"value\":\"2026-10-01T10:00:00Z\"},\"source\":{\"observationId\":\"claim-1\",\"system\":\"agent\"},\"transformations\":[],\"trust\":{\"Unauthenticated\":{}},\"witness\":{\"value\":\"00000000-0000-4000-8000-000000000102\"}},\"subject\":{\"key\":\"ORDER-123\",\"kind\":\"SalesOrder\",\"system\":\"sap-demo\"},\"submittedAt\":{\"value\":\"2026-10-01T10:05:00Z\"},\"supersedes\":null},\"path\":\"claim.json\"},{\"content\":{\"expectedOutcome\":{\"OrderReached\":{\"state\":{\"Shipped\":{}}}},\"id\":{\"value\":\"00000000-0000-4000-8000-000000000201\"},\"parties\":[{\"value\":\"00000000-0000-4000-8000-000000000102\"}],\"policy\":{\"id\":{\"value\":\"00000000-0000-4000-8000-000000000202\"},\"requiredEvidence\":[{\"StateTransition\":{}}],\"rule\":{\"allowedFrom\":[{\"Approved\":{}}],\"to\":{\"Shipped\":{}}},\"version\":{\"major\":1,\"minor\":0,\"patch\":0}},\"subject\":{\"key\":\"ORDER-123\",\"kind\":\"SalesOrder\",\"system\":\"sap-demo\"},\"validity\":{\"from\":{\"value\":\"2026-01-01T00:00:00Z\"},\"until\":{\"value\":\"2027-01-01T00:00:00Z\"}},\"version\":{\"major\":1,\"minor\":0,\"patch\":0},\"workType\":{\"OrderFulfillment\":{}}},\"path\":\"contract.json\"},{\"content\":{\"commitments\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"2b1edeb0202f381dcb106b939d24192645b2de4877f190bca3f2922dcdeadab3\"},\"contract\":{\"algorithm\":\"sha-256\",\"hex\":\"6b1ca89dd6c782cd636931adbded6d64949b50debbeac69f5360bde682f94677\"},\"evidence\":{\"algorithm\":\"sha-256\",\"hex\":\"3abb35931186e5ac5de2df6cfdacb208bd04b3442c614072ed73c783c1714153\"},\"inputs\":{\"algorithm\":\"sha-256\",\"hex\":\"c3607bc42a169ef32c7b7db12566ad5b12f4df3f25dea1a4e4ad81c4b919c0f3\"}},\"conditions\":[{\"evidence\":[],\"holds\":false,\"id\":\"CONTRADICTING_TRANSITION\"},{\"evidence\":[],\"holds\":true,\"id\":\"OUTCOME_IS_TARGET\"},{\"evidence\":[],\"holds\":false,\"id\":\"REQUIRED_EVIDENCE\"},{\"evidence\":[],\"holds\":false,\"id\":\"SUPPORTING_TRANSITION\"}],\"decision\":\"UNDETERMINED\",\"evaluator\":{\"name\":\"order-transition\",\"specification\":\"1\"},\"protocol\":\"wvp-0.1\"},\"path\":\"decision.json\"},{\"content\":[{\"body\":{\"ExternalArtifact\":{\"digest\":{\"algorithm\":\"sha-256\",\"hex\":\"2b34057690992db89c3eba5fe9e5db4710105cbad1a80405916ae1418e4c1b0d\"},\"location\":\"agent-trace:example-1\",\"mediaType\":\"application/vnd.verified.agent-trace+json\"}},\"id\":{\"value\":\"00000000-0000-4000-8000-000000000011\"}}],\"path\":\"evidence/bodies.json\"},{\"content\":[{\"signature\":{\"encoded\":\"5XTXjKAw8PoVE6reRyLKBvfCRDOnsNIQQE4+SybLgZVXps5ZAPCTegQcuHSoUJgHdEcvpegE9H1wyXtuPj8kDQ==\",\"keyId\":\"test-agent-1\",\"scheme\":\"Ed25519\"},\"statement\":{\"chain\":null,\"id\":{\"value\":\"00000000-0000-4000-8000-000000000011\"},\"issuer\":{\"value\":\"00000000-0000-4000-8000-000000000102\"},\"kind\":{\"AgentTrace\":{}},\"observedAt\":{\"value\":\"2026-10-01T10:00:00Z\"},\"payload\":{\"algorithm\":\"sha-256\",\"hex\":\"3b254b437acc91a86f72c6e5a7f2fb22f07b5872d506a618800bcfb250b809d6\"},\"protocol\":\"verified-evidence-statement-v1\",\"source\":{\"observationId\":\"trace-example-1\",\"system\":\"agent-runtime\"},\"subject\":{\"key\":\"ORDER-123\",\"kind\":\"SalesOrder\",\"system\":\"sap-demo\"},\"tenant\":{\"value\":\"tenant-a\"}}}],\"path\":\"evidence/statements.json\"},{\"content\":{\"assembledAt\":{\"value\":\"2026-10-01T10:06:00Z\"},\"evaluatedAt\":{\"value\":\"2026-10-01T10:07:00Z\"},\"ingestedAt\":{\"value\":\"2026-10-01T10:01:00Z\"},\"packageId\":{\"value\":\"00000000-0000-4000-8000-000000000303\"},\"tenant\":{\"value\":\"tenant-a\"}},\"path\":\"inputs.json\"}],\"manifest\":{\"canonicalVersion\":\"verified-json-v1\",\"files\":[{\"hash\":{\"algorithm\":\"sha-256\",\"hex\":\"2b1edeb0202f381dcb106b939d24192645b2de4877f190bca3f2922dcdeadab3\"},\"path\":\"claim.json\"},{\"hash\":{\"algorithm\":\"sha-256\",\"hex\":\"6b1ca89dd6c782cd636931adbded6d64949b50debbeac69f5360bde682f94677\"},\"path\":\"contract.json\"},{\"hash\":{\"algorithm\":\"sha-256\",\"hex\":\"ee84fde4e56483e32cd2c1edac042cddc730c7cfa424b7cdedbed6a0f3767fd8\"},\"path\":\"decision.json\"},{\"hash\":{\"algorithm\":\"sha-256\",\"hex\":\"c0dde5834a5e6b3f0406af9bc9046c606f667f680794a840693e60408fc65b80\"},\"path\":\"evidence/bodies.json\"},{\"hash\":{\"algorithm\":\"sha-256\",\"hex\":\"91b30db5724551b2c7a4301c19f607e3b90711cdc59508950c0440efa1e87ca2\"},\"path\":\"evidence/statements.json\"},{\"hash\":{\"algorithm\":\"sha-256\",\"hex\":\"c3607bc42a169ef32c7b7db12566ad5b12f4df3f25dea1a4e4ad81c4b919c0f3\"},\"path\":\"inputs.json\"}],\"packageVersion\":2,\"protocol\":\"wvp-0.1\"},\"packageCommitment\":{\"algorithm\":\"sha-256\",\"hex\":\"760627a7a4f0acf67db5d6dc317b1fb476042edbaee06ac2f3aeabda2c59626e\"},\"packageId\":\"wvp:sha-256:760627a7a4f0acf67db5d6dc317b1fb476042edbaee06ac2f3aeabda2c59626e\",\"signatures\":[]}",
+  "protocol" : "wvp-0.1",
+  "registry" : {
+    "keys" : [
+      {
+        "algorithm" : "Ed25519",
+        "issuer" : {
+          "value" : "00000000-0000-4000-8000-000000000101"
+        },
+        "keyId" : "test-erp-gateway-1",
+        "publicKey" : "MCowBQYDK2VwAyEAiojj3XQJ8ZX9UtstPLpdcspnCb8dlBIb83SIAbQPb1w=",
+        "revokedAt" : null,
+        "sources" : [
+          "sap-demo"
+        ],
+        "tenant" : {
+          "value" : "tenant-a"
+        },
+        "validFrom" : {
+          "value" : "2026-01-01T00:00:00Z"
+        },
+        "validUntil" : null
+      },
+      {
+        "algorithm" : "Ed25519",
+        "issuer" : {
+          "value" : "00000000-0000-4000-8000-000000000102"
+        },
+        "keyId" : "test-agent-1",
+        "publicKey" : "MCowBQYDK2VwAyEAgTl3Dqh9F19Wo1Rmw0x+zMuNipG07jeiXfYPW4/Js5Q=",
+        "revokedAt" : null,
+        "sources" : [
+          "agent-runtime"
+        ],
+        "tenant" : {
+          "value" : "tenant-a"
+        },
+        "validFrom" : {
+          "value" : "2026-01-01T00:00:00Z"
+        },
+        "validUntil" : null
+      },
+      {
+        "algorithm" : "Ed25519",
+        "issuer" : {
+          "value" : "00000000-0000-4000-8000-000000000101"
+        },
+        "keyId" : "test-erp-gateway-b",
+        "publicKey" : "MCowBQYDK2VwAyEA7UkoxijRwsbq6QM4kFmVYSlZJzpcY/k2NsFGFKyHN9E=",
+        "revokedAt" : null,
+        "sources" : [
+          "sap-demo"
+        ],
+        "tenant" : {
+          "value" : "tenant-b"
+        },
+        "validFrom" : {
+          "value" : "2026-01-01T00:00:00Z"
+        },
+        "validUntil" : null
+      },
+      {
+        "algorithm" : "Ed25519",
+        "issuer" : {
+          "value" : "00000000-0000-4000-8000-000000000101"
+        },
+        "keyId" : "test-erp-gateway-revoked",
+        "publicKey" : "MCowBQYDK2VwAyEAypOsFwUYcHHWe4PH/w7+gQjo7EUwV113JoeTM9vavnw=",
+        "revokedAt" : {
+          "value" : "2026-09-30T00:00:00Z"
+        },
+        "sources" : [
+          "sap-demo"
+        ],
+        "tenant" : {
+          "value" : "tenant-a"
+        },
+        "validFrom" : {
+          "value" : "2026-01-01T00:00:00Z"
+        },
+        "validUntil" : null
+      },
+      {
+        "algorithm" : "Ed25519",
+        "issuer" : {
+          "value" : "00000000-0000-4000-8000-000000000301"
+        },
+        "keyId" : "test-verifier-1",
+        "publicKey" : "MCowBQYDK2VwAyEAbnoc3Smwt4/ROvTFWY/v9O8qlxZuPKby5Pv8zYBQW/E=",
+        "revokedAt" : null,
+        "sources" : [
+          "wvp-decision"
+        ],
+        "tenant" : {
+          "value" : "tenant-a"
+        },
+        "validFrom" : {
+          "value" : "2026-01-01T00:00:00Z"
+        },
+        "validUntil" : null
+      }
+    ]
+  }
+}

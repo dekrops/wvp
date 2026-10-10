@@ -1,0 +1,257 @@
+{
+  "description" : "Two different statements carry the same evidence ID.",
+  "expected" : {
+    "accept" : false,
+    "error" : "DUPLICATE_EVIDENCE_ID"
+  },
+  "input" : {
+    "assembledAt" : {
+      "value" : "2026-10-01T10:06:00Z"
+    },
+    "bodies" : [
+      "{\"StateTransition\":{\"at\":{\"value\":\"2026-10-01T10:00:00Z\"},\"from\":{\"Approved\":{}},\"subject\":{\"key\":\"ORDER-123\",\"kind\":\"SalesOrder\",\"system\":\"sap-demo\"},\"to\":{\"Shipped\":{}}}}",
+      "{\"StateTransition\":{\"at\":{\"value\":\"2026-10-01T10:00:00Z\"},\"from\":{\"Approved\":{}},\"subject\":{\"key\":\"ORDER-123\",\"kind\":\"SalesOrder\",\"system\":\"sap-demo\"},\"to\":{\"Shipped\":{}}}}"
+    ],
+    "claim" : {
+      "claimant" : {
+        "value" : "00000000-0000-4000-8000-000000000102"
+      },
+      "contractId" : {
+        "value" : "00000000-0000-4000-8000-000000000201"
+      },
+      "evidence" : [
+        {
+          "value" : "00000000-0000-4000-8000-000000000001"
+        }
+      ],
+      "id" : {
+        "value" : "00000000-0000-4000-8000-000000000404"
+      },
+      "occurredAt" : {
+        "value" : "2026-10-01T10:00:00Z"
+      },
+      "outcome" : {
+        "OrderReached" : {
+          "state" : {
+            "Shipped" : {
+              
+            }
+          }
+        }
+      },
+      "provenance" : {
+        "causedBy" : [
+        ],
+        "ingestedAt" : {
+          "value" : "2026-10-01T10:05:00Z"
+        },
+        "observedAt" : {
+          "value" : "2026-10-01T10:00:00Z"
+        },
+        "source" : {
+          "observationId" : "claim-1",
+          "system" : "agent"
+        },
+        "transformations" : [
+        ],
+        "trust" : {
+          "Unauthenticated" : {
+            
+          }
+        },
+        "witness" : {
+          "value" : "00000000-0000-4000-8000-000000000102"
+        }
+      },
+      "subject" : {
+        "key" : "ORDER-123",
+        "kind" : "SalesOrder",
+        "system" : "sap-demo"
+      },
+      "submittedAt" : {
+        "value" : "2026-10-01T10:05:00Z"
+      },
+      "supersedes" : null
+    },
+    "contract" : {
+      "expectedOutcome" : {
+        "OrderReached" : {
+          "state" : {
+            "Shipped" : {
+              
+            }
+          }
+        }
+      },
+      "id" : {
+        "value" : "00000000-0000-4000-8000-000000000201"
+      },
+      "parties" : [
+        {
+          "value" : "00000000-0000-4000-8000-000000000102"
+        }
+      ],
+      "policy" : {
+        "id" : {
+          "value" : "00000000-0000-4000-8000-000000000202"
+        },
+        "requiredEvidence" : [
+          {
+            "StateTransition" : {
+              
+            }
+          }
+        ],
+        "rule" : {
+          "allowedFrom" : [
+            {
+              "Approved" : {
+                
+              }
+            }
+          ],
+          "to" : {
+            "Shipped" : {
+              
+            }
+          }
+        },
+        "version" : {
+          "major" : 1,
+          "minor" : 0,
+          "patch" : 0
+        }
+      },
+      "subject" : {
+        "key" : "ORDER-123",
+        "kind" : "SalesOrder",
+        "system" : "sap-demo"
+      },
+      "validity" : {
+        "from" : {
+          "value" : "2026-01-01T00:00:00Z"
+        },
+        "until" : {
+          "value" : "2027-01-01T00:00:00Z"
+        }
+      },
+      "version" : {
+        "major" : 1,
+        "minor" : 0,
+        "patch" : 0
+      },
+      "workType" : {
+        "OrderFulfillment" : {
+          
+        }
+      }
+    },
+    "ingestedAt" : {
+      "value" : "2026-10-01T10:01:00Z"
+    },
+    "packageId" : {
+      "value" : "00000000-0000-4000-8000-000000000303"
+    },
+    "resultId" : {
+      "value" : "00000000-0000-4000-8000-000000000302"
+    },
+    "statements" : [
+      "{\"signature\":{\"encoded\":\"+0ZH83KaVMXhw1iTEL0TmhQXK+mtSaD+2zl+2A1eazGSTMkzj54Y+dVighMk1NdZ6tv+u+sJCCN8+CdiNxw/Aw==\",\"keyId\":\"test-erp-gateway-1\",\"scheme\":\"Ed25519\"},\"statement\":{\"chain\":{\"previous\":null,\"sequence\":0,\"stream\":\"sap-demo/sales-orders\"},\"id\":{\"value\":\"00000000-0000-4000-8000-000000000001\"},\"issuer\":{\"value\":\"00000000-0000-4000-8000-000000000101\"},\"kind\":{\"StateTransition\":{}},\"observedAt\":{\"value\":\"2026-10-01T10:00:00Z\"},\"payload\":{\"algorithm\":\"sha-256\",\"hex\":\"254f976a942ae124b4fdc0c322784d856e5745b1ff1f6d7833c9d3f2f0a779bc\"},\"protocol\":\"verified-evidence-statement-v1\",\"source\":{\"observationId\":\"observation-1\",\"system\":\"sap-demo\"},\"subject\":{\"key\":\"ORDER-123\",\"kind\":\"SalesOrder\",\"system\":\"sap-demo\"},\"tenant\":{\"value\":\"tenant-a\"}}}",
+      "{\"signature\":{\"encoded\":\"YChmLlhj9PClb0itXGoZksLcCHesXzfgfz7cS++RVBJ4w/1tAis3nB2VzJjVVcRuirIjJer/LX7LVJQo2aOfAg==\",\"keyId\":\"test-erp-gateway-1\",\"scheme\":\"Ed25519\"},\"statement\":{\"chain\":null,\"id\":{\"value\":\"00000000-0000-4000-8000-000000000001\"},\"issuer\":{\"value\":\"00000000-0000-4000-8000-000000000101\"},\"kind\":{\"StateTransition\":{}},\"observedAt\":{\"value\":\"2026-10-01T10:00:00Z\"},\"payload\":{\"algorithm\":\"sha-256\",\"hex\":\"254f976a942ae124b4fdc0c322784d856e5745b1ff1f6d7833c9d3f2f0a779bc\"},\"protocol\":\"verified-evidence-statement-v1\",\"source\":{\"observationId\":\"observation-dup\",\"system\":\"sap-demo\"},\"subject\":{\"key\":\"ORDER-123\",\"kind\":\"SalesOrder\",\"system\":\"sap-demo\"},\"tenant\":{\"value\":\"tenant-a\"}}}"
+    ],
+    "tenant" : {
+      "value" : "tenant-a"
+    },
+    "verifiedAt" : {
+      "value" : "2026-10-01T10:07:00Z"
+    },
+    "verifier" : {
+      "value" : "00000000-0000-4000-8000-000000000301"
+    }
+  },
+  "kind" : "admission",
+  "name" : "duplicate-evidence-id",
+  "protocol" : "verified-evidence-statement-v1",
+  "registry" : {
+    "keys" : [
+      {
+        "algorithm" : "Ed25519",
+        "issuer" : {
+          "value" : "00000000-0000-4000-8000-000000000101"
+        },
+        "keyId" : "test-erp-gateway-1",
+        "publicKey" : "MCowBQYDK2VwAyEAiojj3XQJ8ZX9UtstPLpdcspnCb8dlBIb83SIAbQPb1w=",
+        "revokedAt" : null,
+        "sources" : [
+          "sap-demo"
+        ],
+        "tenant" : {
+          "value" : "tenant-a"
+        },
+        "validFrom" : {
+          "value" : "2026-01-01T00:00:00Z"
+        },
+        "validUntil" : null
+      },
+      {
+        "algorithm" : "Ed25519",
+        "issuer" : {
+          "value" : "00000000-0000-4000-8000-000000000102"
+        },
+        "keyId" : "test-agent-1",
+        "publicKey" : "MCowBQYDK2VwAyEAgTl3Dqh9F19Wo1Rmw0x+zMuNipG07jeiXfYPW4/Js5Q=",
+        "revokedAt" : null,
+        "sources" : [
+          "agent-runtime"
+        ],
+        "tenant" : {
+          "value" : "tenant-a"
+        },
+        "validFrom" : {
+          "value" : "2026-01-01T00:00:00Z"
+        },
+        "validUntil" : null
+      },
+      {
+        "algorithm" : "Ed25519",
+        "issuer" : {
+          "value" : "00000000-0000-4000-8000-000000000101"
+        },
+        "keyId" : "test-erp-gateway-b",
+        "publicKey" : "MCowBQYDK2VwAyEA7UkoxijRwsbq6QM4kFmVYSlZJzpcY/k2NsFGFKyHN9E=",
+        "revokedAt" : null,
+        "sources" : [
+          "sap-demo"
+        ],
+        "tenant" : {
+          "value" : "tenant-b"
+        },
+        "validFrom" : {
+          "value" : "2026-01-01T00:00:00Z"
+        },
+        "validUntil" : null
+      },
+      {
+        "algorithm" : "Ed25519",
+        "issuer" : {
+          "value" : "00000000-0000-4000-8000-000000000101"
+        },
+        "keyId" : "test-erp-gateway-revoked",
+        "publicKey" : "MCowBQYDK2VwAyEAypOsFwUYcHHWe4PH/w7+gQjo7EUwV113JoeTM9vavnw=",
+        "revokedAt" : {
+          "value" : "2026-09-30T00:00:00Z"
+        },
+        "sources" : [
+          "sap-demo"
+        ],
+        "tenant" : {
+          "value" : "tenant-a"
+        },
+        "validFrom" : {
+          "value" : "2026-01-01T00:00:00Z"
+        },
+        "validUntil" : null
+      }
+    ]
+  }
+}

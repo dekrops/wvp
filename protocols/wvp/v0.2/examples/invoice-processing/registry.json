@@ -1,0 +1,81 @@
+{
+  "keys" : [
+    {
+      "algorithm" : "Ed25519",
+      "issuer" : {
+        "value" : "00000000-0000-4000-8000-000000000111"
+      },
+      "keyId" : "test-sap-s4-gateway-1",
+      "publicKey" : "MCowBQYDK2VwAyEA0EqyMnQrtKs6E2i9RhXk5tAiSrcaAWuvhSCjMsl3hzc=",
+      "revokedAt" : null,
+      "sources" : [
+        "sap-s4",
+        "sap-archive"
+      ],
+      "tenant" : {
+        "value" : "tenant-a"
+      },
+      "validFrom" : {
+        "value" : "2026-01-01T00:00:00Z"
+      },
+      "validUntil" : null
+    },
+    {
+      "algorithm" : "Ed25519",
+      "issuer" : {
+        "value" : "00000000-0000-4000-8000-000000000112"
+      },
+      "keyId" : "test-identity-directory-1",
+      "publicKey" : "MCowBQYDK2VwAyEAIEBA42TBDyvsnB/lAKHNTCR8idZQoB7X6CyrqGeHfCE=",
+      "revokedAt" : null,
+      "sources" : [
+        "identity-directory"
+      ],
+      "tenant" : {
+        "value" : "tenant-a"
+      },
+      "validFrom" : {
+        "value" : "2026-01-01T00:00:00Z"
+      },
+      "validUntil" : null
+    },
+    {
+      "algorithm" : "Ed25519",
+      "issuer" : {
+        "value" : "00000000-0000-4000-8000-000000000113"
+      },
+      "keyId" : "test-agent-notes-1",
+      "publicKey" : "MCowBQYDK2VwAyEAZs1gi5KLiOUODv6qM/rxxDzv4HKUsLh+n+CrpqPPdjM=",
+      "revokedAt" : null,
+      "sources" : [
+        "agent-notes"
+      ],
+      "tenant" : {
+        "value" : "tenant-a"
+      },
+      "validFrom" : {
+        "value" : "2026-01-01T00:00:00Z"
+      },
+      "validUntil" : null
+    },
+    {
+      "algorithm" : "Ed25519",
+      "issuer" : {
+        "value" : "00000000-0000-4000-8000-000000000301"
+      },
+      "keyId" : "test-verifier-2",
+      "publicKey" : "MCowBQYDK2VwAyEAIIKL9cW9ystoSGMzbCAvtVmdpIvlWWYVdCFwcFvsqfc=",
+      "revokedAt" : null,
+      "sources" : [
+        "wvp-decision"
+      ],
+      "tenant" : {
+        "value" : "tenant-a"
+      },
+      "validFrom" : {
+        "value" : "2026-01-01T00:00:00Z"
+      },
+      "validUntil" : null
+    }
+  ]
+}

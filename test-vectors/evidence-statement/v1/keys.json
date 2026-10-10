@@ -1,0 +1,50 @@
+{
+  "description" : "Deterministic public test keys for conformance only. NEVER trust or provision them.",
+  "keys" : [
+    {
+      "issuer" : {
+        "value" : "00000000-0000-4000-8000-000000000101"
+      },
+      "keyId" : "test-erp-gateway-1",
+      "publicKey" : "MCowBQYDK2VwAyEAiojj3XQJ8ZX9UtstPLpdcspnCb8dlBIb83SIAbQPb1w=",
+      "seedHex" : "0101010101010101010101010101010101010101010101010101010101010101",
+      "tenant" : {
+        "value" : "tenant-a"
+      }
+    },
+    {
+      "issuer" : {
+        "value" : "00000000-0000-4000-8000-000000000102"
+      },
+      "keyId" : "test-agent-1",
+      "publicKey" : "MCowBQYDK2VwAyEAgTl3Dqh9F19Wo1Rmw0x+zMuNipG07jeiXfYPW4/Js5Q=",
+      "seedHex" : "0202020202020202020202020202020202020202020202020202020202020202",
+      "tenant" : {
+        "value" : "tenant-a"
+      }
+    },
+    {
+      "issuer" : {
+        "value" : "00000000-0000-4000-8000-000000000101"
+      },
+      "keyId" : "test-erp-gateway-b",
+      "publicKey" : "MCowBQYDK2VwAyEA7UkoxijRwsbq6QM4kFmVYSlZJzpcY/k2NsFGFKyHN9E=",
+      "seedHex" : "0303030303030303030303030303030303030303030303030303030303030303",
+      "tenant" : {
+        "value" : "tenant-b"
+      }
+    },
+    {
+      "issuer" : {
+        "value" : "00000000-0000-4000-8000-000000000101"
+      },
+      "keyId" : "test-erp-gateway-revoked",
+      "publicKey" : "MCowBQYDK2VwAyEAypOsFwUYcHHWe4PH/w7+gQjo7EUwV113JoeTM9vavnw=",
+      "seedHex" : "0404040404040404040404040404040404040404040404040404040404040404",
+      "tenant" : {
+        "value" : "tenant-a"
+      }
+    }
+  ],
+  "testOnly" : true
+}
