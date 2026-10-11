@@ -5373,6 +5373,1057 @@
       }
     },
     {
+      "description" : "Position 1 names another statement than the one presented at position 0.",
+      "expected" : {
+        "records" : [
+          {
+            "digest" : {
+              "algorithm" : "sha-256",
+              "hex" : "73ab62c2fa4ae2cee288b9db657a0b3de062db9b3331d9c24aa8b8a80ec48318"
+            },
+            "kind" : "work-record"
+          },
+          {
+            "digest" : {
+              "algorithm" : "sha-256",
+              "hex" : "7066cf7d8c718ab5d55df690215293ae78301941dd00c42973e70c482f1e952e"
+            },
+            "kind" : "agreement"
+          },
+          {
+            "digest" : {
+              "algorithm" : "sha-256",
+              "hex" : "4ca40a64060e46bc5644eda7b943cd432eb836cd1ede77a7af8cc0557ec7963b"
+            },
+            "kind" : "claim-commitment"
+          },
+          {
+            "digest" : {
+              "algorithm" : "sha-256",
+              "hex" : "fd8c5aa4a6b7f1be21294269b0f6b526bca829a463f13a61bfe49fab8b10cb30"
+            },
+            "kind" : "receipt"
+          }
+        ],
+        "relations" : [
+          {
+            "keyId" : "test-ledger-1",
+            "relation" : "recorded",
+            "source" : "ledger.example",
+            "standing" : "CHECKED"
+          },
+          {
+            "keyId" : "test-ledger-1",
+            "relation" : "linked",
+            "source" : "ledger.example",
+            "standing" : "CHECKED"
+          }
+        ],
+        "sameClaims" : [
+        ],
+        "streams" : [
+          {
+            "completeness" : "CHAIN_PREVIOUS_MISMATCH",
+            "issuer" : {
+              "value" : "00000000-0000-4000-8000-000000000701"
+            },
+            "stream" : "ledger.example/relations",
+            "tenant" : {
+              "value" : "tenant-a"
+            }
+          }
+        ]
+      },
+      "name" : "chain-previous-mismatch",
+      "records" : [
+        {
+          "kind" : "work-record",
+          "text" : "{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"8e81bd67eebd28ae02e8b9168157d7f4e74b503d2ac86ce3299798ed2c21bb09\"},\"claimId\":{\"value\":\"00000000-0000-4000-8000-000000000501\"},\"contract\":{\"algorithm\":\"sha-256\",\"hex\":\"7a85539c4ac64a34187acb580df0cbf8cf0ca712350060221ec9e6c32cb16a11\"},\"contractId\":\"invoice-processing\",\"contractVersion\":\"1.0.0\",\"decision\":\"SUPPORTED\",\"decisionDigest\":{\"algorithm\":\"sha-256\",\"hex\":\"048d413899b47e00dba0bfe602ae15abd413633c1d1594ff72b90e8b1ff724f9\"},\"evaluator\":\"work-contract\",\"evidence\":{\"algorithm\":\"sha-256\",\"hex\":\"c22f766eb9594959756b2e46a15474159e062366b2776283c1bb6641a7c1fcb4\"},\"inputs\":{\"algorithm\":\"sha-256\",\"hex\":\"7467199b63e60efe3024f37cfdefb929320c9b987520cc4ecb5aad98c0a68b60\"},\"language\":\"work-contract-1\",\"packageCommitment\":{\"algorithm\":\"sha-256\",\"hex\":\"a2cc1e196acd1b3385c96ed5541599757c18fe87a875180666c1a9ce5c95d349\"},\"protocol\":\"wvp-0.2\",\"semantics\":\"kleene-1\",\"specification\":\"1\"}"
+        },
+        {
+          "kind" : "agreement",
+          "text" : "{\"agreement\":{\"claimant\":{\"value\":\"00000000-0000-4000-8000-000000000502\"},\"contract\":{\"digest\":{\"algorithm\":\"sha-256\",\"hex\":\"7a85539c4ac64a34187acb580df0cbf8cf0ca712350060221ec9e6c32cb16a11\"},\"id\":\"invoice-processing\",\"version\":\"1.0.0\"},\"id\":{\"value\":\"00000000-0000-4000-8000-000000000701\"},\"openClaimLimit\":20,\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"respondWithinSeconds\":1209600,\"respondent\":{\"value\":\"00000000-0000-4000-8000-000000000602\"},\"scope\":{\"identity\":[\"invoice\"],\"operation\":\"process\",\"scope\":\"invoice-processing\"},\"tenant\":{\"value\":\"tenant-a\"},\"unitKey\":{\"algorithm\":\"sha-256\",\"hex\":\"46e493a605f1bb35ec3e29f0a4d2c15742fe864378543876c8909cb024e90bf3\"},\"validFrom\":{\"value\":\"2026-01-01T00:00:00Z\"},\"validUntil\":{\"value\":\"2027-01-01T00:00:00Z\"}},\"signatures\":{\"claimant\":{\"encoded\":\"mTzBemXOa4bQUfk7Ug3J5I2M5/pNPqpVsB4D+W0DuWihwld6fJIS5unI7+ic6+bq4GNWfyt6p9qWtp9+id4eBg==\",\"keyId\":\"test-claimant-1\",\"scheme\":\"Ed25519\"},\"respondent\":{\"encoded\":\"smhvGcvAq5N6zexBjE67qaUcMY7PAwGLXoZbn4aklhzbltmVWbncQ/t+r6MZ152pgH5E58je9IJmcy3a0vLzBA==\",\"keyId\":\"test-respondent-1\",\"scheme\":\"Ed25519\"}}}"
+        },
+        {
+          "kind" : "claim-commitment",
+          "text" : "{\"claim\":{\"agreement\":{\"algorithm\":\"sha-256\",\"hex\":\"7066cf7d8c718ab5d55df690215293ae78301941dd00c42973e70c482f1e952e\"},\"claimedAt\":{\"value\":\"2026-10-01T10:05:00Z\"},\"id\":{\"value\":\"00000000-0000-4000-8000-000000000501\"},\"inputs\":{\"algorithm\":\"sha-256\",\"hex\":\"576ea1554852369298e6008d3250620d3b26b0240c890806c62c7a86571f60d0\"},\"protocol\":\"verified-claim-registration-v1\",\"unit\":{\"algorithm\":\"hmac-sha-256\",\"hex\":\"f39ed66067a61c3da619c6b4d29fc77a0ec1256d4fe70e5710bfc5a97037e310\"}},\"signature\":{\"encoded\":\"i2qVK2GcvFt40PGpvv9OpwWH/kxQiJw2t2iU9PUh0eNIbs7Idp+pEpOqyZ7FQDaonYCv/zTq/FiZqDzptUx9DQ==\",\"keyId\":\"test-claimant-1\",\"scheme\":\"Ed25519\"}}"
+        },
+        {
+          "kind" : "receipt",
+          "text" : "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"4ca40a64060e46bc5644eda7b943cd432eb836cd1ede77a7af8cc0557ec7963b\"},\"previous\":null,\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:05:02Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:05:02Z\"},\"sequence\":0},\"signature\":{\"encoded\":\"RSfx5OzEZEFdU0jp9oluB5rSWZ9w1pOdajE515TZSUOfvC/+7Jer/MnAzBbadhWQh4MjVIQAN8mG1XA2ayubAA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}"
+        }
+      ],
+      "relations" : [
+        {
+          "body" : {
+            "protocol" : "verified-work-relation-v1",
+            "recorded" : {
+              "claimId" : {
+                "value" : "00000000-0000-4000-8000-000000000501"
+              },
+              "record" : {
+                "digest" : {
+                  "algorithm" : "sha-256",
+                  "hex" : "73ab62c2fa4ae2cee288b9db657a0b3de062db9b3331d9c24aa8b8a80ec48318"
+                },
+                "kind" : "work-record"
+              }
+            }
+          },
+          "statement" : {
+            "signature" : {
+              "encoded" : "yMYVWQ9HS+4G9EuXGf5lDf+Rvryu6AITUN13S1vT0OkF9lY7IxmDgtQpBSPDA7qFQtZk4OBTE1sDkK9aflMgCw==",
+              "keyId" : "test-ledger-1",
+              "scheme" : "Ed25519"
+            },
+            "statement" : {
+              "chain" : {
+                "previous" : null,
+                "sequence" : 0,
+                "stream" : "ledger.example/relations"
+              },
+              "id" : {
+                "value" : "00000000-0000-4000-8000-000000000801"
+              },
+              "issuer" : {
+                "value" : "00000000-0000-4000-8000-000000000701"
+              },
+              "kind" : {
+                "SignedAttestation" : {
+                  
+                }
+              },
+              "observedAt" : {
+                "value" : "2026-10-01T10:10:00Z"
+              },
+              "payload" : {
+                "algorithm" : "sha-256",
+                "hex" : "91137950128a4242d7b7f6b3a30efb52c4c9776a134cfb4eed5c462bfbae0bc2"
+              },
+              "protocol" : "verified-evidence-statement-v1",
+              "source" : {
+                "observationId" : "relation-1",
+                "system" : "ledger.example"
+              },
+              "subject" : {
+                "key" : "00000000-0000-4000-8000-000000000501",
+                "kind" : "work-relation",
+                "system" : "ledger.example"
+              },
+              "tenant" : {
+                "value" : "tenant-a"
+              }
+            }
+          }
+        },
+        {
+          "body" : {
+            "linked" : {
+              "agreement" : {
+                "digest" : {
+                  "algorithm" : "sha-256",
+                  "hex" : "7066cf7d8c718ab5d55df690215293ae78301941dd00c42973e70c482f1e952e"
+                },
+                "kind" : "agreement"
+              },
+              "claim" : {
+                "digest" : {
+                  "algorithm" : "sha-256",
+                  "hex" : "4ca40a64060e46bc5644eda7b943cd432eb836cd1ede77a7af8cc0557ec7963b"
+                },
+                "kind" : "claim-commitment"
+              },
+              "claimId" : {
+                "value" : "00000000-0000-4000-8000-000000000501"
+              },
+              "receipt" : {
+                "digest" : {
+                  "algorithm" : "sha-256",
+                  "hex" : "fd8c5aa4a6b7f1be21294269b0f6b526bca829a463f13a61bfe49fab8b10cb30"
+                },
+                "kind" : "receipt"
+              },
+              "record" : {
+                "digest" : {
+                  "algorithm" : "sha-256",
+                  "hex" : "73ab62c2fa4ae2cee288b9db657a0b3de062db9b3331d9c24aa8b8a80ec48318"
+                },
+                "kind" : "work-record"
+              },
+              "registry" : "registry.example",
+              "sequence" : 0
+            },
+            "protocol" : "verified-work-relation-v1"
+          },
+          "statement" : {
+            "signature" : {
+              "encoded" : "TtSQbk8ELJ4AfjU3NwnM+YPgjjWvmM4w4mBd6FwKR4h4S7Gm7ytoQWqFkdR2a4bcot4lv8uXBbhKF6rW9DSNCA==",
+              "keyId" : "test-ledger-1",
+              "scheme" : "Ed25519"
+            },
+            "statement" : {
+              "chain" : {
+                "previous" : {
+                  "algorithm" : "sha-256",
+                  "hex" : "d4747d930396f99ddb388183a1446f323883a2f8b379b2e2aff8a882f28f9195"
+                },
+                "sequence" : 1,
+                "stream" : "ledger.example/relations"
+              },
+              "id" : {
+                "value" : "00000000-0000-4000-8000-000000000802"
+              },
+              "issuer" : {
+                "value" : "00000000-0000-4000-8000-000000000701"
+              },
+              "kind" : {
+                "SignedAttestation" : {
+                  
+                }
+              },
+              "observedAt" : {
+                "value" : "2026-10-01T10:10:00Z"
+              },
+              "payload" : {
+                "algorithm" : "sha-256",
+                "hex" : "637e7d9cdf58d58a2afa86b5caa34834535e481919b00ca9a328885d42483857"
+              },
+              "protocol" : "verified-evidence-statement-v1",
+              "source" : {
+                "observationId" : "relation-2",
+                "system" : "ledger.example"
+              },
+              "subject" : {
+                "key" : "00000000-0000-4000-8000-000000000501",
+                "kind" : "work-relation",
+                "system" : "ledger.example"
+              },
+              "tenant" : {
+                "value" : "tenant-a"
+              }
+            }
+          }
+        }
+      ],
+      "trust" : {
+        "keys" : [
+          {
+            "algorithm" : "Ed25519",
+            "issuer" : {
+              "value" : "00000000-0000-4000-8000-000000000701"
+            },
+            "keyId" : "test-ledger-1",
+            "publicKey" : "MCowBQYDK2VwAyEASAdaWX5yGhVuLgeZ3lzAxTJNxufq8c3UYlCGjsUyFd0=",
+            "revokedAt" : null,
+            "sources" : [
+              "ledger.example"
+            ],
+            "tenant" : {
+              "value" : "tenant-a"
+            },
+            "validFrom" : {
+              "value" : "2026-01-01T00:00:00Z"
+            },
+            "validUntil" : null
+          },
+          {
+            "algorithm" : "Ed25519",
+            "issuer" : {
+              "value" : "00000000-0000-4000-8000-000000000702"
+            },
+            "keyId" : "test-application-1",
+            "publicKey" : "MCowBQYDK2VwAyEAXiEsCYDks5/AlyETSqAhCTdO39JgwNPQPLUByNZUV6k=",
+            "revokedAt" : null,
+            "sources" : [
+              "application.example"
+            ],
+            "tenant" : {
+              "value" : "tenant-a"
+            },
+            "validFrom" : {
+              "value" : "2026-01-01T00:00:00Z"
+            },
+            "validUntil" : null
+          }
+        ]
+      }
+    },
+    {
+      "description" : "The statement at position 0 names a predecessor.",
+      "expected" : {
+        "records" : [
+          {
+            "digest" : {
+              "algorithm" : "sha-256",
+              "hex" : "73ab62c2fa4ae2cee288b9db657a0b3de062db9b3331d9c24aa8b8a80ec48318"
+            },
+            "kind" : "work-record"
+          }
+        ],
+        "relations" : [
+          {
+            "keyId" : "test-ledger-1",
+            "relation" : "recorded",
+            "source" : "ledger.example",
+            "standing" : "CHECKED"
+          }
+        ],
+        "sameClaims" : [
+        ],
+        "streams" : [
+          {
+            "completeness" : "CHAIN_GENESIS_INVALID",
+            "issuer" : {
+              "value" : "00000000-0000-4000-8000-000000000701"
+            },
+            "stream" : "ledger.example/relations",
+            "tenant" : {
+              "value" : "tenant-a"
+            }
+          }
+        ]
+      },
+      "name" : "chain-genesis-with-previous",
+      "records" : [
+        {
+          "kind" : "work-record",
+          "text" : "{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"8e81bd67eebd28ae02e8b9168157d7f4e74b503d2ac86ce3299798ed2c21bb09\"},\"claimId\":{\"value\":\"00000000-0000-4000-8000-000000000501\"},\"contract\":{\"algorithm\":\"sha-256\",\"hex\":\"7a85539c4ac64a34187acb580df0cbf8cf0ca712350060221ec9e6c32cb16a11\"},\"contractId\":\"invoice-processing\",\"contractVersion\":\"1.0.0\",\"decision\":\"SUPPORTED\",\"decisionDigest\":{\"algorithm\":\"sha-256\",\"hex\":\"048d413899b47e00dba0bfe602ae15abd413633c1d1594ff72b90e8b1ff724f9\"},\"evaluator\":\"work-contract\",\"evidence\":{\"algorithm\":\"sha-256\",\"hex\":\"c22f766eb9594959756b2e46a15474159e062366b2776283c1bb6641a7c1fcb4\"},\"inputs\":{\"algorithm\":\"sha-256\",\"hex\":\"7467199b63e60efe3024f37cfdefb929320c9b987520cc4ecb5aad98c0a68b60\"},\"language\":\"work-contract-1\",\"packageCommitment\":{\"algorithm\":\"sha-256\",\"hex\":\"a2cc1e196acd1b3385c96ed5541599757c18fe87a875180666c1a9ce5c95d349\"},\"protocol\":\"wvp-0.2\",\"semantics\":\"kleene-1\",\"specification\":\"1\"}"
+        }
+      ],
+      "relations" : [
+        {
+          "body" : {
+            "protocol" : "verified-work-relation-v1",
+            "recorded" : {
+              "claimId" : {
+                "value" : "00000000-0000-4000-8000-000000000501"
+              },
+              "record" : {
+                "digest" : {
+                  "algorithm" : "sha-256",
+                  "hex" : "73ab62c2fa4ae2cee288b9db657a0b3de062db9b3331d9c24aa8b8a80ec48318"
+                },
+                "kind" : "work-record"
+              }
+            }
+          },
+          "statement" : {
+            "signature" : {
+              "encoded" : "AvXADwoPjfOPPjToQ1muaQQTSrUrO8d18wegYNAglE6ihYcDeNz2fxDg+lD8GTw/hQ1dYAnxiP0a33E9PqLfBA==",
+              "keyId" : "test-ledger-1",
+              "scheme" : "Ed25519"
+            },
+            "statement" : {
+              "chain" : {
+                "previous" : {
+                  "algorithm" : "sha-256",
+                  "hex" : "2ab38f266f6d0d362f2379456697f0f2478cceb486218193c6381dc8f9085ae4"
+                },
+                "sequence" : 0,
+                "stream" : "ledger.example/relations"
+              },
+              "id" : {
+                "value" : "00000000-0000-4000-8000-000000000801"
+              },
+              "issuer" : {
+                "value" : "00000000-0000-4000-8000-000000000701"
+              },
+              "kind" : {
+                "SignedAttestation" : {
+                  
+                }
+              },
+              "observedAt" : {
+                "value" : "2026-10-01T10:10:00Z"
+              },
+              "payload" : {
+                "algorithm" : "sha-256",
+                "hex" : "91137950128a4242d7b7f6b3a30efb52c4c9776a134cfb4eed5c462bfbae0bc2"
+              },
+              "protocol" : "verified-evidence-statement-v1",
+              "source" : {
+                "observationId" : "relation-1",
+                "system" : "ledger.example"
+              },
+              "subject" : {
+                "key" : "00000000-0000-4000-8000-000000000501",
+                "kind" : "work-relation",
+                "system" : "ledger.example"
+              },
+              "tenant" : {
+                "value" : "tenant-a"
+              }
+            }
+          }
+        }
+      ],
+      "trust" : {
+        "keys" : [
+          {
+            "algorithm" : "Ed25519",
+            "issuer" : {
+              "value" : "00000000-0000-4000-8000-000000000701"
+            },
+            "keyId" : "test-ledger-1",
+            "publicKey" : "MCowBQYDK2VwAyEASAdaWX5yGhVuLgeZ3lzAxTJNxufq8c3UYlCGjsUyFd0=",
+            "revokedAt" : null,
+            "sources" : [
+              "ledger.example"
+            ],
+            "tenant" : {
+              "value" : "tenant-a"
+            },
+            "validFrom" : {
+              "value" : "2026-01-01T00:00:00Z"
+            },
+            "validUntil" : null
+          },
+          {
+            "algorithm" : "Ed25519",
+            "issuer" : {
+              "value" : "00000000-0000-4000-8000-000000000702"
+            },
+            "keyId" : "test-application-1",
+            "publicKey" : "MCowBQYDK2VwAyEAXiEsCYDks5/AlyETSqAhCTdO39JgwNPQPLUByNZUV6k=",
+            "revokedAt" : null,
+            "sources" : [
+              "application.example"
+            ],
+            "tenant" : {
+              "value" : "tenant-a"
+            },
+            "validFrom" : {
+              "value" : "2026-01-01T00:00:00Z"
+            },
+            "validUntil" : null
+          }
+        ]
+      }
+    },
+    {
+      "description" : "One statement presented twice holds one position, and is no equivocation.",
+      "expected" : {
+        "records" : [
+          {
+            "digest" : {
+              "algorithm" : "sha-256",
+              "hex" : "73ab62c2fa4ae2cee288b9db657a0b3de062db9b3331d9c24aa8b8a80ec48318"
+            },
+            "kind" : "work-record"
+          },
+          {
+            "digest" : {
+              "algorithm" : "sha-256",
+              "hex" : "7066cf7d8c718ab5d55df690215293ae78301941dd00c42973e70c482f1e952e"
+            },
+            "kind" : "agreement"
+          },
+          {
+            "digest" : {
+              "algorithm" : "sha-256",
+              "hex" : "4ca40a64060e46bc5644eda7b943cd432eb836cd1ede77a7af8cc0557ec7963b"
+            },
+            "kind" : "claim-commitment"
+          },
+          {
+            "digest" : {
+              "algorithm" : "sha-256",
+              "hex" : "fd8c5aa4a6b7f1be21294269b0f6b526bca829a463f13a61bfe49fab8b10cb30"
+            },
+            "kind" : "receipt"
+          }
+        ],
+        "relations" : [
+          {
+            "keyId" : "test-ledger-1",
+            "relation" : "recorded",
+            "source" : "ledger.example",
+            "standing" : "CHECKED"
+          },
+          {
+            "keyId" : "test-ledger-1",
+            "relation" : "recorded",
+            "source" : "ledger.example",
+            "standing" : "CHECKED"
+          },
+          {
+            "keyId" : "test-ledger-1",
+            "relation" : "linked",
+            "source" : "ledger.example",
+            "standing" : "CHECKED"
+          }
+        ],
+        "sameClaims" : [
+        ],
+        "streams" : [
+          {
+            "completeness" : "UNINTERRUPTED",
+            "issuer" : {
+              "value" : "00000000-0000-4000-8000-000000000701"
+            },
+            "last" : 1,
+            "stream" : "ledger.example/relations",
+            "tenant" : {
+              "value" : "tenant-a"
+            }
+          }
+        ]
+      },
+      "name" : "chain-statement-twice",
+      "records" : [
+        {
+          "kind" : "work-record",
+          "text" : "{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"8e81bd67eebd28ae02e8b9168157d7f4e74b503d2ac86ce3299798ed2c21bb09\"},\"claimId\":{\"value\":\"00000000-0000-4000-8000-000000000501\"},\"contract\":{\"algorithm\":\"sha-256\",\"hex\":\"7a85539c4ac64a34187acb580df0cbf8cf0ca712350060221ec9e6c32cb16a11\"},\"contractId\":\"invoice-processing\",\"contractVersion\":\"1.0.0\",\"decision\":\"SUPPORTED\",\"decisionDigest\":{\"algorithm\":\"sha-256\",\"hex\":\"048d413899b47e00dba0bfe602ae15abd413633c1d1594ff72b90e8b1ff724f9\"},\"evaluator\":\"work-contract\",\"evidence\":{\"algorithm\":\"sha-256\",\"hex\":\"c22f766eb9594959756b2e46a15474159e062366b2776283c1bb6641a7c1fcb4\"},\"inputs\":{\"algorithm\":\"sha-256\",\"hex\":\"7467199b63e60efe3024f37cfdefb929320c9b987520cc4ecb5aad98c0a68b60\"},\"language\":\"work-contract-1\",\"packageCommitment\":{\"algorithm\":\"sha-256\",\"hex\":\"a2cc1e196acd1b3385c96ed5541599757c18fe87a875180666c1a9ce5c95d349\"},\"protocol\":\"wvp-0.2\",\"semantics\":\"kleene-1\",\"specification\":\"1\"}"
+        },
+        {
+          "kind" : "agreement",
+          "text" : "{\"agreement\":{\"claimant\":{\"value\":\"00000000-0000-4000-8000-000000000502\"},\"contract\":{\"digest\":{\"algorithm\":\"sha-256\",\"hex\":\"7a85539c4ac64a34187acb580df0cbf8cf0ca712350060221ec9e6c32cb16a11\"},\"id\":\"invoice-processing\",\"version\":\"1.0.0\"},\"id\":{\"value\":\"00000000-0000-4000-8000-000000000701\"},\"openClaimLimit\":20,\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"respondWithinSeconds\":1209600,\"respondent\":{\"value\":\"00000000-0000-4000-8000-000000000602\"},\"scope\":{\"identity\":[\"invoice\"],\"operation\":\"process\",\"scope\":\"invoice-processing\"},\"tenant\":{\"value\":\"tenant-a\"},\"unitKey\":{\"algorithm\":\"sha-256\",\"hex\":\"46e493a605f1bb35ec3e29f0a4d2c15742fe864378543876c8909cb024e90bf3\"},\"validFrom\":{\"value\":\"2026-01-01T00:00:00Z\"},\"validUntil\":{\"value\":\"2027-01-01T00:00:00Z\"}},\"signatures\":{\"claimant\":{\"encoded\":\"mTzBemXOa4bQUfk7Ug3J5I2M5/pNPqpVsB4D+W0DuWihwld6fJIS5unI7+ic6+bq4GNWfyt6p9qWtp9+id4eBg==\",\"keyId\":\"test-claimant-1\",\"scheme\":\"Ed25519\"},\"respondent\":{\"encoded\":\"smhvGcvAq5N6zexBjE67qaUcMY7PAwGLXoZbn4aklhzbltmVWbncQ/t+r6MZ152pgH5E58je9IJmcy3a0vLzBA==\",\"keyId\":\"test-respondent-1\",\"scheme\":\"Ed25519\"}}}"
+        },
+        {
+          "kind" : "claim-commitment",
+          "text" : "{\"claim\":{\"agreement\":{\"algorithm\":\"sha-256\",\"hex\":\"7066cf7d8c718ab5d55df690215293ae78301941dd00c42973e70c482f1e952e\"},\"claimedAt\":{\"value\":\"2026-10-01T10:05:00Z\"},\"id\":{\"value\":\"00000000-0000-4000-8000-000000000501\"},\"inputs\":{\"algorithm\":\"sha-256\",\"hex\":\"576ea1554852369298e6008d3250620d3b26b0240c890806c62c7a86571f60d0\"},\"protocol\":\"verified-claim-registration-v1\",\"unit\":{\"algorithm\":\"hmac-sha-256\",\"hex\":\"f39ed66067a61c3da619c6b4d29fc77a0ec1256d4fe70e5710bfc5a97037e310\"}},\"signature\":{\"encoded\":\"i2qVK2GcvFt40PGpvv9OpwWH/kxQiJw2t2iU9PUh0eNIbs7Idp+pEpOqyZ7FQDaonYCv/zTq/FiZqDzptUx9DQ==\",\"keyId\":\"test-claimant-1\",\"scheme\":\"Ed25519\"}}"
+        },
+        {
+          "kind" : "receipt",
+          "text" : "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"4ca40a64060e46bc5644eda7b943cd432eb836cd1ede77a7af8cc0557ec7963b\"},\"previous\":null,\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:05:02Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:05:02Z\"},\"sequence\":0},\"signature\":{\"encoded\":\"RSfx5OzEZEFdU0jp9oluB5rSWZ9w1pOdajE515TZSUOfvC/+7Jer/MnAzBbadhWQh4MjVIQAN8mG1XA2ayubAA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}"
+        }
+      ],
+      "relations" : [
+        {
+          "body" : {
+            "protocol" : "verified-work-relation-v1",
+            "recorded" : {
+              "claimId" : {
+                "value" : "00000000-0000-4000-8000-000000000501"
+              },
+              "record" : {
+                "digest" : {
+                  "algorithm" : "sha-256",
+                  "hex" : "73ab62c2fa4ae2cee288b9db657a0b3de062db9b3331d9c24aa8b8a80ec48318"
+                },
+                "kind" : "work-record"
+              }
+            }
+          },
+          "statement" : {
+            "signature" : {
+              "encoded" : "yMYVWQ9HS+4G9EuXGf5lDf+Rvryu6AITUN13S1vT0OkF9lY7IxmDgtQpBSPDA7qFQtZk4OBTE1sDkK9aflMgCw==",
+              "keyId" : "test-ledger-1",
+              "scheme" : "Ed25519"
+            },
+            "statement" : {
+              "chain" : {
+                "previous" : null,
+                "sequence" : 0,
+                "stream" : "ledger.example/relations"
+              },
+              "id" : {
+                "value" : "00000000-0000-4000-8000-000000000801"
+              },
+              "issuer" : {
+                "value" : "00000000-0000-4000-8000-000000000701"
+              },
+              "kind" : {
+                "SignedAttestation" : {
+                  
+                }
+              },
+              "observedAt" : {
+                "value" : "2026-10-01T10:10:00Z"
+              },
+              "payload" : {
+                "algorithm" : "sha-256",
+                "hex" : "91137950128a4242d7b7f6b3a30efb52c4c9776a134cfb4eed5c462bfbae0bc2"
+              },
+              "protocol" : "verified-evidence-statement-v1",
+              "source" : {
+                "observationId" : "relation-1",
+                "system" : "ledger.example"
+              },
+              "subject" : {
+                "key" : "00000000-0000-4000-8000-000000000501",
+                "kind" : "work-relation",
+                "system" : "ledger.example"
+              },
+              "tenant" : {
+                "value" : "tenant-a"
+              }
+            }
+          }
+        },
+        {
+          "body" : {
+            "protocol" : "verified-work-relation-v1",
+            "recorded" : {
+              "claimId" : {
+                "value" : "00000000-0000-4000-8000-000000000501"
+              },
+              "record" : {
+                "digest" : {
+                  "algorithm" : "sha-256",
+                  "hex" : "73ab62c2fa4ae2cee288b9db657a0b3de062db9b3331d9c24aa8b8a80ec48318"
+                },
+                "kind" : "work-record"
+              }
+            }
+          },
+          "statement" : {
+            "signature" : {
+              "encoded" : "yMYVWQ9HS+4G9EuXGf5lDf+Rvryu6AITUN13S1vT0OkF9lY7IxmDgtQpBSPDA7qFQtZk4OBTE1sDkK9aflMgCw==",
+              "keyId" : "test-ledger-1",
+              "scheme" : "Ed25519"
+            },
+            "statement" : {
+              "chain" : {
+                "previous" : null,
+                "sequence" : 0,
+                "stream" : "ledger.example/relations"
+              },
+              "id" : {
+                "value" : "00000000-0000-4000-8000-000000000801"
+              },
+              "issuer" : {
+                "value" : "00000000-0000-4000-8000-000000000701"
+              },
+              "kind" : {
+                "SignedAttestation" : {
+                  
+                }
+              },
+              "observedAt" : {
+                "value" : "2026-10-01T10:10:00Z"
+              },
+              "payload" : {
+                "algorithm" : "sha-256",
+                "hex" : "91137950128a4242d7b7f6b3a30efb52c4c9776a134cfb4eed5c462bfbae0bc2"
+              },
+              "protocol" : "verified-evidence-statement-v1",
+              "source" : {
+                "observationId" : "relation-1",
+                "system" : "ledger.example"
+              },
+              "subject" : {
+                "key" : "00000000-0000-4000-8000-000000000501",
+                "kind" : "work-relation",
+                "system" : "ledger.example"
+              },
+              "tenant" : {
+                "value" : "tenant-a"
+              }
+            }
+          }
+        },
+        {
+          "body" : {
+            "linked" : {
+              "agreement" : {
+                "digest" : {
+                  "algorithm" : "sha-256",
+                  "hex" : "7066cf7d8c718ab5d55df690215293ae78301941dd00c42973e70c482f1e952e"
+                },
+                "kind" : "agreement"
+              },
+              "claim" : {
+                "digest" : {
+                  "algorithm" : "sha-256",
+                  "hex" : "4ca40a64060e46bc5644eda7b943cd432eb836cd1ede77a7af8cc0557ec7963b"
+                },
+                "kind" : "claim-commitment"
+              },
+              "claimId" : {
+                "value" : "00000000-0000-4000-8000-000000000501"
+              },
+              "receipt" : {
+                "digest" : {
+                  "algorithm" : "sha-256",
+                  "hex" : "fd8c5aa4a6b7f1be21294269b0f6b526bca829a463f13a61bfe49fab8b10cb30"
+                },
+                "kind" : "receipt"
+              },
+              "record" : {
+                "digest" : {
+                  "algorithm" : "sha-256",
+                  "hex" : "73ab62c2fa4ae2cee288b9db657a0b3de062db9b3331d9c24aa8b8a80ec48318"
+                },
+                "kind" : "work-record"
+              },
+              "registry" : "registry.example",
+              "sequence" : 0
+            },
+            "protocol" : "verified-work-relation-v1"
+          },
+          "statement" : {
+            "signature" : {
+              "encoded" : "AmJE8Xs5LdXRuKgfShOxCTr3izd8G7BZlOiYeOuA+2MAPTtRTK2Rh5LZOTYDyOSbKv4oGio59rScFH8/9nANBA==",
+              "keyId" : "test-ledger-1",
+              "scheme" : "Ed25519"
+            },
+            "statement" : {
+              "chain" : {
+                "previous" : {
+                  "algorithm" : "sha-256",
+                  "hex" : "2609f0bf6917a6dd0d84af6013c237c81bdcfa7a9fa7ea5bf8a49a74c8d7735b"
+                },
+                "sequence" : 1,
+                "stream" : "ledger.example/relations"
+              },
+              "id" : {
+                "value" : "00000000-0000-4000-8000-000000000802"
+              },
+              "issuer" : {
+                "value" : "00000000-0000-4000-8000-000000000701"
+              },
+              "kind" : {
+                "SignedAttestation" : {
+                  
+                }
+              },
+              "observedAt" : {
+                "value" : "2026-10-01T10:10:00Z"
+              },
+              "payload" : {
+                "algorithm" : "sha-256",
+                "hex" : "637e7d9cdf58d58a2afa86b5caa34834535e481919b00ca9a328885d42483857"
+              },
+              "protocol" : "verified-evidence-statement-v1",
+              "source" : {
+                "observationId" : "relation-2",
+                "system" : "ledger.example"
+              },
+              "subject" : {
+                "key" : "00000000-0000-4000-8000-000000000501",
+                "kind" : "work-relation",
+                "system" : "ledger.example"
+              },
+              "tenant" : {
+                "value" : "tenant-a"
+              }
+            }
+          }
+        }
+      ],
+      "trust" : {
+        "keys" : [
+          {
+            "algorithm" : "Ed25519",
+            "issuer" : {
+              "value" : "00000000-0000-4000-8000-000000000701"
+            },
+            "keyId" : "test-ledger-1",
+            "publicKey" : "MCowBQYDK2VwAyEASAdaWX5yGhVuLgeZ3lzAxTJNxufq8c3UYlCGjsUyFd0=",
+            "revokedAt" : null,
+            "sources" : [
+              "ledger.example"
+            ],
+            "tenant" : {
+              "value" : "tenant-a"
+            },
+            "validFrom" : {
+              "value" : "2026-01-01T00:00:00Z"
+            },
+            "validUntil" : null
+          },
+          {
+            "algorithm" : "Ed25519",
+            "issuer" : {
+              "value" : "00000000-0000-4000-8000-000000000702"
+            },
+            "keyId" : "test-application-1",
+            "publicKey" : "MCowBQYDK2VwAyEAXiEsCYDks5/AlyETSqAhCTdO39JgwNPQPLUByNZUV6k=",
+            "revokedAt" : null,
+            "sources" : [
+              "application.example"
+            ],
+            "tenant" : {
+              "value" : "tenant-a"
+            },
+            "validFrom" : {
+              "value" : "2026-01-01T00:00:00Z"
+            },
+            "validUntil" : null
+          }
+        ]
+      }
+    },
+    {
+      "description" : "A statement whose body is refused still verified, and holds its position in the stream.",
+      "expected" : {
+        "records" : [
+          {
+            "digest" : {
+              "algorithm" : "sha-256",
+              "hex" : "73ab62c2fa4ae2cee288b9db657a0b3de062db9b3331d9c24aa8b8a80ec48318"
+            },
+            "kind" : "work-record"
+          },
+          {
+            "digest" : {
+              "algorithm" : "sha-256",
+              "hex" : "7066cf7d8c718ab5d55df690215293ae78301941dd00c42973e70c482f1e952e"
+            },
+            "kind" : "agreement"
+          },
+          {
+            "digest" : {
+              "algorithm" : "sha-256",
+              "hex" : "4ca40a64060e46bc5644eda7b943cd432eb836cd1ede77a7af8cc0557ec7963b"
+            },
+            "kind" : "claim-commitment"
+          },
+          {
+            "digest" : {
+              "algorithm" : "sha-256",
+              "hex" : "fd8c5aa4a6b7f1be21294269b0f6b526bca829a463f13a61bfe49fab8b10cb30"
+            },
+            "kind" : "receipt"
+          }
+        ],
+        "relations" : [
+          {
+            "code" : "MALFORMED",
+            "keyId" : "test-ledger-1",
+            "source" : "ledger.example",
+            "standing" : "REFUSED"
+          },
+          {
+            "keyId" : "test-ledger-1",
+            "relation" : "linked",
+            "source" : "ledger.example",
+            "standing" : "CHECKED"
+          }
+        ],
+        "sameClaims" : [
+        ],
+        "streams" : [
+          {
+            "completeness" : "UNINTERRUPTED",
+            "issuer" : {
+              "value" : "00000000-0000-4000-8000-000000000701"
+            },
+            "last" : 1,
+            "stream" : "ledger.example/relations",
+            "tenant" : {
+              "value" : "tenant-a"
+            }
+          }
+        ]
+      },
+      "name" : "chain-refused-body-holds-position",
+      "records" : [
+        {
+          "kind" : "work-record",
+          "text" : "{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"8e81bd67eebd28ae02e8b9168157d7f4e74b503d2ac86ce3299798ed2c21bb09\"},\"claimId\":{\"value\":\"00000000-0000-4000-8000-000000000501\"},\"contract\":{\"algorithm\":\"sha-256\",\"hex\":\"7a85539c4ac64a34187acb580df0cbf8cf0ca712350060221ec9e6c32cb16a11\"},\"contractId\":\"invoice-processing\",\"contractVersion\":\"1.0.0\",\"decision\":\"SUPPORTED\",\"decisionDigest\":{\"algorithm\":\"sha-256\",\"hex\":\"048d413899b47e00dba0bfe602ae15abd413633c1d1594ff72b90e8b1ff724f9\"},\"evaluator\":\"work-contract\",\"evidence\":{\"algorithm\":\"sha-256\",\"hex\":\"c22f766eb9594959756b2e46a15474159e062366b2776283c1bb6641a7c1fcb4\"},\"inputs\":{\"algorithm\":\"sha-256\",\"hex\":\"7467199b63e60efe3024f37cfdefb929320c9b987520cc4ecb5aad98c0a68b60\"},\"language\":\"work-contract-1\",\"packageCommitment\":{\"algorithm\":\"sha-256\",\"hex\":\"a2cc1e196acd1b3385c96ed5541599757c18fe87a875180666c1a9ce5c95d349\"},\"protocol\":\"wvp-0.2\",\"semantics\":\"kleene-1\",\"specification\":\"1\"}"
+        },
+        {
+          "kind" : "agreement",
+          "text" : "{\"agreement\":{\"claimant\":{\"value\":\"00000000-0000-4000-8000-000000000502\"},\"contract\":{\"digest\":{\"algorithm\":\"sha-256\",\"hex\":\"7a85539c4ac64a34187acb580df0cbf8cf0ca712350060221ec9e6c32cb16a11\"},\"id\":\"invoice-processing\",\"version\":\"1.0.0\"},\"id\":{\"value\":\"00000000-0000-4000-8000-000000000701\"},\"openClaimLimit\":20,\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"respondWithinSeconds\":1209600,\"respondent\":{\"value\":\"00000000-0000-4000-8000-000000000602\"},\"scope\":{\"identity\":[\"invoice\"],\"operation\":\"process\",\"scope\":\"invoice-processing\"},\"tenant\":{\"value\":\"tenant-a\"},\"unitKey\":{\"algorithm\":\"sha-256\",\"hex\":\"46e493a605f1bb35ec3e29f0a4d2c15742fe864378543876c8909cb024e90bf3\"},\"validFrom\":{\"value\":\"2026-01-01T00:00:00Z\"},\"validUntil\":{\"value\":\"2027-01-01T00:00:00Z\"}},\"signatures\":{\"claimant\":{\"encoded\":\"mTzBemXOa4bQUfk7Ug3J5I2M5/pNPqpVsB4D+W0DuWihwld6fJIS5unI7+ic6+bq4GNWfyt6p9qWtp9+id4eBg==\",\"keyId\":\"test-claimant-1\",\"scheme\":\"Ed25519\"},\"respondent\":{\"encoded\":\"smhvGcvAq5N6zexBjE67qaUcMY7PAwGLXoZbn4aklhzbltmVWbncQ/t+r6MZ152pgH5E58je9IJmcy3a0vLzBA==\",\"keyId\":\"test-respondent-1\",\"scheme\":\"Ed25519\"}}}"
+        },
+        {
+          "kind" : "claim-commitment",
+          "text" : "{\"claim\":{\"agreement\":{\"algorithm\":\"sha-256\",\"hex\":\"7066cf7d8c718ab5d55df690215293ae78301941dd00c42973e70c482f1e952e\"},\"claimedAt\":{\"value\":\"2026-10-01T10:05:00Z\"},\"id\":{\"value\":\"00000000-0000-4000-8000-000000000501\"},\"inputs\":{\"algorithm\":\"sha-256\",\"hex\":\"576ea1554852369298e6008d3250620d3b26b0240c890806c62c7a86571f60d0\"},\"protocol\":\"verified-claim-registration-v1\",\"unit\":{\"algorithm\":\"hmac-sha-256\",\"hex\":\"f39ed66067a61c3da619c6b4d29fc77a0ec1256d4fe70e5710bfc5a97037e310\"}},\"signature\":{\"encoded\":\"i2qVK2GcvFt40PGpvv9OpwWH/kxQiJw2t2iU9PUh0eNIbs7Idp+pEpOqyZ7FQDaonYCv/zTq/FiZqDzptUx9DQ==\",\"keyId\":\"test-claimant-1\",\"scheme\":\"Ed25519\"}}"
+        },
+        {
+          "kind" : "receipt",
+          "text" : "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"4ca40a64060e46bc5644eda7b943cd432eb836cd1ede77a7af8cc0557ec7963b\"},\"previous\":null,\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:05:02Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:05:02Z\"},\"sequence\":0},\"signature\":{\"encoded\":\"RSfx5OzEZEFdU0jp9oluB5rSWZ9w1pOdajE515TZSUOfvC/+7Jer/MnAzBbadhWQh4MjVIQAN8mG1XA2ayubAA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}"
+        }
+      ],
+      "relations" : [
+        {
+          "body" : {
+            "protocol" : "verified-work-relation-v1",
+            "recorded" : {
+              "accepted" : true,
+              "claimId" : {
+                "value" : "00000000-0000-4000-8000-000000000501"
+              },
+              "record" : {
+                "digest" : {
+                  "algorithm" : "sha-256",
+                  "hex" : "73ab62c2fa4ae2cee288b9db657a0b3de062db9b3331d9c24aa8b8a80ec48318"
+                },
+                "kind" : "work-record"
+              }
+            }
+          },
+          "statement" : {
+            "signature" : {
+              "encoded" : "gID+GNS0U4uoeqYQZ4ws4KrhtdnibrHhS0W0d4iN1vbDNVpI6ZqMtODjzSz9KZmzxoImen0+q4cq8PxfO6goCw==",
+              "keyId" : "test-ledger-1",
+              "scheme" : "Ed25519"
+            },
+            "statement" : {
+              "chain" : {
+                "previous" : null,
+                "sequence" : 0,
+                "stream" : "ledger.example/relations"
+              },
+              "id" : {
+                "value" : "00000000-0000-4000-8000-000000000801"
+              },
+              "issuer" : {
+                "value" : "00000000-0000-4000-8000-000000000701"
+              },
+              "kind" : {
+                "SignedAttestation" : {
+                  
+                }
+              },
+              "observedAt" : {
+                "value" : "2026-10-01T10:10:00Z"
+              },
+              "payload" : {
+                "algorithm" : "sha-256",
+                "hex" : "05b991e2881cbf6d3bac19371153fa724621f0258774bb0e0c2dfdc441f78755"
+              },
+              "protocol" : "verified-evidence-statement-v1",
+              "source" : {
+                "observationId" : "relation-1",
+                "system" : "ledger.example"
+              },
+              "subject" : {
+                "key" : "00000000-0000-4000-8000-000000000501",
+                "kind" : "work-relation",
+                "system" : "ledger.example"
+              },
+              "tenant" : {
+                "value" : "tenant-a"
+              }
+            }
+          }
+        },
+        {
+          "body" : {
+            "linked" : {
+              "agreement" : {
+                "digest" : {
+                  "algorithm" : "sha-256",
+                  "hex" : "7066cf7d8c718ab5d55df690215293ae78301941dd00c42973e70c482f1e952e"
+                },
+                "kind" : "agreement"
+              },
+              "claim" : {
+                "digest" : {
+                  "algorithm" : "sha-256",
+                  "hex" : "4ca40a64060e46bc5644eda7b943cd432eb836cd1ede77a7af8cc0557ec7963b"
+                },
+                "kind" : "claim-commitment"
+              },
+              "claimId" : {
+                "value" : "00000000-0000-4000-8000-000000000501"
+              },
+              "receipt" : {
+                "digest" : {
+                  "algorithm" : "sha-256",
+                  "hex" : "fd8c5aa4a6b7f1be21294269b0f6b526bca829a463f13a61bfe49fab8b10cb30"
+                },
+                "kind" : "receipt"
+              },
+              "record" : {
+                "digest" : {
+                  "algorithm" : "sha-256",
+                  "hex" : "73ab62c2fa4ae2cee288b9db657a0b3de062db9b3331d9c24aa8b8a80ec48318"
+                },
+                "kind" : "work-record"
+              },
+              "registry" : "registry.example",
+              "sequence" : 0
+            },
+            "protocol" : "verified-work-relation-v1"
+          },
+          "statement" : {
+            "signature" : {
+              "encoded" : "fYzM8+dRY3uRtYUIB99uilIuL/LMKOGWM9kShK7l/DMZsJ/0zzvWsRym073z1M/9QqYMrgOHPhkvVDl/HZ1mAw==",
+              "keyId" : "test-ledger-1",
+              "scheme" : "Ed25519"
+            },
+            "statement" : {
+              "chain" : {
+                "previous" : {
+                  "algorithm" : "sha-256",
+                  "hex" : "ab3196571d1e5034ed18515487be1e935c4de5281a1e1a44e2cd5566c7a91095"
+                },
+                "sequence" : 1,
+                "stream" : "ledger.example/relations"
+              },
+              "id" : {
+                "value" : "00000000-0000-4000-8000-000000000802"
+              },
+              "issuer" : {
+                "value" : "00000000-0000-4000-8000-000000000701"
+              },
+              "kind" : {
+                "SignedAttestation" : {
+                  
+                }
+              },
+              "observedAt" : {
+                "value" : "2026-10-01T10:10:00Z"
+              },
+              "payload" : {
+                "algorithm" : "sha-256",
+                "hex" : "637e7d9cdf58d58a2afa86b5caa34834535e481919b00ca9a328885d42483857"
+              },
+              "protocol" : "verified-evidence-statement-v1",
+              "source" : {
+                "observationId" : "relation-2",
+                "system" : "ledger.example"
+              },
+              "subject" : {
+                "key" : "00000000-0000-4000-8000-000000000501",
+                "kind" : "work-relation",
+                "system" : "ledger.example"
+              },
+              "tenant" : {
+                "value" : "tenant-a"
+              }
+            }
+          }
+        }
+      ],
+      "trust" : {
+        "keys" : [
+          {
+            "algorithm" : "Ed25519",
+            "issuer" : {
+              "value" : "00000000-0000-4000-8000-000000000701"
+            },
+            "keyId" : "test-ledger-1",
+            "publicKey" : "MCowBQYDK2VwAyEASAdaWX5yGhVuLgeZ3lzAxTJNxufq8c3UYlCGjsUyFd0=",
+            "revokedAt" : null,
+            "sources" : [
+              "ledger.example"
+            ],
+            "tenant" : {
+              "value" : "tenant-a"
+            },
+            "validFrom" : {
+              "value" : "2026-01-01T00:00:00Z"
+            },
+            "validUntil" : null
+          },
+          {
+            "algorithm" : "Ed25519",
+            "issuer" : {
+              "value" : "00000000-0000-4000-8000-000000000702"
+            },
+            "keyId" : "test-application-1",
+            "publicKey" : "MCowBQYDK2VwAyEAXiEsCYDks5/AlyETSqAhCTdO39JgwNPQPLUByNZUV6k=",
+            "revokedAt" : null,
+            "sources" : [
+              "application.example"
+            ],
+            "tenant" : {
+              "value" : "tenant-a"
+            },
+            "validFrom" : {
+              "value" : "2026-01-01T00:00:00Z"
+            },
+            "validUntil" : null
+          }
+        ]
+      }
+    },
+    {
       "description" : "A work record text with whitespace is not held, and the relation to it is stated.",
       "expected" : {
         "records" : [

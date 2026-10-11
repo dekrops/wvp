@@ -192,14 +192,24 @@ This is a **derived** relation: no one signs it, and anyone holding the three re
 
 A set of relations says nothing about relations that are not in it, unless their authority chained them.
 
-For each stream (one tenant, issuer and stream name) the reader computes continuity as Evidence Statement v1 defines it, from chain positions only, and reports one of:
+A **stream** is one tenant, one issuer and one stream name. Its statements are every presented statement that verified (section 5.2, step 1) and has a chain position, whether or not its body was then accepted. A statement presented more than once counts once.
 
-| Completeness    | Meaning                                                                                            |
-| --------------- | -------------------------------------------------------------------------------------------------- |
-| `UNINTERRUPTED` | Every position from the stream's first to the last one presented is present. Carries that position |
-| `UNKNOWN`       | Anything else: a position is missing, or the stream's first statement was not presented            |
+From chain positions only, never from the order received or from asserted times, the reader checks each stream, in this order:
 
-Relations without a chain position belong to no stream, and their completeness is `UNKNOWN`. A stream whose presented statements contradict each other is refused with the chain's own code.
+1. no two different statements hold one position: `CHAIN_EQUIVOCATION`;
+2. the statement at position 0, if presented, names no predecessor: `CHAIN_GENESIS_INVALID`;
+3. wherever positions `n` and `n + 1` are both presented, the later names the digest of the earlier: `CHAIN_PREVIOUS_MISMATCH`.
+
+A stream that fails one is reported with that code. Otherwise it is reported as one of:
+
+| Completeness    | Meaning                                                                                                   |
+| --------------- | --------------------------------------------------------------------------------------------------------- |
+| `UNINTERRUPTED` | Position 0 is presented, and every position from it to the last one presented. Carries that last position |
+| `UNKNOWN`       | Anything else: a position is missing, or position 0 was not presented                                     |
+
+A missing position is not a refusal. This differs from verifying a segment under Evidence Statement v1, which takes statements in the order received and refuses a gap: a reader of relations is given a selection, and reports what the selection shows.
+
+Relations without a chain position belong to no stream, and their completeness is `UNKNOWN`.
 
 `UNINTERRUPTED` says nothing about what follows the last position: a stream cut short is indistinguishable from one that stopped. Only the authority's own later statement, or an anchor the reader holds from elsewhere, can show more. For a registry the equivalent is its signed head, which claim registration defines and this specification does not repeat.
 
@@ -213,4 +223,4 @@ Relations without a chain position belong to no stream, and their completeness i
 
 ## 9. Conformance
 
-`test-vectors/work-relation/v1/vectors.json` holds, for each case, the relations, the records and the trust registry, and the expected reading: each record's digest or `MALFORMED_RECORD`, each relation's standing with its code or absent references, each derived relation, and each stream's completeness. An implementation conforms when it computes the same reading for every case.
+`test-vectors/work-relation/v1/vectors.json` holds, for each case, the relations, the records and the trust registry, and the expected reading: each record's digest or `MALFORMED_RECORD`, each relation's standing with its code or absent references, each derived relation, and each stream's completeness. Records and relations are reported in the order given. Derived relations are ordered by the package's digest, then the claim commitment's, as hexadecimal text. Streams are ordered by tenant, then issuer, then stream name, as text. An implementation conforms when it computes the same reading for every case.

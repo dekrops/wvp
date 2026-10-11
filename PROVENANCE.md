@@ -1,6 +1,6 @@
 # Provenance
 
-Exported from `dekrops/verified` at commit `549545dba8c4770d45920d6a1f657a56409c007e` by `tooling/export-protocol.mjs`.
+Exported from `dekrops/verified` at commit `54bb3b4a116915002dd3c81b35b7f6ff3dcb9e9e` by `tooling/export-protocol.mjs`.
 
 Every file is a byte-for-byte copy of the file at the same path, except where marked edited, and except `README.md` and the license files at the root, which are copied from `publishing/wvp/`. The only edit is that a Markdown link to a file that is not published is replaced by its text, and `test-vectors/README.md` omits the section on vectors that are not published.
 
@@ -20,7 +20,7 @@ All data in the vectors and examples is synthetic. Names such as `u.lindqvist` a
 | `protocols/work-contract/v1/examples/invoice-processing/artifact.json` | `5f9427f5cf84b1734f0a2584fe9d1ebbdfd0d2565c5f73ae93070fda8509bece` |  |
 | `protocols/work-contract/v1/examples/invoice-processing/draft.json` | `8ea92a6b4fca375b1fd6f6ddddf1e65a7a639e4d13b04983ccdc66bf16642c5e` |  |
 | `protocols/work-contract/v1/SPEC.md` | `91dc51881661b58e035c7130749d67bb4b402287aabcd619a7152ae396e933c4` | yes |
-| `protocols/work-relation/v1/SPEC.md` | `99e2f9349dbd2c15e03e177f85250091d4b86cae800e318f17264142914eb7f8` | yes |
+| `protocols/work-relation/v1/SPEC.md` | `255adecbd0ef336c0f148be65e98e4c20a0bcd7444759f0412075fc7d1cc7225` | yes |
 | `protocols/work-unit/v1/SPEC.md` | `e7502722b753204f770f31f580490dad6ee2924cafbe64895bd7f2596ab46795` | yes |
 | `protocols/wvp/v0.1/examples/order-transition/package.json` | `6572b58ad9ddfe738f6b52eac1a1dbe32942a63448f68163f4383405c46d0fac` |  |
 | `protocols/wvp/v0.1/examples/order-transition/registry.json` | `c5ea044bc385876bac7cfb49c703fab84e1cb1924e5af559e4369337638e79d5` |  |
@@ -165,7 +165,7 @@ All data in the vectors and examples is synthetic. Names such as `u.lindqvist` a
 | `test-vectors/work-contract/v1/differential/approved-and-posted.approval-first.json` | `f3126a36024b1444bc54746aee0014fc4f98864dfce969c00ba3ee6300f562fd` |  |
 | `test-vectors/work-contract/v1/differential/invoice-processing.json` | `d3f62be7bb345605f5a279898826cf909b190bb9f6cbda31923089d389d93a3b` |  |
 | `test-vectors/work-contract/v1/differential/invoice-processing.source-order.json` | `efc028c375485efb18e5a586569c15fc3820cbaf93a5024a498876be55733031` |  |
-| `test-vectors/work-relation/v1/vectors.json` | `65665a9571f42d2f66ff85d6595ff59effc945903024d87db8e5a58489cddf81` |  |
+| `test-vectors/work-relation/v1/vectors.json` | `ff66d1a22ec50f69ccfdab99276a841a32ecb4797ab79ace675f747d6e83e2a4` |  |
 | `test-vectors/work-unit/v1/vectors.json` | `8555ac6bd9381177436b489b58bc8a17614866244d883628de7b21e4bbea89e5` |  |
 | `test-vectors/wvp/v0.1/invalid/body-case-not-carried.json` | `e4a8f85a3733ee8285226c0581862fd5549e70a073e9762ad067592278de0ee0` |  |
 | `test-vectors/wvp/v0.1/invalid/enumeration-case-with-payload.json` | `348d0e11debcdf409a935d35ea8b1f863a4d1ac5583f75dc1bd44af9f069144e` |  |
