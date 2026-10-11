@@ -36,15 +36,43 @@ Splitting by path gives the public process a place that cannot be overwritten, w
 
 ## The path to the specifications being written here
 
-Each step is a precondition for the next. None is promised by a date.
+Three milestones. Each has prerequisites that can be checked, and each step before the last can be undone by reverting one pull request.
 
-| Step                                              | What it means                                                                                                                                                                                                                                                                  | Who can do it                                                                                               |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
-| **1. Public process** (done)                      | RFCs, governance and conformance reports are written here and survive every export                                                                                                                                                                                             | —                                                                                                           |
-| **2. Publish what is normative** (done)           | The Lean definition that Work Contract Language 1 defers to is published under `formal/lean` and checked by this repository's CI                                                                                                                                               | —                                                                                                           |
-| **3. Remove private references**                  | Specifications stop naming modules, scripts and decision records that readers cannot see; status paragraphs about one product move out of normative documents                                                                                                                  | An editorial pass, at the source                                                                            |
-| **4. A public way to check the corpus** (in part) | A public implementation, or the public ones together, reproduce every vector in this repository's own CI, so that a pull request here is checked here. [Done for 937 of 976 cases](../conformance/ci.md); the signed heads of claim registration have no public implementation | Any implementer who checks heads                                                                            |
-| **5. A public way to generate vectors**           | Vectors for a new rule can be produced by a tool anyone can run                                                                                                                                                                                                                | The steward publishes a generator, or the process accepts hand-built vectors checked by two implementations |
-| **6. Specifications written here**                | The export is retired for specifications. The source repository becomes one implementation among others                                                                                                                                                                        | An RFC that changes RFC 0001, section 11                                                                    |
+### Milestone A: the corpus is checked here, by public code
 
-Until step 6, a specification changes here only by an export that carries out an accepted RFC or an editorial fix.
+| Prerequisite                                                                    | State                                                                             |
+| ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| The normative Lean definition is published                                      | Done                                                                              |
+| A workflow here checks structure, provenance and unchanged expectations         | Done ([what is checked](../conformance/ci.md))                                    |
+| A public implementation reproduces every part                                   | 937 of 976 cases. Missing: the signed heads of claim registration                 |
+| A second public implementation, by other authors, reproduces at least one layer | Not done. Lean reproduces Work Contract Language 1 and has the generator's author |
+
+A is reached when the third row is complete. Nothing about publication changes at A: the export continues.
+
+### Milestone B: vectors can be proposed and checked with public tooling
+
+| Prerequisite                                                                                               | State                                                                                              |
+| ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| A documented way to build a candidate vector and run it through a public implementation                    | Done ([proposing vectors](../conformance/proposing-vectors.md))                                    |
+| The format of the vector files is specified, so that a generator and a harness agree without reading code  | Not done: [open question C4](open-questions.md)                                                    |
+| A public tool issues accepted packages of the current version, so that valid vectors need not be mutations | In part: `verified-cli` issues `wvp-0.2`. Nothing public produces registrations, logs or relations |
+| The process says when a vector not generated by the reference may be published                             | Not done: it needs an RFC. Proposed rule below                                                     |
+
+The rule B needs, to be proposed as an RFC and not adopted here: _a vector may be published when its generator is public and deterministic, and two implementations that share no code with the generator or with each other reproduce it; where only one does, the vector is published marked as singly reproduced, and cannot count toward Final._
+
+B is reversible: until C, the reference implementation still regenerates the whole corpus on every export and the byte-for-byte comparison still runs, so a vector that entered by the public route and that the reference does not reproduce is found at the next export.
+
+### Milestone C: the specifications are written here
+
+| Prerequisite                                                                                                                               | Why                                                                                                 |
+| ------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------- |
+| A and B                                                                                                                                    | A change made here must be checkable and extendable here                                            |
+| Specifications no longer name private modules, scripts or decision records ([open question C6](open-questions.md))                         | Text written here cannot refer to what its editors cannot see                                       |
+| The reference implementation reads the corpus from this repository, pinned to a commit, as `verified-cli` does                             | The direction of authority turns round: the source becomes one implementation among others          |
+| The export's byte-for-byte comparison is replaced by this repository's `unchanged` and `provenance` checks, extended to the specifications | The invariant that a published expectation never changes must not rest on review alone, at any time |
+| At least one maintainer from outside the steward                                                                                           | Otherwise moving the text changes where it is typed and not who decides                             |
+| An RFC that changes RFC 0001, section 11                                                                                                   | It is a change to the process                                                                       |
+
+C is carried out one specification at a time, lowest layer first (`verified-json-v1`), each by a pull request that removes its path from the export's list and adds it to the paths written here. Each such step is undone by the opposite pull request while both repositories still hold the files. The export is retired when no path is left on its list, and not before.
+
+Until C, a specification changes here only by an export that carries out an accepted RFC or an editorial fix.

@@ -1,0 +1,44 @@
+{"synthetic": false,
+ "outputs":
+ {"o": ["6451578553577722106"],
+  "i": "16521835141689574530",
+  "c": "3911960473568798959"},
+ "log":
+ [{"message":
+   ".> LEAN_PATH=/Users/zin/sophia/wvp/rfcs/0003/formal/.lake/build/lib/lean /private/tmp/claude-502/-Users-zin-sophia/b1e95444-c88b-40d7-ae1b-bcbf383bd840/scratchpad/elan/toolchains/leanprover--lean4---v4.24.0/bin/lean /Users/zin/sophia/wvp/rfcs/0003/formal/WvpV03.lean -o /Users/zin/sophia/wvp/rfcs/0003/formal/.lake/build/lib/lean/WvpV03.olean -i /Users/zin/sophia/wvp/rfcs/0003/formal/.lake/build/lib/lean/WvpV03.ilean -c /Users/zin/sophia/wvp/rfcs/0003/formal/.lake/build/ir/WvpV03.c --setup /Users/zin/sophia/wvp/rfcs/0003/formal/.lake/build/ir/WvpV03.setup.json --json",
+   "level": "trace"},
+  {"message":
+   "WvpV03.lean:200:0: 'WvpV03.claim_binding' depends on axioms: [propext, Quot.sound]",
+   "level": "info"},
+  {"message":
+   "WvpV03.lean:201:0: 'WvpV03.closed_kind_is_as_listed' depends on axioms: [propext, Quot.sound]",
+   "level": "info"},
+  {"message":
+   "WvpV03.lean:202:0: 'WvpV03.same_listing_same_records' depends on axioms: [propext, Quot.sound]",
+   "level": "info"},
+  {"message":
+   "WvpV03.lean:203:0: 'WvpV03.established_needs_pins' depends on axioms: [propext, Quot.sound]",
+   "level": "info"},
+  {"message":
+   "WvpV03.lean:204:0: 'WvpV03.no_pins_never_established' depends on axioms: [propext, Quot.sound]",
+   "level": "info"},
+  {"message":
+   "WvpV03.lean:205:0: 'WvpV03.added_checks_only_refuse' depends on axioms: [propext]",
+   "level": "info"}],
+ "inputs":
+ [["WvpV03:deps",
+   [["deps",
+     [["«wvp-v03-model»/WvpV03:extraDep",
+       [["@«wvp-v03-model»:extraDep", "1723"]]],
+      ["imports", "1723"]]],
+    ["libs",
+     [["import dynlibs", "1723"],
+      ["package external libraries", "1723"],
+      ["module dynlibs", "1723"],
+      ["module plugins", "1723"]]]]],
+  ["Lean 4.24.0, commit 797c613eb9b6d4ec95db23e3e00af9ac6657f24b",
+   "1165570713881806064"],
+  ["/Users/zin/sophia/wvp/rfcs/0003/formal/WvpV03.lean", "4892350582481694479"],
+  ["options", [["-DwarningAsError=true", "11970037163681973480"]]],
+  ["Module.leanArgs: #[]", "1723"]],
+ "depHash": "5880621448990524841"}
