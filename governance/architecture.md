@@ -61,9 +61,9 @@ What reproduces the vectors, as each implementation's own documents state. [`con
 | `verified-work-relation-v1`      | yes             | no         | no                                                                   | yes                                                              |
 | **Public**                       | no              | no         | no                                                                   | yes                                                              |
 
-The Scala reference generates every vector. It, the JavaScript and the Lean are the steward's and are not public. The Python and TypeScript SDKs bind the Rust crates; under RFC 0001 section 8.2 a binding counts once, with what it binds.
+The Scala reference generates every vector. It and the JavaScript are the steward's and are not public. The Lean definitions are published in this repository and checked by its CI. The Python and TypeScript SDKs bind the Rust crates; under RFC 0001 section 8.2 a binding counts once, with what it binds.
 
-So, today, every specification has exactly one implementation that an outsider can read, and the implementation that generates the expectations is not one of them. [The audit](normative-audit-2026-10.md) takes this up.
+So, today, every specification has one implementation that an outsider can read and run, the contract language has a second in Lean, and the implementation that generates the expectations is not public. [The audit](normative-audit-2026-10.md) takes this up.
 
 ## Where the protocol ends
 

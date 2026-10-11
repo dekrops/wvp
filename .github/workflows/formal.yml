@@ -1,0 +1,45 @@
+name: Formal definitions
+
+# Builds the Lean definitions, audits the axioms of every theorem, and runs the reference
+# evaluator of Work Contract Language 1 over the corpus in this repository. It is the public check
+# of what the specifications call proved.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: formal-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lean:
+    name: Lean definitions build, and the corpus is reproduced
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Install the pinned Lean toolchain
+        env:
+          ELAN_VERSION: v4.1.2
+        run: |
+          curl --fail --location --retry 3 \
+            "https://github.com/leanprover/elan/releases/download/${ELAN_VERSION}/elan-x86_64-unknown-linux-gnu.tar.gz" \
+            --output "$RUNNER_TEMP/elan.tar.gz"
+          mkdir -p "$RUNNER_TEMP/elan"
+          tar -xzf "$RUNNER_TEMP/elan.tar.gz" -C "$RUNNER_TEMP/elan"
+          "$RUNNER_TEMP/elan/elan-init" -y --no-modify-path --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          toolchain=$(cat formal/lean/lean-toolchain)
+          for attempt in 1 2 3; do
+            if "$HOME/.elan/bin/elan" toolchain install "$toolchain"; then break; fi
+            if [ "$attempt" = 3 ]; then exit 1; fi
+            sleep $((attempt * 15))
+          done
+      - run: bash formal/lean/check.sh
