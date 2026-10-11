@@ -42,12 +42,12 @@ These change no outcome that a published vector states. Most are clarifications 
 
 ## D. The process itself
 
-| #   | Question                                              | What it needs                                                                                      |
-| --- | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| D1  | **One maintainer, from the steward**                  | Maintainers from outside it, as soon as there are implementers outside it (RFC 0001, section 12.3) |
-| D2  | **No public way to check or generate the corpus**     | [Publication](publication.md), steps 4 and 5                                                       |
-| D3  | **No patent policy**                                  | A decision by the steward, then an RFC that changes RFC 0001, section 13                           |
-| D4  | **Private reports of vulnerabilities need a channel** | Enable private vulnerability reporting on this repository                                          |
+| #   | Question                                                                                                                                                                     | What it needs                                                                                      |
+| --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| D1  | **One maintainer, from the steward**                                                                                                                                         | Maintainers from outside it, as soon as there are implementers outside it (RFC 0001, section 12.3) |
+| D2  | **No public way to generate the corpus, and none to check the signed heads of claim registration.** The rest of the corpus is [checked here in public](../conformance/ci.md) | [Publication](publication.md), steps 4 and 5                                                       |
+| D3  | **No patent policy**                                                                                                                                                         | A decision by the steward, then an RFC that changes RFC 0001, section 13                           |
+| D4  | **Private reports of vulnerabilities need a channel**                                                                                                                        | Enable private vulnerability reporting on this repository                                          |
 
 ## Suggested order
 

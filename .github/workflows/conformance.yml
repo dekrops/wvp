@@ -1,0 +1,155 @@
+name: Conformance
+
+# Checks the corpus of this revision in public, without the implementation that generated it:
+# its structure, that it is what the export wrote, that no published expectation changed, and
+# that the public implementations reproduce it. conformance/ci.md says what each job
+# establishes and what it does not.
+#
+# It runs on pull requests from anyone, so it is given nothing worth taking: a read-only token,
+# no secrets, and no credentials left in a checkout. Every action is pinned to a commit.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: conformance-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  corpus:
+    name: The corpus is well-formed, as exported, and no expectation changed
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      # The revision this one is compared with: the base of a pull request, or what main was.
+      EARLIER: ${{ github.event.pull_request.base.sha || github.event.before }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: python3 conformance/tools/conformance.py structure
+      - run: python3 conformance/tools/conformance.py provenance
+      - name: Fetch the earlier revision
+        id: earlier
+        if: env.EARLIER != '' && env.EARLIER != '0000000000000000000000000000000000000000'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.EARLIER }}
+          path: .earlier
+          persist-credentials: false
+      # Judged by the earlier revision's tool and map where it has them, so that a change
+      # cannot loosen the check that judges it.
+      - name: No published expectation changed
+        if: steps.earlier.outcome == 'success'
+        run: |
+          tool=conformance/tools/conformance.py
+          if [ -f ".earlier/$tool" ]; then tool=".earlier/$tool"; fi
+          python3 "$tool" unchanged --old .earlier --new .
+
+  rust:
+    name: verified-cli (Rust) reproduces the corpus
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # The implementation is public and is not copied here. It is pinned to a commit in
+      # conformance/corpus.json, so that moving it is a reviewed change.
+      - name: Read the pinned revision
+        id: pin
+        run: |
+          commit=$(python3 -c "import json; print(json.load(open('conformance/corpus.json'))['implementations']['rust']['commit'])")
+          [[ "$commit" =~ ^[0-9a-f]{40}$ ]] || { echo "not a commit: $commit"; exit 1; }
+          echo "commit=$commit" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: dekrops/verified-cli
+          ref: ${{ steps.pin.outputs.commit }}
+          path: .implementations/verified-cli
+          persist-credentials: false
+      # The toolchain is the one the implementation pins in its rust-toolchain.toml.
+      - run: rustup show active-toolchain || rustup toolchain install
+        working-directory: .implementations/verified-cli
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+        with:
+          workspaces: .implementations/verified-cli
+      - run: >
+          python3 conformance/tools/conformance.py run --implementation rust
+          --source .implementations/verified-cli --out results/rust.json
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: results-rust
+          path: results/rust.json
+          if-no-files-found: ignore
+
+  lean:
+    name: The Lean definitions build, their proofs are audited, and the evaluator reproduces the corpus
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install the pinned Lean toolchain
+        env:
+          ELAN_VERSION: v4.1.2
+          ELAN_SHA256: f81c2e48c1588d4612cd2c8851947898a45ac8d72748a07dff3a5694f1cf589b
+        run: |
+          curl --fail --location --retry 3 \
+            "https://github.com/leanprover/elan/releases/download/${ELAN_VERSION}/elan-x86_64-unknown-linux-gnu.tar.gz" \
+            --output "$RUNNER_TEMP/elan.tar.gz"
+          echo "${ELAN_SHA256}  $RUNNER_TEMP/elan.tar.gz" | sha256sum --check
+          mkdir -p "$RUNNER_TEMP/elan"
+          tar -xzf "$RUNNER_TEMP/elan.tar.gz" -C "$RUNNER_TEMP/elan"
+          "$RUNNER_TEMP/elan/elan-init" -y --no-modify-path --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          toolchain=$(cat formal/lean/lean-toolchain)
+          for attempt in 1 2 3; do
+            if "$HOME/.elan/bin/elan" toolchain install "$toolchain"; then break; fi
+            if [ "$attempt" = 3 ]; then exit 1; fi
+            sleep $((attempt * 15))
+          done
+      # Builds everything, audits the axioms of every theorem, and runs the evaluator.
+      - run: bash formal/lean/check.sh
+      - run: >
+          python3 conformance/tools/conformance.py run --implementation lean
+          --source formal/lean --out results/lean.json
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: results-lean
+          path: results/lean.json
+          if-no-files-found: ignore
+
+  report:
+    name: Coverage by specification and part
+    needs: [rust, lean]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: results-*
+          path: results
+      # Fails if an implementation failed or did not run. A part that no public implementation
+      # is run against is reported, and is not a failure.
+      - run: |
+          set -o pipefail
+          python3 conformance/tools/conformance.py report --results results --out report.md | tee -a "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: conformance-report
+          path: report.md
+          if-no-files-found: ignore

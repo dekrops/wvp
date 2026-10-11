@@ -1,0 +1,472 @@
+{
+  "about": "Informative. A map of the conformance corpus for this repository's tooling: where each part is, how its cases are counted, and which public implementation is run against it. It defines nothing about the protocol. Each specification and the vectors themselves do.",
+  "support": [
+    "test-vectors/README.md",
+    "test-vectors/evidence-statement/v1/keys.json"
+  ],
+  "parts": [
+    {
+      "id": "canonical",
+      "specification": "verified-json-v1",
+      "title": "Canonical bytes and digests",
+      "files": "test-vectors/canonical-hash-v1.json",
+      "layout": "lists",
+      "lists": {
+        "valid": {
+          "identity": "name",
+          "expectation": ["canonicalUtf8", "sha256"]
+        },
+        "invalid": { "identity": "name", "expectation": [] }
+      },
+      "self_check": "canonical-digest"
+    },
+    {
+      "id": "statement",
+      "specification": "verified-evidence-statement-v1",
+      "title": "Statements",
+      "files": "test-vectors/evidence-statement/v1/*/*.json",
+      "layout": "one-per-file",
+      "where": { "kind": "statement" },
+      "protocol": "verified-evidence-statement-v1"
+    },
+    {
+      "id": "chain",
+      "specification": "verified-evidence-statement-v1",
+      "title": "Chains",
+      "files": "test-vectors/evidence-statement/v1/*/*.json",
+      "layout": "one-per-file",
+      "where": { "kind": "chain" },
+      "protocol": "verified-evidence-statement-v1"
+    },
+    {
+      "id": "admission",
+      "specification": "verified-evidence-statement-v1",
+      "title": "Admission",
+      "files": "test-vectors/evidence-statement/v1/*/*.json",
+      "layout": "one-per-file",
+      "where": { "kind": "admission" },
+      "protocol": "verified-evidence-statement-v1"
+    },
+    {
+      "id": "wvp-0.1",
+      "specification": "wvp-0.1",
+      "title": "Packages",
+      "files": "test-vectors/wvp/v0.1/*/*.json",
+      "layout": "one-per-file",
+      "protocol": "wvp-0.1"
+    },
+    {
+      "id": "wvp-0.2",
+      "specification": "wvp-0.2",
+      "title": "Packages",
+      "files": "test-vectors/wvp/v0.2/*/*.json",
+      "layout": "one-per-file",
+      "protocol": "wvp-0.2"
+    },
+    {
+      "id": "wvp-0.2-expectations",
+      "specification": "wvp-0.2",
+      "title": "Relying-party expectations",
+      "files": "test-vectors/wvp/v0.2/expectations.json",
+      "layout": "lists",
+      "lists": { "": { "identity": "index", "expectation": ["expected"] } }
+    },
+    {
+      "id": "contract-cases",
+      "specification": "work-contract-1",
+      "title": "Cases",
+      "files": "test-vectors/work-contract/v1/cases/*.json",
+      "layout": "one-per-file",
+      "named": false,
+      "accept_member": false
+    },
+    {
+      "id": "contract-differential",
+      "specification": "work-contract-1",
+      "title": "Generated differential cases",
+      "files": "test-vectors/work-contract/v1/differential/*.json",
+      "layout": "lists",
+      "lists": { "cases": { "identity": "index", "expectation": ["expected"] } }
+    },
+    {
+      "id": "work-unit",
+      "specification": "work-unit-1",
+      "title": "Identities, nullifiers and key commitments",
+      "files": "test-vectors/work-unit/v1/vectors.json",
+      "layout": "lists",
+      "lists": {
+        "cases": {
+          "identity": "name",
+          "expectation": ["identityCanonical", "nullifier"]
+        },
+        "keys": { "identity": "id", "expectation": ["commitment"] }
+      }
+    },
+    {
+      "id": "registration",
+      "specification": "verified-claim-registration-v1",
+      "title": "Registrations",
+      "files": "test-vectors/claim-registration/v1/vectors.json",
+      "layout": "lists",
+      "lists": { "cases": { "identity": "name", "expectation": ["expected"] } }
+    },
+    {
+      "id": "registration-log",
+      "specification": "verified-claim-registration-v1",
+      "title": "Log segments and held receipts",
+      "files": "test-vectors/claim-registration/v1/log.json",
+      "layout": "lists",
+      "lists": { "cases": { "identity": "name", "expectation": ["expected"] } }
+    },
+    {
+      "id": "registration-audit",
+      "specification": "verified-claim-registration-v1",
+      "title": "Audits",
+      "files": "test-vectors/claim-registration/v1/audit.json",
+      "layout": "lists",
+      "lists": { "cases": { "identity": "name", "expectation": ["expected"] } }
+    },
+    {
+      "id": "registration-notice",
+      "specification": "verified-claim-registration-v1",
+      "title": "Withdrawal and supersession",
+      "files": "test-vectors/claim-registration/v1/notice.json",
+      "layout": "lists",
+      "lists": { "cases": { "identity": "name", "expectation": ["expected"] } }
+    },
+    {
+      "id": "registration-dispute",
+      "specification": "verified-claim-registration-v1",
+      "title": "Disputes",
+      "files": "test-vectors/claim-registration/v1/dispute.json",
+      "layout": "lists",
+      "lists": { "cases": { "identity": "name", "expectation": ["expected"] } }
+    },
+    {
+      "id": "registration-unit",
+      "specification": "verified-claim-registration-v1",
+      "title": "A claim's unit against its inputs",
+      "files": "test-vectors/claim-registration/v1/unit.json",
+      "layout": "lists",
+      "lists": { "cases": { "identity": "name", "expectation": ["expected"] } }
+    },
+    {
+      "id": "registration-head",
+      "specification": "verified-claim-registration-v1",
+      "title": "Signed heads of the log",
+      "files": "test-vectors/claim-registration/v1/head.json",
+      "layout": "lists",
+      "lists": { "cases": { "identity": "name", "expectation": ["expected"] } }
+    },
+    {
+      "id": "relation",
+      "specification": "verified-work-relation-v1",
+      "title": "Readings",
+      "files": "test-vectors/work-relation/v1/vectors.json",
+      "layout": "lists",
+      "lists": { "cases": { "identity": "name", "expectation": ["expected"] } }
+    }
+  ],
+  "implementations": {
+    "rust": {
+      "name": "verified-cli",
+      "language": "Rust",
+      "repository": "https://github.com/dekrops/verified-cli",
+      "tag": "v0.1.4",
+      "commit": "4d41004eed165a2df65523f0d9753cbf050f306e",
+      "independent": "Written from the published specifications. It shares no code with the implementation that generates the expectations."
+    },
+    "lean": {
+      "name": "Lean 4 reference evaluator",
+      "language": "Lean 4",
+      "repository": "formal/lean, in this repository",
+      "independent": "A separate program from the generator, by the same author. Published here by export."
+    }
+  },
+  "checks": [
+    {
+      "implementation": "rust",
+      "covers": ["canonical"],
+      "argv": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "verified-canonical",
+        "--test",
+        "shared_vectors",
+        "--",
+        "--exact",
+        "shared_vectors",
+        "--nocapture"
+      ],
+      "reproduced": "shared vectors: (\\d+) valid, (\\d+) invalid"
+    },
+    {
+      "implementation": "rust",
+      "covers": ["statement"],
+      "argv": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "verified-verifier",
+        "--test",
+        "evidence_conformance",
+        "--",
+        "--exact",
+        "every_evidence_statement_vector_is_reproduced",
+        "--nocapture"
+      ],
+      "reproduced": "evidence-statement-1: (\\d+) statement, "
+    },
+    {
+      "implementation": "rust",
+      "covers": ["chain"],
+      "argv": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "verified-verifier",
+        "--test",
+        "evidence_conformance",
+        "--",
+        "--exact",
+        "every_evidence_statement_vector_is_reproduced",
+        "--nocapture"
+      ],
+      "reproduced": "evidence-statement-1: \\d+ statement, (\\d+) chain and "
+    },
+    {
+      "implementation": "rust",
+      "covers": ["admission"],
+      "argv": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "verified-verifier",
+        "--test",
+        "evidence_conformance",
+        "--",
+        "--exact",
+        "every_evidence_statement_vector_is_reproduced",
+        "--nocapture"
+      ],
+      "reproduced": "evidence-statement-1: \\d+ statement, \\d+ chain and (\\d+) admission vectors reproduced",
+      "caveat": "Of the 3 accepted admissions, `verificationResultSha256` and `verificationStatus` are not compared: they are the result of one platform's verification, which this implementation does not compute."
+    },
+    {
+      "implementation": "rust",
+      "covers": ["wvp-0.1", "wvp-0.2"],
+      "argv": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "verified-verifier",
+        "--test",
+        "conformance",
+        "--",
+        "--exact",
+        "every_package_vector_is_reproduced",
+        "--nocapture"
+      ],
+      "reproduced": "wvp corpus: (\\d+) package vectors reproduced"
+    },
+    {
+      "implementation": "rust",
+      "covers": ["wvp-0.2-expectations"],
+      "argv": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "verified-verifier",
+        "--test",
+        "conformance",
+        "--",
+        "--exact",
+        "every_expectation_case_is_reproduced",
+        "--nocapture"
+      ],
+      "reproduced": "wvp corpus: (\\d+) expectation cases reproduced"
+    },
+    {
+      "implementation": "rust",
+      "covers": ["contract-cases", "contract-differential"],
+      "argv": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "verified-contract",
+        "--test",
+        "conformance",
+        "--",
+        "--exact",
+        "every_case_in_the_corpus_is_reproduced",
+        "--nocapture"
+      ],
+      "reproduced": "work-contract-1: (\\d+) cases reproduced",
+      "unrepresentable": "; (\\d+) not representable"
+    },
+    {
+      "implementation": "lean",
+      "covers": ["contract-cases", "contract-differential"],
+      "argv": [
+        "lake",
+        "exe",
+        "contract-reference",
+        "{corpus}/work-contract/v1/cases",
+        "{corpus}/work-contract/v1/differential"
+      ],
+      "reproduced": "Reference evaluator: (\\d+) of \\d+ cases agree"
+    },
+    {
+      "implementation": "rust",
+      "covers": ["work-unit"],
+      "argv": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "verified-work-unit",
+        "--test",
+        "work_unit",
+        "--",
+        "--exact",
+        "every_vector_in_the_corpus_is_reproduced",
+        "--nocapture"
+      ],
+      "reproduced": "work-unit-1: (\\d+) key commitments and (\\d+) nullifiers reproduced"
+    },
+    {
+      "implementation": "rust",
+      "covers": ["registration"],
+      "argv": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "verified-verifier",
+        "--test",
+        "registration_conformance",
+        "--",
+        "--exact",
+        "every_registration_case_is_reproduced",
+        "--nocapture"
+      ],
+      "reproduced": "claim-registration-1: (\\d+) registration cases reproduced"
+    },
+    {
+      "implementation": "rust",
+      "covers": ["registration-log"],
+      "argv": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "verified-verifier",
+        "--test",
+        "registration_conformance",
+        "--",
+        "--exact",
+        "every_log_case_is_reproduced",
+        "--nocapture"
+      ],
+      "reproduced": "claim-registration-1: (\\d+) log cases reproduced"
+    },
+    {
+      "implementation": "rust",
+      "covers": ["registration-audit"],
+      "argv": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "verified-verifier",
+        "--test",
+        "registration_conformance",
+        "--",
+        "--exact",
+        "every_audit_case_is_reproduced",
+        "--nocapture"
+      ],
+      "reproduced": "claim-registration-1: (\\d+) audit cases of audit\\.json reproduced"
+    },
+    {
+      "implementation": "rust",
+      "covers": ["registration-notice"],
+      "argv": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "verified-verifier",
+        "--test",
+        "registration_conformance",
+        "--",
+        "--exact",
+        "every_audit_case_is_reproduced",
+        "--nocapture"
+      ],
+      "reproduced": "claim-registration-1: (\\d+) audit cases of notice\\.json reproduced"
+    },
+    {
+      "implementation": "rust",
+      "covers": ["registration-dispute"],
+      "argv": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "verified-verifier",
+        "--test",
+        "registration_conformance",
+        "--",
+        "--exact",
+        "every_audit_case_is_reproduced",
+        "--nocapture"
+      ],
+      "reproduced": "claim-registration-1: (\\d+) audit cases of dispute\\.json reproduced"
+    },
+    {
+      "implementation": "rust",
+      "covers": ["registration-unit"],
+      "argv": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "verified-work-unit",
+        "--test",
+        "work_unit",
+        "--",
+        "--exact",
+        "registered::every_unit_case_in_the_corpus_is_reproduced",
+        "--nocapture"
+      ],
+      "reproduced": "claim-registration-1: (\\d+) unit cases reproduced"
+    },
+    {
+      "implementation": "rust",
+      "covers": ["relation"],
+      "argv": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "verified-history",
+        "--test",
+        "conformance",
+        "--",
+        "--exact",
+        "every_case_yields_its_expected_reading",
+        "--nocapture"
+      ],
+      "reproduced": "work relation v1: (\\d+) cases"
+    }
+  ]
+}

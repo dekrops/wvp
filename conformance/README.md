@@ -41,6 +41,10 @@ A report is the implementer's own statement. Maintainers check that it has the s
 
 A report that is no longer true is corrected or removed by its author, or by a maintainer after asking them.
 
+## What this repository checks itself
+
+Every pull request and `main` are checked in public: the structure of the corpus, that it is what the export wrote, that no published expectation changed, and that the public implementations reproduce it, part by part. [What this repository checks in public](ci.md) says what each check establishes and what it does not, and how to run it. That run is evidence beside an implementer's report, not a replacement for one.
+
 ## Implementations known today
 
 Reports under `reports/` are the authority once they exist. Until an implementation files one, this table repeats what its own compatibility document says, and names that document.
