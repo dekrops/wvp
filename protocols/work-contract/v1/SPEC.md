@@ -218,8 +218,10 @@ Arithmetic (so a variance must be a recorded field; it cannot be computed from t
 
 A decision is also not final. It answers one question: this contract, these inputs (the cutoff among them), this evidence. Later evidence can change it: a record that conflicts with an earlier one, a record that shows a completeness statement was wrong, or a withdrawn completeness statement. What does hold is narrower and is proved for the formal definition: if none of those happens and the question is unchanged, admitting more evidence does not change a `SUPPORTED` or `CONTRADICTED` decision.
 
+That result is about evaluation (section 7, steps 7 and 8), and the formal definition does not model the work bound (step 4). The bound counts every fact in the environment, so admitting one more record, even one that evaluation ignores, can turn a decision into a `WORK_LIMIT` refusal (cases `91-work-bound-reached` and `92-work-bound-exceeded`). A refusal is not a decision: it never turns `SUPPORTED` into `CONTRADICTED` or the reverse, and it is not covered by the result above.
+
 ## 14. Conformance
 
 `test-vectors/work-contract/v1/cases` holds one file per case: `description`, `contract`, `environment`, `expected`. `differential` holds generated batches: `contract` and `cases: [{ environment, expected }]`. A conforming evaluator reproduces `expected` for every case. The corpus covers each decision, each refusal, both conflict policies, ignored records, completeness and the cutoff, the truth tables, second spellings and limits, and the invoice-processing example (`examples/invoice-processing`). Never regenerate published expectations: a change of outcome is a new language version.
 
-What is proved about the definition, and what only agreement on this corpus supports, is listed in formal/lean/README.md.
+What is proved about the definition, and what only agreement on this corpus supports, is listed in [formal/lean/README.md](../../../formal/lean/README.md#work-contract-language-1).

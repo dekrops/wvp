@@ -21,7 +21,7 @@ Independent implementations that reproduce these vectors:
 
 - **Scala**, the reference implementation, which also generates the vectors (not public);
 - **JavaScript**, written separately from the Scala (not public);
-- **Lean 4**, a reference evaluator for Work Contract Language 1, and a model of the claim registry's states (not public);
+- **Lean 4**, in [`formal/lean`](formal/lean/README.md): the definition of evaluation that Work Contract Language 1 defers to, with its proofs and a reference evaluator, and models of the v0.1 evaluator, evidence admission, statement chains and the claim registry's states;
 - **Rust**, [`verified-cli`](https://github.com/dekrops/verified-cli), written from these specifications. Of claim registration it checks registrations, log segments, audits and units; it does not yet check heads.
 
 Work relation v1 is reproduced by the Scala reference and by Rust (the `verified-history` crate of `verified-cli`, a library without a command), and not by JavaScript.

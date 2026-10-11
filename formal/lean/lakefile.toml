@@ -1,0 +1,13 @@
+name = "verified"
+version = "0.1.0"
+defaultTargets = ["Verified"]
+
+[leanOptions]
+warningAsError = true
+
+[[lean_lib]]
+name = "Verified"
+
+[[lean_exe]]
+name = "contract-reference"
+root = "ContractReference"
