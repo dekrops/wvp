@@ -1,0 +1,605 @@
+{
+  "cases" : [
+    {
+      "anchorJson" : null,
+      "description" : "The head of a log of four entries, issued after the last was recorded.",
+      "expected" : {
+        "accept" : true,
+        "issuedAt" : {
+          "value" : "2026-10-01T10:03:20Z"
+        },
+        "last" : {
+          "algorithm" : "sha-256",
+          "hex" : "d187a5d83368e6a459e1913729aac68771fb4a41d9d604ecb90d30eb9201d21e"
+        },
+        "registry" : "registry.example",
+        "size" : 4
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"d187a5d83368e6a459e1913729aac68771fb4a41d9d604ecb90d30eb9201d21e\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":4},\"signature\":{\"encoded\":\"KMG8ISzFn7YUMnAeekKjg5J3AiMosNu+uH8oumktdVdTao4zk9LeqT5lqmgkkG/CsW08sCwppwngbplNtU0uDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "head",
+      "otherHeadJson" : null,
+      "receiptsJson" : null
+    },
+    {
+      "anchorJson" : null,
+      "description" : "A log with no entries has size 0 and no last entry.",
+      "expected" : {
+        "accept" : true,
+        "issuedAt" : {
+          "value" : "2026-10-01T10:00:00Z"
+        },
+        "last" : null,
+        "registry" : "registry.example",
+        "size" : 0
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:00:00Z\"},\"last\":null,\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":0},\"signature\":{\"encoded\":\"Ohn8hek1wv7eTh9+FweREICSxy9AN6jISpG4e7d5BZNmUQr0VqV/lhlSpqFKlrGQueNxLGffxw3J61xc9GWeDQ==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "empty-log",
+      "otherHeadJson" : null,
+      "receiptsJson" : null
+    },
+    {
+      "anchorJson" : null,
+      "description" : "Size 0 naming a last entry.",
+      "expected" : {
+        "accept" : false,
+        "error" : "CHAIN_INVALID"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:00:00Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"11e343751ffb84d5e90d2e31fac1f6fd8ec4c749076cb7d37eecad4f413c403e\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":0},\"signature\":{\"encoded\":\"levbYNJUVJ15Mgx9ydyU5CqzyQe90gS0EBSEh3JMOu1zQy2RSlVuoMUcMDOnHp9GKPegUQDu5+ACQKYn8jOUBw==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "empty-with-last",
+      "otherHeadJson" : null,
+      "receiptsJson" : null
+    },
+    {
+      "anchorJson" : null,
+      "description" : "Two entries and no last entry.",
+      "expected" : {
+        "accept" : false,
+        "error" : "CHAIN_INVALID"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:01:30Z\"},\"last\":null,\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":2},\"signature\":{\"encoded\":\"QNpIEsnna3hX9OPEq3qrLhPBkNF36XqsLpk4D+vfxKCPO5HPX4YRZ3LmBC8PLDihwZc50LjrYdq/bTNs64dKBw==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "entries-without-last",
+      "otherHeadJson" : null,
+      "receiptsJson" : null
+    },
+    {
+      "anchorJson" : null,
+      "description" : "A size below zero.",
+      "expected" : {
+        "accept" : false,
+        "error" : "CHAIN_INVALID"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:00:00Z\"},\"last\":null,\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":-1},\"signature\":{\"encoded\":\"8L/GSQgPFJqIOyE3LJndxEw3gsPY7BwwP60a0A+LGpTRnaQp1JblhKWfI2kbBznT1IdGHiBqIyMg56O9yCu0DA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "negative-size",
+      "otherHeadJson" : null,
+      "receiptsJson" : null
+    },
+    {
+      "anchorJson" : null,
+      "description" : "A head of another protocol version.",
+      "expected" : {
+        "accept" : false,
+        "error" : "UNSUPPORTED_PROTOCOL"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"d187a5d83368e6a459e1913729aac68771fb4a41d9d604ecb90d30eb9201d21e\"},\"protocol\":\"verified-claim-registration-v2\",\"registry\":\"registry.example\",\"size\":4},\"signature\":{\"encoded\":\"VvcxSFHgAGD8h7Hmd+V7vvdcX52whHUmCFxLLAUaP8qaSp12Y2uFa2nDgnhtnD/Tns+PKG0aDZ27xdh+YI51Bg==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "other-protocol",
+      "otherHeadJson" : null,
+      "receiptsJson" : null
+    },
+    {
+      "anchorJson" : null,
+      "description" : "The last entry named by a digest that is not SHA-256.",
+      "expected" : {
+        "accept" : false,
+        "error" : "MALFORMED_COMMITMENT"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-512\",\"hex\":\"d187a5d83368e6a459e1913729aac68771fb4a41d9d604ecb90d30eb9201d21e\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":4},\"signature\":{\"encoded\":\"1UJZpXLpB9Hbt3OnciVVxK6pzMweMifniuQhbJIg9rXbrC7IQbff9wOGrpJ6OxVREffVqBNF9nDw8NL5QVmgDg==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "last-not-sha-256",
+      "otherHeadJson" : null,
+      "receiptsJson" : null
+    },
+    {
+      "anchorJson" : null,
+      "description" : "The head's text is not canonical JSON.",
+      "expected" : {
+        "accept" : false,
+        "error" : "MALFORMED"
+      },
+      "headJson" : "{ \"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"d187a5d83368e6a459e1913729aac68771fb4a41d9d604ecb90d30eb9201d21e\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":4},\"signature\":{\"encoded\":\"KMG8ISzFn7YUMnAeekKjg5J3AiMosNu+uH8oumktdVdTao4zk9LeqT5lqmgkkG/CsW08sCwppwngbplNtU0uDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "not-canonical",
+      "otherHeadJson" : null,
+      "receiptsJson" : null
+    },
+    {
+      "anchorJson" : null,
+      "description" : "Signed by a key the relying party does not trust.",
+      "expected" : {
+        "accept" : false,
+        "error" : "UNKNOWN_KEY"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"d187a5d83368e6a459e1913729aac68771fb4a41d9d604ecb90d30eb9201d21e\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":4},\"signature\":{\"encoded\":\"f0QBn+kNT0QUSZitzImRAYqrAivytIvvdQUgYD8xbGJbtIs4NlCqQRoINSDeRbYTn3UqUJvOfK//ZfZmtLQuAQ==\",\"keyId\":\"test-untrusted\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "untrusted-key",
+      "otherHeadJson" : null,
+      "receiptsJson" : null
+    },
+    {
+      "anchorJson" : null,
+      "description" : "Signed by a trusted key of another registry than the one the head names.",
+      "expected" : {
+        "accept" : false,
+        "error" : "REGISTRY_MISMATCH"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"d187a5d83368e6a459e1913729aac68771fb4a41d9d604ecb90d30eb9201d21e\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":4},\"signature\":{\"encoded\":\"TCuv2203PYai2kWZ+2fZjQgS7MtPTI6f33aVQ7DPXOKMm/T8oFI4opPGTzD3JeR/cAJhjjDP2s3oLdZEg34zCw==\",\"keyId\":\"test-other-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "key-of-another-registry",
+      "otherHeadJson" : null,
+      "receiptsJson" : null
+    },
+    {
+      "anchorJson" : null,
+      "description" : "Signed by a key of the registry that was no longer valid when the head was issued.",
+      "expected" : {
+        "accept" : false,
+        "error" : "KEY_NOT_VALID"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"d187a5d83368e6a459e1913729aac68771fb4a41d9d604ecb90d30eb9201d21e\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":4},\"signature\":{\"encoded\":\"gxYp96U15c+aONiAkagEai1qHGeANtScOfSu7VSBdwgJT30C0xxQtg6d4IsEQnpcFOkfukSpKOCOq0gnxld5CQ==\",\"keyId\":\"test-registry-retired\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "retired-key",
+      "otherHeadJson" : null,
+      "receiptsJson" : null
+    },
+    {
+      "anchorJson" : null,
+      "description" : "The size was changed after signing.",
+      "expected" : {
+        "accept" : false,
+        "error" : "SIGNATURE_INVALID"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"d187a5d83368e6a459e1913729aac68771fb4a41d9d604ecb90d30eb9201d21e\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":3},\"signature\":{\"encoded\":\"KMG8ISzFn7YUMnAeekKjg5J3AiMosNu+uH8oumktdVdTao4zk9LeqT5lqmgkkG/CsW08sCwppwngbplNtU0uDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "altered",
+      "otherHeadJson" : null,
+      "receiptsJson" : null
+    },
+    {
+      "anchorJson" : null,
+      "description" : "Signed under the receipt's domain: a signature for one kind of object is not one for another.",
+      "expected" : {
+        "accept" : false,
+        "error" : "SIGNATURE_INVALID"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"d187a5d83368e6a459e1913729aac68771fb4a41d9d604ecb90d30eb9201d21e\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":4},\"signature\":{\"encoded\":\"ZqMLooamaH92iqYx6lP3+q+gEyqGwyfNj8GnJE3xXC8MxWeZUCZJC/6dSk1d646Cp9ctsmby09R6HdisRX+MBw==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "signed-as-a-receipt",
+      "otherHeadJson" : null,
+      "receiptsJson" : null
+    },
+    {
+      "anchorJson" : null,
+      "description" : "The held entry is the head's last entry.",
+      "expected" : {
+        "accept" : true,
+        "standing" : "INCLUDED"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"d187a5d83368e6a459e1913729aac68771fb4a41d9d604ecb90d30eb9201d21e\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":4},\"signature\":{\"encoded\":\"KMG8ISzFn7YUMnAeekKjg5J3AiMosNu+uH8oumktdVdTao4zk9LeqT5lqmgkkG/CsW08sCwppwngbplNtU0uDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"826fd6f28e9c8fb173ab013fe4aeda0a4bdb5e74129309d3d20fddc6a6746e2c\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"7b277f53d3d345455fe063e0aebe1daec8b883b648becf9feddf70c14b8f8dba\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:03:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:03:00Z\"},\"sequence\":3},\"signature\":{\"encoded\":\"5i6X2gEgcQpt47rnIIOeqP9MpNcU3oVlhR+8MWdSWeMp8YQ2MyvRfqJ63cAZINoqXi/eNOc0ON6G6s1H92EbDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "name" : "held-is-last",
+      "otherHeadJson" : null,
+      "receiptsJson" : null
+    },
+    {
+      "anchorJson" : null,
+      "description" : "The held entry is before the head's last: the head covers its position, a segment shows inclusion.",
+      "expected" : {
+        "accept" : true,
+        "standing" : "COVERED"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"d187a5d83368e6a459e1913729aac68771fb4a41d9d604ecb90d30eb9201d21e\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":4},\"signature\":{\"encoded\":\"KMG8ISzFn7YUMnAeekKjg5J3AiMosNu+uH8oumktdVdTao4zk9LeqT5lqmgkkG/CsW08sCwppwngbplNtU0uDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"a864205329cc3dd1ccf79025d305ed28a5b789104bf54e2e167cc9c6fa8499ed\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"11e343751ffb84d5e90d2e31fac1f6fd8ec4c749076cb7d37eecad4f413c403e\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:01:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:01:00Z\"},\"sequence\":1},\"signature\":{\"encoded\":\"cU5fUZR6m38FSo2iOoQp+e6waq++9Me3fJ51insF7VIg5Qd6Ph2g4pr7QWZhr4C7WvM8XuGRTjevhWO51Xw4CA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "name" : "held-before-last",
+      "otherHeadJson" : null,
+      "receiptsJson" : null
+    },
+    {
+      "anchorJson" : null,
+      "description" : "The held entry was recorded after the head was issued.",
+      "expected" : {
+        "accept" : true,
+        "standing" : "NOT_COVERED"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:01:30Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"9bd018aad935a3cdaa3918394910154d2c153a8b2d6cff4c38aaaa6034f7929f\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":2},\"signature\":{\"encoded\":\"vpHTwS5Kk5Xa/NHwJCUP2AB2d5lhC/Kg78O3jJ7GDC7PrWQBzwE7Ts3S14/jqNrIU3DRyIpSIvbU3Gg1VEMrAQ==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"826fd6f28e9c8fb173ab013fe4aeda0a4bdb5e74129309d3d20fddc6a6746e2c\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"7b277f53d3d345455fe063e0aebe1daec8b883b648becf9feddf70c14b8f8dba\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:03:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:03:00Z\"},\"sequence\":3},\"signature\":{\"encoded\":\"5i6X2gEgcQpt47rnIIOeqP9MpNcU3oVlhR+8MWdSWeMp8YQ2MyvRfqJ63cAZINoqXi/eNOc0ON6G6s1H92EbDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "name" : "held-recorded-after",
+      "otherHeadJson" : null,
+      "receiptsJson" : null
+    },
+    {
+      "anchorJson" : null,
+      "description" : "The held entry was recorded before the head was issued, and the head leaves it out.",
+      "expected" : {
+        "accept" : true,
+        "sequence" : 3,
+        "standing" : "WITHHELD"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"9bd018aad935a3cdaa3918394910154d2c153a8b2d6cff4c38aaaa6034f7929f\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":2},\"signature\":{\"encoded\":\"zlnUGsihscsEOMK8DZHwm34/Hu6hwgu4YA1ldtYixP+QRrWOlACh2f83ZY2yzn3B60bH95u6HQAlhlFRhI0aBA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"826fd6f28e9c8fb173ab013fe4aeda0a4bdb5e74129309d3d20fddc6a6746e2c\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"7b277f53d3d345455fe063e0aebe1daec8b883b648becf9feddf70c14b8f8dba\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:03:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:03:00Z\"},\"sequence\":3},\"signature\":{\"encoded\":\"5i6X2gEgcQpt47rnIIOeqP9MpNcU3oVlhR+8MWdSWeMp8YQ2MyvRfqJ63cAZINoqXi/eNOc0ON6G6s1H92EbDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "name" : "held-withheld",
+      "otherHeadJson" : null,
+      "receiptsJson" : null
+    },
+    {
+      "anchorJson" : null,
+      "description" : "Recorded in the very instant the head was issued: not withheld.",
+      "expected" : {
+        "accept" : true,
+        "standing" : "NOT_COVERED"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:00Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"7b277f53d3d345455fe063e0aebe1daec8b883b648becf9feddf70c14b8f8dba\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":3},\"signature\":{\"encoded\":\"cQtSUhcDP18vU+UP8eLPSfKooXYSRp1WR+kEKCHEpnqIUjjA1+RUXcZJtRTgmqN+0yhbZloUYq0tWsFk1RjyAg==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"826fd6f28e9c8fb173ab013fe4aeda0a4bdb5e74129309d3d20fddc6a6746e2c\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"7b277f53d3d345455fe063e0aebe1daec8b883b648becf9feddf70c14b8f8dba\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:03:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:03:00Z\"},\"sequence\":3},\"signature\":{\"encoded\":\"5i6X2gEgcQpt47rnIIOeqP9MpNcU3oVlhR+8MWdSWeMp8YQ2MyvRfqJ63cAZINoqXi/eNOc0ON6G6s1H92EbDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "name" : "held-same-instant",
+      "otherHeadJson" : null,
+      "receiptsJson" : null
+    },
+    {
+      "anchorJson" : null,
+      "description" : "The head names another entry at the held entry's position: the registry signed both.",
+      "expected" : {
+        "accept" : true,
+        "headed" : {
+          "algorithm" : "sha-256",
+          "hex" : "aa27a1244e1f5b6264f581115231165615a2e2d2943b7e89f8cfd9fc0f08b005"
+        },
+        "logged" : {
+          "algorithm" : "sha-256",
+          "hex" : "7b277f53d3d345455fe063e0aebe1daec8b883b648becf9feddf70c14b8f8dba"
+        },
+        "standing" : "EQUIVOCATION"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"aa27a1244e1f5b6264f581115231165615a2e2d2943b7e89f8cfd9fc0f08b005\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":3},\"signature\":{\"encoded\":\"vy1yA/DWU4Ezoo2TKOLEEtL7XdenWOjvLkT1Ue7VTy0Uxc8ld30Ltv7UZBtl5RjhzpSzg9Q5dJ/etduJhPRBBA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"66389dfa79da765728dd774c7f3f5697200ade7de34eecd9819340a0241097bc\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"9bd018aad935a3cdaa3918394910154d2c153a8b2d6cff4c38aaaa6034f7929f\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:02:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:02:00Z\"},\"sequence\":2},\"signature\":{\"encoded\":\"TuqWiu1ZWB74n+29CWbb2MRDayz15b1iKx2HJBDxpeqG0P4y3/5DU6OOptL6/J2dP9H5cxtDOfq3smg/ydT2Cg==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "name" : "held-rewritten",
+      "otherHeadJson" : null,
+      "receiptsJson" : null
+    },
+    {
+      "anchorJson" : null,
+      "description" : "The head counts the held entry but is dated before it was recorded.",
+      "expected" : {
+        "accept" : true,
+        "sequence" : 3,
+        "standing" : "PREDATED"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:01:40Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"d187a5d83368e6a459e1913729aac68771fb4a41d9d604ecb90d30eb9201d21e\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":4},\"signature\":{\"encoded\":\"xLQezOJClb3H0z4Q8qaEqMuhIrkZDXnpvUSGZiRDcpg2mXeLRrMYzY97aG1y6Xq76bDBSkJPYCYv1yfzj539Ag==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"826fd6f28e9c8fb173ab013fe4aeda0a4bdb5e74129309d3d20fddc6a6746e2c\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"7b277f53d3d345455fe063e0aebe1daec8b883b648becf9feddf70c14b8f8dba\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:03:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:03:00Z\"},\"sequence\":3},\"signature\":{\"encoded\":\"5i6X2gEgcQpt47rnIIOeqP9MpNcU3oVlhR+8MWdSWeMp8YQ2MyvRfqJ63cAZINoqXi/eNOc0ON6G6s1H92EbDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "name" : "held-predated",
+      "otherHeadJson" : null,
+      "receiptsJson" : null
+    },
+    {
+      "anchorJson" : null,
+      "description" : "The held entry is another registry's.",
+      "expected" : {
+        "accept" : false,
+        "error" : "REGISTRY_MISMATCH"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"d187a5d83368e6a459e1913729aac68771fb4a41d9d604ecb90d30eb9201d21e\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":4},\"signature\":{\"encoded\":\"KMG8ISzFn7YUMnAeekKjg5J3AiMosNu+uH8oumktdVdTao4zk9LeqT5lqmgkkG/CsW08sCwppwngbplNtU0uDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"66389dfa79da765728dd774c7f3f5697200ade7de34eecd9819340a0241097bc\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"9bd018aad935a3cdaa3918394910154d2c153a8b2d6cff4c38aaaa6034f7929f\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:02:00Z\"},\"registry\":\"registry.other.example\",\"respondBy\":{\"value\":\"2026-10-15T10:02:00Z\"},\"sequence\":2},\"signature\":{\"encoded\":\"7q+ZIU5P/8MIx0fJTk99TCpxkwMjURKGn9D4ZN8a2epodX+wJWphV/6unc80/rkz0hJMXaZ8B6JZOyZoSm5QDg==\",\"keyId\":\"test-other-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "name" : "held-of-another-registry",
+      "otherHeadJson" : null,
+      "receiptsJson" : null
+    },
+    {
+      "anchorJson" : null,
+      "description" : "The held entry is not signed by a trusted key.",
+      "expected" : {
+        "accept" : false,
+        "error" : "UNKNOWN_KEY"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"d187a5d83368e6a459e1913729aac68771fb4a41d9d604ecb90d30eb9201d21e\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":4},\"signature\":{\"encoded\":\"KMG8ISzFn7YUMnAeekKjg5J3AiMosNu+uH8oumktdVdTao4zk9LeqT5lqmgkkG/CsW08sCwppwngbplNtU0uDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"826fd6f28e9c8fb173ab013fe4aeda0a4bdb5e74129309d3d20fddc6a6746e2c\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"7b277f53d3d345455fe063e0aebe1daec8b883b648becf9feddf70c14b8f8dba\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:03:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:03:00Z\"},\"sequence\":3},\"signature\":{\"encoded\":\"qhDLDM4CuPmxF/ObgYP1HfoiJ/6cRD/1R+4m2GVADpjt4vzxoZr/O4J/+TFlJIdV1w7JZ3JCKEOOOJg3Qof3BA==\",\"keyId\":\"test-untrusted\",\"scheme\":\"Ed25519\"}}",
+      "name" : "held-forged",
+      "otherHeadJson" : null,
+      "receiptsJson" : null
+    },
+    {
+      "anchorJson" : null,
+      "description" : "The segment ends at the head: the whole log as of its time.",
+      "expected" : {
+        "accept" : true,
+        "standing" : "CURRENT"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"d187a5d83368e6a459e1913729aac68771fb4a41d9d604ecb90d30eb9201d21e\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":4},\"signature\":{\"encoded\":\"KMG8ISzFn7YUMnAeekKjg5J3AiMosNu+uH8oumktdVdTao4zk9LeqT5lqmgkkG/CsW08sCwppwngbplNtU0uDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "segment-current",
+      "otherHeadJson" : null,
+      "receiptsJson" : [
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"909d1823cbfeff51447a774f84519368da55c937c9e1716b4951b424a6555873\"},\"previous\":null,\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:00:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:00:00Z\"},\"sequence\":0},\"signature\":{\"encoded\":\"GtNgp91geZV3rnqLSVFEZZeurc/pOnoHZPeL7B9oFmRxNGyFY+phEOTKDRJIKSrlc4SPe1KsEB8FI+ZOX/31Dw==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"a864205329cc3dd1ccf79025d305ed28a5b789104bf54e2e167cc9c6fa8499ed\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"11e343751ffb84d5e90d2e31fac1f6fd8ec4c749076cb7d37eecad4f413c403e\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:01:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:01:00Z\"},\"sequence\":1},\"signature\":{\"encoded\":\"cU5fUZR6m38FSo2iOoQp+e6waq++9Me3fJ51insF7VIg5Qd6Ph2g4pr7QWZhr4C7WvM8XuGRTjevhWO51Xw4CA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"66389dfa79da765728dd774c7f3f5697200ade7de34eecd9819340a0241097bc\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"9bd018aad935a3cdaa3918394910154d2c153a8b2d6cff4c38aaaa6034f7929f\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:02:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:02:00Z\"},\"sequence\":2},\"signature\":{\"encoded\":\"TuqWiu1ZWB74n+29CWbb2MRDayz15b1iKx2HJBDxpeqG0P4y3/5DU6OOptL6/J2dP9H5cxtDOfq3smg/ydT2Cg==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"826fd6f28e9c8fb173ab013fe4aeda0a4bdb5e74129309d3d20fddc6a6746e2c\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"7b277f53d3d345455fe063e0aebe1daec8b883b648becf9feddf70c14b8f8dba\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:03:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:03:00Z\"},\"sequence\":3},\"signature\":{\"encoded\":\"5i6X2gEgcQpt47rnIIOeqP9MpNcU3oVlhR+8MWdSWeMp8YQ2MyvRfqJ63cAZINoqXi/eNOc0ON6G6s1H92EbDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}"
+      ]
+    },
+    {
+      "anchorJson" : null,
+      "description" : "The segment ends before the head: a tail is missing.",
+      "expected" : {
+        "accept" : true,
+        "standing" : "BEHIND"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"d187a5d83368e6a459e1913729aac68771fb4a41d9d604ecb90d30eb9201d21e\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":4},\"signature\":{\"encoded\":\"KMG8ISzFn7YUMnAeekKjg5J3AiMosNu+uH8oumktdVdTao4zk9LeqT5lqmgkkG/CsW08sCwppwngbplNtU0uDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "segment-behind",
+      "otherHeadJson" : null,
+      "receiptsJson" : [
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"909d1823cbfeff51447a774f84519368da55c937c9e1716b4951b424a6555873\"},\"previous\":null,\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:00:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:00:00Z\"},\"sequence\":0},\"signature\":{\"encoded\":\"GtNgp91geZV3rnqLSVFEZZeurc/pOnoHZPeL7B9oFmRxNGyFY+phEOTKDRJIKSrlc4SPe1KsEB8FI+ZOX/31Dw==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"a864205329cc3dd1ccf79025d305ed28a5b789104bf54e2e167cc9c6fa8499ed\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"11e343751ffb84d5e90d2e31fac1f6fd8ec4c749076cb7d37eecad4f413c403e\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:01:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:01:00Z\"},\"sequence\":1},\"signature\":{\"encoded\":\"cU5fUZR6m38FSo2iOoQp+e6waq++9Me3fJ51insF7VIg5Qd6Ph2g4pr7QWZhr4C7WvM8XuGRTjevhWO51Xw4CA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}"
+      ]
+    },
+    {
+      "anchorJson" : null,
+      "description" : "The segment continues past an older head.",
+      "expected" : {
+        "accept" : true,
+        "standing" : "AHEAD"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:01:30Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"9bd018aad935a3cdaa3918394910154d2c153a8b2d6cff4c38aaaa6034f7929f\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":2},\"signature\":{\"encoded\":\"vpHTwS5Kk5Xa/NHwJCUP2AB2d5lhC/Kg78O3jJ7GDC7PrWQBzwE7Ts3S14/jqNrIU3DRyIpSIvbU3Gg1VEMrAQ==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "segment-ahead",
+      "otherHeadJson" : null,
+      "receiptsJson" : [
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"909d1823cbfeff51447a774f84519368da55c937c9e1716b4951b424a6555873\"},\"previous\":null,\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:00:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:00:00Z\"},\"sequence\":0},\"signature\":{\"encoded\":\"GtNgp91geZV3rnqLSVFEZZeurc/pOnoHZPeL7B9oFmRxNGyFY+phEOTKDRJIKSrlc4SPe1KsEB8FI+ZOX/31Dw==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"a864205329cc3dd1ccf79025d305ed28a5b789104bf54e2e167cc9c6fa8499ed\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"11e343751ffb84d5e90d2e31fac1f6fd8ec4c749076cb7d37eecad4f413c403e\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:01:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:01:00Z\"},\"sequence\":1},\"signature\":{\"encoded\":\"cU5fUZR6m38FSo2iOoQp+e6waq++9Me3fJ51insF7VIg5Qd6Ph2g4pr7QWZhr4C7WvM8XuGRTjevhWO51Xw4CA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"66389dfa79da765728dd774c7f3f5697200ade7de34eecd9819340a0241097bc\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"9bd018aad935a3cdaa3918394910154d2c153a8b2d6cff4c38aaaa6034f7929f\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:02:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:02:00Z\"},\"sequence\":2},\"signature\":{\"encoded\":\"TuqWiu1ZWB74n+29CWbb2MRDayz15b1iKx2HJBDxpeqG0P4y3/5DU6OOptL6/J2dP9H5cxtDOfq3smg/ydT2Cg==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"826fd6f28e9c8fb173ab013fe4aeda0a4bdb5e74129309d3d20fddc6a6746e2c\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"7b277f53d3d345455fe063e0aebe1daec8b883b648becf9feddf70c14b8f8dba\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:03:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:03:00Z\"},\"sequence\":3},\"signature\":{\"encoded\":\"5i6X2gEgcQpt47rnIIOeqP9MpNcU3oVlhR+8MWdSWeMp8YQ2MyvRfqJ63cAZINoqXi/eNOc0ON6G6s1H92EbDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}"
+      ]
+    },
+    {
+      "anchorJson" : null,
+      "description" : "The head was issued after entries it leaves out were recorded.",
+      "expected" : {
+        "accept" : true,
+        "sequence" : 2,
+        "standing" : "WITHHELD"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"9bd018aad935a3cdaa3918394910154d2c153a8b2d6cff4c38aaaa6034f7929f\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":2},\"signature\":{\"encoded\":\"zlnUGsihscsEOMK8DZHwm34/Hu6hwgu4YA1ldtYixP+QRrWOlACh2f83ZY2yzn3B60bH95u6HQAlhlFRhI0aBA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "segment-withheld",
+      "otherHeadJson" : null,
+      "receiptsJson" : [
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"909d1823cbfeff51447a774f84519368da55c937c9e1716b4951b424a6555873\"},\"previous\":null,\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:00:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:00:00Z\"},\"sequence\":0},\"signature\":{\"encoded\":\"GtNgp91geZV3rnqLSVFEZZeurc/pOnoHZPeL7B9oFmRxNGyFY+phEOTKDRJIKSrlc4SPe1KsEB8FI+ZOX/31Dw==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"a864205329cc3dd1ccf79025d305ed28a5b789104bf54e2e167cc9c6fa8499ed\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"11e343751ffb84d5e90d2e31fac1f6fd8ec4c749076cb7d37eecad4f413c403e\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:01:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:01:00Z\"},\"sequence\":1},\"signature\":{\"encoded\":\"cU5fUZR6m38FSo2iOoQp+e6waq++9Me3fJ51insF7VIg5Qd6Ph2g4pr7QWZhr4C7WvM8XuGRTjevhWO51Xw4CA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"66389dfa79da765728dd774c7f3f5697200ade7de34eecd9819340a0241097bc\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"9bd018aad935a3cdaa3918394910154d2c153a8b2d6cff4c38aaaa6034f7929f\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:02:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:02:00Z\"},\"sequence\":2},\"signature\":{\"encoded\":\"TuqWiu1ZWB74n+29CWbb2MRDayz15b1iKx2HJBDxpeqG0P4y3/5DU6OOptL6/J2dP9H5cxtDOfq3smg/ydT2Cg==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"826fd6f28e9c8fb173ab013fe4aeda0a4bdb5e74129309d3d20fddc6a6746e2c\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"7b277f53d3d345455fe063e0aebe1daec8b883b648becf9feddf70c14b8f8dba\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:03:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:03:00Z\"},\"sequence\":3},\"signature\":{\"encoded\":\"5i6X2gEgcQpt47rnIIOeqP9MpNcU3oVlhR+8MWdSWeMp8YQ2MyvRfqJ63cAZINoqXi/eNOc0ON6G6s1H92EbDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}"
+      ]
+    },
+    {
+      "anchorJson" : null,
+      "description" : "The log was rewritten after the head was issued. It verifies on its own; the head exposes it.",
+      "expected" : {
+        "accept" : true,
+        "headed" : {
+          "algorithm" : "sha-256",
+          "hex" : "7b277f53d3d345455fe063e0aebe1daec8b883b648becf9feddf70c14b8f8dba"
+        },
+        "logged" : {
+          "algorithm" : "sha-256",
+          "hex" : "aa27a1244e1f5b6264f581115231165615a2e2d2943b7e89f8cfd9fc0f08b005"
+        },
+        "standing" : "EQUIVOCATION"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:02:10Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"7b277f53d3d345455fe063e0aebe1daec8b883b648becf9feddf70c14b8f8dba\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":3},\"signature\":{\"encoded\":\"7eeAegO6FKRvooJXMGuaWhp4t8KOoBdpeZadoauIc3nTIerF67xI3uLZMQBTwrMmpP4mF9veWwyvYc75HbQ9Bg==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "segment-rewritten",
+      "otherHeadJson" : null,
+      "receiptsJson" : [
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"909d1823cbfeff51447a774f84519368da55c937c9e1716b4951b424a6555873\"},\"previous\":null,\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:00:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:00:00Z\"},\"sequence\":0},\"signature\":{\"encoded\":\"GtNgp91geZV3rnqLSVFEZZeurc/pOnoHZPeL7B9oFmRxNGyFY+phEOTKDRJIKSrlc4SPe1KsEB8FI+ZOX/31Dw==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"a864205329cc3dd1ccf79025d305ed28a5b789104bf54e2e167cc9c6fa8499ed\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"11e343751ffb84d5e90d2e31fac1f6fd8ec4c749076cb7d37eecad4f413c403e\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:01:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:01:00Z\"},\"sequence\":1},\"signature\":{\"encoded\":\"cU5fUZR6m38FSo2iOoQp+e6waq++9Me3fJ51insF7VIg5Qd6Ph2g4pr7QWZhr4C7WvM8XuGRTjevhWO51Xw4CA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"826fd6f28e9c8fb173ab013fe4aeda0a4bdb5e74129309d3d20fddc6a6746e2c\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"9bd018aad935a3cdaa3918394910154d2c153a8b2d6cff4c38aaaa6034f7929f\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:03:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:03:00Z\"},\"sequence\":2},\"signature\":{\"encoded\":\"w4CoTBtHoxuAIvzQ6q9Nz23Ki0fpqHC5KRT8KYMjzkCRLGlylMrqKZTriaZztVhDSco0tkqCHB6vwbWG4B0NCw==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"daac4595ed101d906f1dbbcb337e22f39724bd249b5b275b1ee3f8a45c4e7470\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"aa27a1244e1f5b6264f581115231165615a2e2d2943b7e89f8cfd9fc0f08b005\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:04:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:04:00Z\"},\"sequence\":3},\"signature\":{\"encoded\":\"Z1g3mYUAfE4JOrYXqhpdD2j4xpwtb7bzWt69RHaKGvgSM3Ny+pZZsXkP+UbB5t7lpbLYvrpMzPYWcv4OYGYpCw==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}"
+      ]
+    },
+    {
+      "anchorJson" : null,
+      "description" : "The head counts entries recorded after its time.",
+      "expected" : {
+        "accept" : true,
+        "sequence" : 2,
+        "standing" : "PREDATED"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:01:40Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"d187a5d83368e6a459e1913729aac68771fb4a41d9d604ecb90d30eb9201d21e\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":4},\"signature\":{\"encoded\":\"xLQezOJClb3H0z4Q8qaEqMuhIrkZDXnpvUSGZiRDcpg2mXeLRrMYzY97aG1y6Xq76bDBSkJPYCYv1yfzj539Ag==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "segment-predated",
+      "otherHeadJson" : null,
+      "receiptsJson" : [
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"909d1823cbfeff51447a774f84519368da55c937c9e1716b4951b424a6555873\"},\"previous\":null,\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:00:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:00:00Z\"},\"sequence\":0},\"signature\":{\"encoded\":\"GtNgp91geZV3rnqLSVFEZZeurc/pOnoHZPeL7B9oFmRxNGyFY+phEOTKDRJIKSrlc4SPe1KsEB8FI+ZOX/31Dw==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"a864205329cc3dd1ccf79025d305ed28a5b789104bf54e2e167cc9c6fa8499ed\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"11e343751ffb84d5e90d2e31fac1f6fd8ec4c749076cb7d37eecad4f413c403e\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:01:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:01:00Z\"},\"sequence\":1},\"signature\":{\"encoded\":\"cU5fUZR6m38FSo2iOoQp+e6waq++9Me3fJ51insF7VIg5Qd6Ph2g4pr7QWZhr4C7WvM8XuGRTjevhWO51Xw4CA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"66389dfa79da765728dd774c7f3f5697200ade7de34eecd9819340a0241097bc\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"9bd018aad935a3cdaa3918394910154d2c153a8b2d6cff4c38aaaa6034f7929f\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:02:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:02:00Z\"},\"sequence\":2},\"signature\":{\"encoded\":\"TuqWiu1ZWB74n+29CWbb2MRDayz15b1iKx2HJBDxpeqG0P4y3/5DU6OOptL6/J2dP9H5cxtDOfq3smg/ydT2Cg==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"826fd6f28e9c8fb173ab013fe4aeda0a4bdb5e74129309d3d20fddc6a6746e2c\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"7b277f53d3d345455fe063e0aebe1daec8b883b648becf9feddf70c14b8f8dba\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:03:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:03:00Z\"},\"sequence\":3},\"signature\":{\"encoded\":\"5i6X2gEgcQpt47rnIIOeqP9MpNcU3oVlhR+8MWdSWeMp8YQ2MyvRfqJ63cAZINoqXi/eNOc0ON6G6s1H92EbDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}"
+      ]
+    },
+    {
+      "anchorJson" : "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"a864205329cc3dd1ccf79025d305ed28a5b789104bf54e2e167cc9c6fa8499ed\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"11e343751ffb84d5e90d2e31fac1f6fd8ec4c749076cb7d37eecad4f413c403e\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:01:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:01:00Z\"},\"sequence\":1},\"signature\":{\"encoded\":\"cU5fUZR6m38FSo2iOoQp+e6waq++9Me3fJ51insF7VIg5Qd6Ph2g4pr7QWZhr4C7WvM8XuGRTjevhWO51Xw4CA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "description" : "The segment starts after the head's last entry: it shows nothing about the head.",
+      "expected" : {
+        "accept" : true,
+        "standing" : "NOT_COVERED"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:00:30Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"11e343751ffb84d5e90d2e31fac1f6fd8ec4c749076cb7d37eecad4f413c403e\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":1},\"signature\":{\"encoded\":\"TSLgrEpeNOphX1NjsMuc29EptFJ/mSPjn0PL0GS6K5SEbjKZ0IPmdj7XrzXpmCHrHCKAA3euzM9zd3a5WXeBDw==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "segment-after-head",
+      "otherHeadJson" : null,
+      "receiptsJson" : [
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"66389dfa79da765728dd774c7f3f5697200ade7de34eecd9819340a0241097bc\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"9bd018aad935a3cdaa3918394910154d2c153a8b2d6cff4c38aaaa6034f7929f\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:02:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:02:00Z\"},\"sequence\":2},\"signature\":{\"encoded\":\"TuqWiu1ZWB74n+29CWbb2MRDayz15b1iKx2HJBDxpeqG0P4y3/5DU6OOptL6/J2dP9H5cxtDOfq3smg/ydT2Cg==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"826fd6f28e9c8fb173ab013fe4aeda0a4bdb5e74129309d3d20fddc6a6746e2c\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"7b277f53d3d345455fe063e0aebe1daec8b883b648becf9feddf70c14b8f8dba\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:03:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:03:00Z\"},\"sequence\":3},\"signature\":{\"encoded\":\"5i6X2gEgcQpt47rnIIOeqP9MpNcU3oVlhR+8MWdSWeMp8YQ2MyvRfqJ63cAZINoqXi/eNOc0ON6G6s1H92EbDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}"
+      ]
+    },
+    {
+      "anchorJson" : null,
+      "description" : "A log begun after a head of the empty log.",
+      "expected" : {
+        "accept" : true,
+        "standing" : "AHEAD"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:00:00Z\"},\"last\":null,\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":0},\"signature\":{\"encoded\":\"Ohn8hek1wv7eTh9+FweREICSxy9AN6jISpG4e7d5BZNmUQr0VqV/lhlSpqFKlrGQueNxLGffxw3J61xc9GWeDQ==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "segment-after-empty-head",
+      "otherHeadJson" : null,
+      "receiptsJson" : [
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"909d1823cbfeff51447a774f84519368da55c937c9e1716b4951b424a6555873\"},\"previous\":null,\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:00:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:00:00Z\"},\"sequence\":0},\"signature\":{\"encoded\":\"GtNgp91geZV3rnqLSVFEZZeurc/pOnoHZPeL7B9oFmRxNGyFY+phEOTKDRJIKSrlc4SPe1KsEB8FI+ZOX/31Dw==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"a864205329cc3dd1ccf79025d305ed28a5b789104bf54e2e167cc9c6fa8499ed\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"11e343751ffb84d5e90d2e31fac1f6fd8ec4c749076cb7d37eecad4f413c403e\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:01:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:01:00Z\"},\"sequence\":1},\"signature\":{\"encoded\":\"cU5fUZR6m38FSo2iOoQp+e6waq++9Me3fJ51insF7VIg5Qd6Ph2g4pr7QWZhr4C7WvM8XuGRTjevhWO51Xw4CA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"66389dfa79da765728dd774c7f3f5697200ade7de34eecd9819340a0241097bc\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"9bd018aad935a3cdaa3918394910154d2c153a8b2d6cff4c38aaaa6034f7929f\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:02:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:02:00Z\"},\"sequence\":2},\"signature\":{\"encoded\":\"TuqWiu1ZWB74n+29CWbb2MRDayz15b1iKx2HJBDxpeqG0P4y3/5DU6OOptL6/J2dP9H5cxtDOfq3smg/ydT2Cg==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"826fd6f28e9c8fb173ab013fe4aeda0a4bdb5e74129309d3d20fddc6a6746e2c\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"7b277f53d3d345455fe063e0aebe1daec8b883b648becf9feddf70c14b8f8dba\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:03:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:03:00Z\"},\"sequence\":3},\"signature\":{\"encoded\":\"5i6X2gEgcQpt47rnIIOeqP9MpNcU3oVlhR+8MWdSWeMp8YQ2MyvRfqJ63cAZINoqXi/eNOc0ON6G6s1H92EbDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}"
+      ]
+    },
+    {
+      "anchorJson" : null,
+      "description" : "A head of the empty log, issued when the log already had entries.",
+      "expected" : {
+        "accept" : true,
+        "sequence" : 0,
+        "standing" : "WITHHELD"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":null,\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":0},\"signature\":{\"encoded\":\"O2RuF+08LF8zTiW0NHOAS6Uiv9y5q6iEC/UmvVHGL1V04bSMnAFI4wGeHo0doMXDx68FLc29sf65ZM44Yx7lDw==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "segment-withheld-from-empty-head",
+      "otherHeadJson" : null,
+      "receiptsJson" : [
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"909d1823cbfeff51447a774f84519368da55c937c9e1716b4951b424a6555873\"},\"previous\":null,\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:00:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:00:00Z\"},\"sequence\":0},\"signature\":{\"encoded\":\"GtNgp91geZV3rnqLSVFEZZeurc/pOnoHZPeL7B9oFmRxNGyFY+phEOTKDRJIKSrlc4SPe1KsEB8FI+ZOX/31Dw==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"a864205329cc3dd1ccf79025d305ed28a5b789104bf54e2e167cc9c6fa8499ed\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"11e343751ffb84d5e90d2e31fac1f6fd8ec4c749076cb7d37eecad4f413c403e\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:01:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:01:00Z\"},\"sequence\":1},\"signature\":{\"encoded\":\"cU5fUZR6m38FSo2iOoQp+e6waq++9Me3fJ51insF7VIg5Qd6Ph2g4pr7QWZhr4C7WvM8XuGRTjevhWO51Xw4CA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"66389dfa79da765728dd774c7f3f5697200ade7de34eecd9819340a0241097bc\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"9bd018aad935a3cdaa3918394910154d2c153a8b2d6cff4c38aaaa6034f7929f\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:02:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:02:00Z\"},\"sequence\":2},\"signature\":{\"encoded\":\"TuqWiu1ZWB74n+29CWbb2MRDayz15b1iKx2HJBDxpeqG0P4y3/5DU6OOptL6/J2dP9H5cxtDOfq3smg/ydT2Cg==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"826fd6f28e9c8fb173ab013fe4aeda0a4bdb5e74129309d3d20fddc6a6746e2c\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"7b277f53d3d345455fe063e0aebe1daec8b883b648becf9feddf70c14b8f8dba\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:03:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:03:00Z\"},\"sequence\":3},\"signature\":{\"encoded\":\"5i6X2gEgcQpt47rnIIOeqP9MpNcU3oVlhR+8MWdSWeMp8YQ2MyvRfqJ63cAZINoqXi/eNOc0ON6G6s1H92EbDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}"
+      ]
+    },
+    {
+      "anchorJson" : null,
+      "description" : "The segment is another registry's log.",
+      "expected" : {
+        "accept" : false,
+        "error" : "REGISTRY_MISMATCH"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"d187a5d83368e6a459e1913729aac68771fb4a41d9d604ecb90d30eb9201d21e\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.other.example\",\"size\":4},\"signature\":{\"encoded\":\"zcRkNGr0FyLSFbJJ5uzKmZsb5w0JkXvLi+SmtAK1Cq0/31OqjncQqQnzPkbte9D4zfUyFlqi0Xbkem/OXuseCg==\",\"keyId\":\"test-other-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "segment-of-another-registry",
+      "otherHeadJson" : null,
+      "receiptsJson" : [
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"909d1823cbfeff51447a774f84519368da55c937c9e1716b4951b424a6555873\"},\"previous\":null,\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:00:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:00:00Z\"},\"sequence\":0},\"signature\":{\"encoded\":\"GtNgp91geZV3rnqLSVFEZZeurc/pOnoHZPeL7B9oFmRxNGyFY+phEOTKDRJIKSrlc4SPe1KsEB8FI+ZOX/31Dw==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"a864205329cc3dd1ccf79025d305ed28a5b789104bf54e2e167cc9c6fa8499ed\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"11e343751ffb84d5e90d2e31fac1f6fd8ec4c749076cb7d37eecad4f413c403e\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:01:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:01:00Z\"},\"sequence\":1},\"signature\":{\"encoded\":\"cU5fUZR6m38FSo2iOoQp+e6waq++9Me3fJ51insF7VIg5Qd6Ph2g4pr7QWZhr4C7WvM8XuGRTjevhWO51Xw4CA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"66389dfa79da765728dd774c7f3f5697200ade7de34eecd9819340a0241097bc\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"9bd018aad935a3cdaa3918394910154d2c153a8b2d6cff4c38aaaa6034f7929f\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:02:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:02:00Z\"},\"sequence\":2},\"signature\":{\"encoded\":\"TuqWiu1ZWB74n+29CWbb2MRDayz15b1iKx2HJBDxpeqG0P4y3/5DU6OOptL6/J2dP9H5cxtDOfq3smg/ydT2Cg==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"826fd6f28e9c8fb173ab013fe4aeda0a4bdb5e74129309d3d20fddc6a6746e2c\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"7b277f53d3d345455fe063e0aebe1daec8b883b648becf9feddf70c14b8f8dba\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:03:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:03:00Z\"},\"sequence\":3},\"signature\":{\"encoded\":\"5i6X2gEgcQpt47rnIIOeqP9MpNcU3oVlhR+8MWdSWeMp8YQ2MyvRfqJ63cAZINoqXi/eNOc0ON6G6s1H92EbDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}"
+      ]
+    },
+    {
+      "anchorJson" : null,
+      "description" : "The segment itself does not verify.",
+      "expected" : {
+        "accept" : false,
+        "error" : "GAP"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"d187a5d83368e6a459e1913729aac68771fb4a41d9d604ecb90d30eb9201d21e\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":4},\"signature\":{\"encoded\":\"KMG8ISzFn7YUMnAeekKjg5J3AiMosNu+uH8oumktdVdTao4zk9LeqT5lqmgkkG/CsW08sCwppwngbplNtU0uDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "segment-invalid",
+      "otherHeadJson" : null,
+      "receiptsJson" : [
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"909d1823cbfeff51447a774f84519368da55c937c9e1716b4951b424a6555873\"},\"previous\":null,\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:00:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:00:00Z\"},\"sequence\":0},\"signature\":{\"encoded\":\"GtNgp91geZV3rnqLSVFEZZeurc/pOnoHZPeL7B9oFmRxNGyFY+phEOTKDRJIKSrlc4SPe1KsEB8FI+ZOX/31Dw==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+        "{\"receipt\":{\"claim\":{\"algorithm\":\"sha-256\",\"hex\":\"66389dfa79da765728dd774c7f3f5697200ade7de34eecd9819340a0241097bc\"},\"previous\":{\"algorithm\":\"sha-256\",\"hex\":\"9bd018aad935a3cdaa3918394910154d2c153a8b2d6cff4c38aaaa6034f7929f\"},\"protocol\":\"verified-claim-registration-v1\",\"receivedAt\":{\"value\":\"2026-10-01T10:02:00Z\"},\"registry\":\"registry.example\",\"respondBy\":{\"value\":\"2026-10-15T10:02:00Z\"},\"sequence\":2},\"signature\":{\"encoded\":\"TuqWiu1ZWB74n+29CWbb2MRDayz15b1iKx2HJBDxpeqG0P4y3/5DU6OOptL6/J2dP9H5cxtDOfq3smg/ydT2Cg==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}"
+      ]
+    },
+    {
+      "anchorJson" : null,
+      "description" : "An older, shorter head and a later, longer one.",
+      "expected" : {
+        "accept" : true,
+        "standing" : "CONSISTENT"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:01:30Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"9bd018aad935a3cdaa3918394910154d2c153a8b2d6cff4c38aaaa6034f7929f\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":2},\"signature\":{\"encoded\":\"vpHTwS5Kk5Xa/NHwJCUP2AB2d5lhC/Kg78O3jJ7GDC7PrWQBzwE7Ts3S14/jqNrIU3DRyIpSIvbU3Gg1VEMrAQ==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "heads-consistent",
+      "otherHeadJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"d187a5d83368e6a459e1913729aac68771fb4a41d9d604ecb90d30eb9201d21e\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":4},\"signature\":{\"encoded\":\"KMG8ISzFn7YUMnAeekKjg5J3AiMosNu+uH8oumktdVdTao4zk9LeqT5lqmgkkG/CsW08sCwppwngbplNtU0uDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "receiptsJson" : null
+    },
+    {
+      "anchorJson" : null,
+      "description" : "The same head twice.",
+      "expected" : {
+        "accept" : true,
+        "standing" : "CONSISTENT"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"d187a5d83368e6a459e1913729aac68771fb4a41d9d604ecb90d30eb9201d21e\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":4},\"signature\":{\"encoded\":\"KMG8ISzFn7YUMnAeekKjg5J3AiMosNu+uH8oumktdVdTao4zk9LeqT5lqmgkkG/CsW08sCwppwngbplNtU0uDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "heads-identical",
+      "otherHeadJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"d187a5d83368e6a459e1913729aac68771fb4a41d9d604ecb90d30eb9201d21e\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":4},\"signature\":{\"encoded\":\"KMG8ISzFn7YUMnAeekKjg5J3AiMosNu+uH8oumktdVdTao4zk9LeqT5lqmgkkG/CsW08sCwppwngbplNtU0uDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "receiptsJson" : null
+    },
+    {
+      "anchorJson" : null,
+      "description" : "Two heads of the same size naming different last entries.",
+      "expected" : {
+        "accept" : true,
+        "headed" : {
+          "algorithm" : "sha-256",
+          "hex" : "7b277f53d3d345455fe063e0aebe1daec8b883b648becf9feddf70c14b8f8dba"
+        },
+        "logged" : {
+          "algorithm" : "sha-256",
+          "hex" : "aa27a1244e1f5b6264f581115231165615a2e2d2943b7e89f8cfd9fc0f08b005"
+        },
+        "standing" : "EQUIVOCATION"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"7b277f53d3d345455fe063e0aebe1daec8b883b648becf9feddf70c14b8f8dba\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":3},\"signature\":{\"encoded\":\"9/NAZki6/K/7KsGkioHXFm7vcodMp83/omuHGAnuEqzHgccqhzujn14HjYWMz8ZSrk9J8dqam3Fa2gXcjpcmBw==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "heads-equivocate",
+      "otherHeadJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"aa27a1244e1f5b6264f581115231165615a2e2d2943b7e89f8cfd9fc0f08b005\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":3},\"signature\":{\"encoded\":\"vy1yA/DWU4Ezoo2TKOLEEtL7XdenWOjvLkT1Ue7VTy0Uxc8ld30Ltv7UZBtl5RjhzpSzg9Q5dJ/etduJhPRBBA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "receiptsJson" : null
+    },
+    {
+      "anchorJson" : null,
+      "description" : "A later head with fewer entries than an earlier one: the later one withheld them.",
+      "expected" : {
+        "accept" : true,
+        "sequence" : 2,
+        "standing" : "WITHHELD"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"9bd018aad935a3cdaa3918394910154d2c153a8b2d6cff4c38aaaa6034f7929f\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":2},\"signature\":{\"encoded\":\"zlnUGsihscsEOMK8DZHwm34/Hu6hwgu4YA1ldtYixP+QRrWOlACh2f83ZY2yzn3B60bH95u6HQAlhlFRhI0aBA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "heads-regress",
+      "otherHeadJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:10Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"d187a5d83368e6a459e1913729aac68771fb4a41d9d604ecb90d30eb9201d21e\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":4},\"signature\":{\"encoded\":\"C3f5K+/HVKykJFa+hUow8In+etx93iGn/roeOzd1Wol0o4PWT4eeqD3UjIPw9my7/8esHnPbxVUUS7MCn+7yCg==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "receiptsJson" : null
+    },
+    {
+      "anchorJson" : null,
+      "description" : "Heads of different registries are not compared.",
+      "expected" : {
+        "accept" : false,
+        "error" : "REGISTRY_MISMATCH"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"d187a5d83368e6a459e1913729aac68771fb4a41d9d604ecb90d30eb9201d21e\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":4},\"signature\":{\"encoded\":\"KMG8ISzFn7YUMnAeekKjg5J3AiMosNu+uH8oumktdVdTao4zk9LeqT5lqmgkkG/CsW08sCwppwngbplNtU0uDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "heads-of-two-registries",
+      "otherHeadJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"d187a5d83368e6a459e1913729aac68771fb4a41d9d604ecb90d30eb9201d21e\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.other.example\",\"size\":4},\"signature\":{\"encoded\":\"zcRkNGr0FyLSFbJJ5uzKmZsb5w0JkXvLi+SmtAK1Cq0/31OqjncQqQnzPkbte9D4zfUyFlqi0Xbkem/OXuseCg==\",\"keyId\":\"test-other-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "receiptsJson" : null
+    },
+    {
+      "anchorJson" : null,
+      "description" : "The second head is not signed by a trusted key.",
+      "expected" : {
+        "accept" : false,
+        "error" : "UNKNOWN_KEY"
+      },
+      "headJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:03:20Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"d187a5d83368e6a459e1913729aac68771fb4a41d9d604ecb90d30eb9201d21e\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":4},\"signature\":{\"encoded\":\"KMG8ISzFn7YUMnAeekKjg5J3AiMosNu+uH8oumktdVdTao4zk9LeqT5lqmgkkG/CsW08sCwppwngbplNtU0uDA==\",\"keyId\":\"test-registry-1\",\"scheme\":\"Ed25519\"}}",
+      "heldJson" : null,
+      "name" : "other-head-forged",
+      "otherHeadJson" : "{\"head\":{\"issuedAt\":{\"value\":\"2026-10-01T10:01:30Z\"},\"last\":{\"algorithm\":\"sha-256\",\"hex\":\"9bd018aad935a3cdaa3918394910154d2c153a8b2d6cff4c38aaaa6034f7929f\"},\"protocol\":\"verified-claim-registration-v1\",\"registry\":\"registry.example\",\"size\":2},\"signature\":{\"encoded\":\"UOXrP9lSshCEXJcrpPSw/Rfc0Gxmn9eECy6svLoY1ZKYKuIQRXzsYYKn/IEkhSDYMV3Y0+ZogID6GjSE9EkwAA==\",\"keyId\":\"test-untrusted\",\"scheme\":\"Ed25519\"}}",
+      "receiptsJson" : null
+    }
+  ],
+  "description" : "Heads, alone and against held entries, segments and other heads. Keys and trust are those of vectors.json.",
+  "protocol" : "verified-claim-registration-v1"
+}
