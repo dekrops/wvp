@@ -143,6 +143,55 @@ jobs:
           path: results/lean.json
           if-no-files-found: ignore
 
+  properties:
+    name: Properties of the evaluator, and generated cases against verified-cli
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install the pinned Lean toolchain
+        env:
+          ELAN_VERSION: v4.1.2
+          ELAN_SHA256: f81c2e48c1588d4612cd2c8851947898a45ac8d72748a07dff3a5694f1cf589b
+        run: |
+          curl --fail --location --retry 3 \
+            "https://github.com/leanprover/elan/releases/download/${ELAN_VERSION}/elan-x86_64-unknown-linux-gnu.tar.gz" \
+            --output "$RUNNER_TEMP/elan.tar.gz"
+          echo "${ELAN_SHA256}  $RUNNER_TEMP/elan.tar.gz" | sha256sum --check
+          mkdir -p "$RUNNER_TEMP/elan"
+          tar -xzf "$RUNNER_TEMP/elan.tar.gz" -C "$RUNNER_TEMP/elan"
+          "$RUNNER_TEMP/elan/elan-init" -y --no-modify-path --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          toolchain=$(cat formal/lean/lean-toolchain)
+          for attempt in 1 2 3; do
+            if "$HOME/.elan/bin/elan" toolchain install "$toolchain"; then break; fi
+            if [ "$attempt" = 3 ]; then exit 1; fi
+            sleep $((attempt * 15))
+          done
+      # Property tests with a fixed seed. Not proofs: a pass is "not refuted on these cases".
+      - run: bash conformance/properties/check.sh
+      - name: Read the pinned revision
+        id: pin
+        run: |
+          commit=$(python3 -c "import json; print(json.load(open('conformance/corpus.json'))['implementations']['rust']['commit'])")
+          [[ "$commit" =~ ^[0-9a-f]{40}$ ]] || { echo "not a commit: $commit"; exit 1; }
+          echo "commit=$commit" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: dekrops/verified-cli
+          ref: ${{ steps.pin.outputs.commit }}
+          path: .implementations/verified-cli
+          persist-credentials: false
+      - run: rustup show active-toolchain || rustup toolchain install
+        working-directory: .implementations/verified-cli
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+        with:
+          workspaces: .implementations/verified-cli
+      # Generated cases, each with the Lean evaluator's result, reproduced by another implementation.
+      - run: bash conformance/properties/differential.sh .implementations/verified-cli
+
   report:
     name: Coverage by specification and part
     needs: [rust, lean]
