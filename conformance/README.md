@@ -47,6 +47,8 @@ Every pull request and `main` are checked in public: the structure of the corpus
 
 A vector for a new rule can be built and checked with public tooling: [proposing vectors](proposing-vectors.md).
 
+For Work Contract Language 1 there is an oracle: [the Lean reference evaluator as a command](oracle/README.md), which says what the published definition yields for any contract and environment.
+
 ## Implementations known today
 
 Reports under `reports/` are the authority once they exist. Until an implementation files one, this table repeats what its own compatibility document says, and names that document.

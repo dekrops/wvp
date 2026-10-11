@@ -1,0 +1,15 @@
+name = "wvp-oracle"
+version = "0.1.0"
+defaultTargets = ["wvp-oracle"]
+
+[leanOptions]
+warningAsError = true
+
+# The definitions and the reference evaluator, exactly as published. Nothing here changes them.
+[[require]]
+name = "verified"
+path = "../../formal/lean"
+
+[[lean_exe]]
+name = "wvp-oracle"
+root = "Oracle"
