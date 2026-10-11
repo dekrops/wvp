@@ -1,0 +1,29 @@
+name = "wvp-properties"
+version = "0.1.0"
+defaultTargets = ["wvp-properties", "wvp-generate"]
+
+[leanOptions]
+warningAsError = true
+
+# The definitions and the reference evaluator, exactly as published.
+[[require]]
+name = "verified"
+path = "../../formal/lean"
+
+# Property-based testing. Pinned to the commit of the tag that matches the Lean toolchain.
+# It is a dependency of this package only: the published definitions have none.
+[[require]]
+name = "plausible"
+git = "https://github.com/leanprover-community/plausible"
+rev = "dfd06ebfe8d0e8fa7faba9cb5e5a2e74e7bd2805"
+
+[[lean_lib]]
+name = "Generated"
+
+[[lean_exe]]
+name = "wvp-properties"
+root = "Properties"
+
+[[lean_exe]]
+name = "wvp-generate"
+root = "Generate"
