@@ -8,6 +8,7 @@ that asks public implementations to reproduce it.
     conformance.py inventory   [--root DIR]
     conformance.py run         --implementation NAME --source DIR --out FILE [--root DIR]
     conformance.py report      --results DIR [--root DIR] [--out FILE]
+    conformance.py try         --proposal DIR --implementation NAME --source DIR [--root DIR]
 
 Standard library only. What each command establishes, and what it does not, is in
 conformance/ci.md. The map of the corpus it reads is conformance/corpus.json.
@@ -20,8 +21,10 @@ import json
 import os
 import pathlib
 import re
+import shutil
 import subprocess
 import sys
+import tempfile
 
 MAP = "conformance/corpus.json"
 # Paths written in this repository by pull request. The export never writes them, and
@@ -387,6 +390,68 @@ def tail(output, lines=60):
     return "\n".join(output.strip().splitlines()[-lines:])
 
 
+# --- try --------------------------------------------------------------------------------------
+
+
+def try_proposal(args):
+    """Runs proposed vectors, one at a time, through an implementation's own harness.
+
+    A proposal is a directory laid out as test-vectors/ is. A file there is a new vector at that
+    path. A file named `<name>.additions.json` holds lists of cases to append to the lists of the
+    published file `<name>.json`. Each is placed beside the published corpus in a temporary copy,
+    and the implementation is asked to reproduce the part it belongs to. A proposal that an
+    implementation written by someone else reproduces is evidence for it. One it does not
+    reproduce is a disagreement to resolve, and is never resolved by editing the expectation.
+    """
+    root = pathlib.Path(args.root).resolve()
+    proposal = pathlib.Path(args.proposal).resolve()
+    corpus = load_map(root)
+    files = sorted(p for p in proposal.rglob("*.json") if p.is_file())
+    if not files:
+        sys.exit(f"no proposed vector under {proposal}")
+    agreed = differed = unchecked = 0
+    for file in files:
+        relative = file.relative_to(proposal).as_posix()
+        target = "test-vectors/" + relative.replace(".additions.json", ".json")
+        with tempfile.TemporaryDirectory() as scratch:
+            trial = pathlib.Path(scratch)
+            shutil.copytree(root / "test-vectors", trial / "test-vectors")
+            shutil.copytree(root / "protocols", trial / "protocols")
+            shutil.copytree(root / "conformance", trial / "conformance")
+            destination = trial / target
+            if relative.endswith(".additions.json"):
+                merged = json.loads(destination.read_text(encoding="utf-8"))
+                for name, cases in json.loads(file.read_text(encoding="utf-8")).items():
+                    if isinstance(cases, list) and isinstance(merged.get(name), list):
+                        merged[name] += cases
+                destination.write_text(json.dumps(merged), encoding="utf-8")
+            else:
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(file, destination)
+            parts = {part["id"] for part in corpus["parts"] if target in files_of(part, corpus_files(trial))}
+            checks = [c for c in corpus["checks"] if c["implementation"] == args.implementation and parts & set(c["covers"])]
+            if not checks:
+                unchecked += 1
+                print(f"NOT RUN  {relative}: {args.implementation} is not run against this part")
+                continue
+            _, counts = inventory(trial)
+            vectors = trial / "test-vectors"
+            environment = dict(os.environ, VERIFIED_CONFORMANCE_DIR=str(vectors), VERIFIED_CONFORMANCE_REQUIRED="1")
+            outcome, shown = "AGREES ", ""
+            for check in checks:
+                argv = [word.replace("{corpus}", str(vectors)) for word in check["argv"]]
+                done = subprocess.run(argv, cwd=args.source, env=environment, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, errors="replace")
+                ran = (count(check.get("reproduced"), done.stdout) or 0) + (count(check.get("unrepresentable"), done.stdout) or 0)
+                if done.returncode != 0 or ran != sum(counts[part] for part in check["covers"]):
+                    outcome, shown = "DIFFERS", tail(done.stdout, 12).replace(str(trial) + "/", "")
+            agreed += outcome == "AGREES "
+            differed += outcome == "DIFFERS"
+            print(f"{outcome}  {relative}")
+            if shown and args.verbose:
+                print("         " + shown.replace("\n", "\n         "))
+    print(f"\n{agreed} reproduced by {args.implementation}, {differed} not, {unchecked} in parts it is not run against.")
+
+
 # --- report -----------------------------------------------------------------------------------
 
 
@@ -478,7 +543,7 @@ def report(args):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     commands = parser.add_subparsers(dest="command", required=True)
-    for name, function in (("structure", structure), ("provenance", provenance), ("unchanged", unchanged), ("inventory", None), ("run", run), ("report", report)):
+    for name, function in (("structure", structure), ("provenance", provenance), ("unchanged", unchanged), ("inventory", None), ("run", run), ("report", report), ("try", try_proposal)):
         command = commands.add_parser(name)
         command.add_argument("--root", default=".", help="a checkout of this repository")
         command.set_defaults(function=function)
@@ -489,6 +554,11 @@ def main():
             command.add_argument("--implementation", required=True)
             command.add_argument("--source", required=True, help="the directory to run the implementation's commands in")
             command.add_argument("--out", required=True)
+        if name == "try":
+            command.add_argument("--proposal", required=True, help="a directory of proposed vectors, laid out as test-vectors/ is")
+            command.add_argument("--implementation", required=True)
+            command.add_argument("--source", required=True, help="the directory to run the implementation's commands in")
+            command.add_argument("--verbose", action="store_true", help="show the end of the implementation's output where it differs")
         if name == "report":
             command.add_argument("--results", required=True, help="a directory of files written by `run`")
             command.add_argument("--out")

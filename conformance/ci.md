@@ -47,6 +47,8 @@ python3 conformance/tools/conformance.py run --implementation lean --source form
 python3 conformance/tools/conformance.py report --results results
 ```
 
+`conformance.py try` runs proposed vectors through an implementation, one case at a time: see [proposing vectors](proposing-vectors.md).
+
 Python 3.11 or later and nothing else for the first three. Rust and Lean install the toolchains their sources pin.
 
 ## Changing what is run

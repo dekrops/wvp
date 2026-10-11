@@ -5,6 +5,7 @@ How the protocol changes. [RFC 0001](0001-standards-process.md) is the process; 
 | RFC                                                 | Title                               | Status   |
 | --------------------------------------------------- | ----------------------------------- | -------- |
 | [0001](0001-standards-process.md)                   | The WVP standards process           | Accepted |
+| [0003](0003-wvp-0.3.md)                             | WVP v0.3                            | Draft    |
 | [0004](0004-conformance-profiles.md)                | Conformance profiles                | Draft    |
 | [0002](0002-inputs-every-verifier-refuses-alike.md) | Inputs every verifier refuses alike | Draft    |
 
