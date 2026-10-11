@@ -1,0 +1,21 @@
+{
+  "description": "Cases RFC 0002 proposes to add to the `invalid` list of canonical-hash-v1.json.",
+  "invalid": [
+    {
+      "name": "duplicate-member-same-value",
+      "inputJson": "{\"a\":1,\"a\":1}"
+    },
+    {
+      "name": "duplicate-member-other-value",
+      "inputJson": "{\"a\":1,\"a\":2}"
+    },
+    {
+      "name": "duplicate-member-nested",
+      "inputJson": "{\"a\":{\"b\":1,\"b\":1}}"
+    },
+    {
+      "name": "duplicate-member-by-escape",
+      "inputJson": "{\"a\":1,\"\\u0061\":2}"
+    }
+  ]
+}
