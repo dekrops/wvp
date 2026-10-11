@@ -1,5 +1,14 @@
 # Work-unit identity v1
 
+|                      |                                                                   |
+| -------------------- | ----------------------------------------------------------------- |
+| Identifier           | `work-unit-1`                                                     |
+| Version              | 1                                                                 |
+| Status               | Draft                                                             |
+| Depends on           | [`verified-json-v1`](../../canonical-json/v1/SPEC.md)             |
+| Normative references | RFC 2104 (HMAC); FIPS 180-4 (SHA-256)                             |
+| Conformance          | [`test-vectors/work-unit/v1`](../../../test-vectors/work-unit/v1) |
+
 Status: draft specification with a reference implementation and vectors. Claim registration v1 uses its nullifier for the unit a registered claim holds. The stateful registry of section 6 is not built, and nothing here changes how claims are recorded or settled.
 
 A **work unit** is what may be billed once. This document defines how a claim is mapped to the unit it is about, a **nullifier** that lets two claims about the same unit be recognized without disclosing which unit it is, and what a stateful registry must do to make a unit billable at most once. The design follows one reference submission's nullifier construction, and the commercial trial's `BillableWorkKey`, which it generalizes.

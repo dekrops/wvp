@@ -4,7 +4,7 @@ Specifications and conformance vectors for checking claims about completed work:
 
 | Specification                                                    | What it defines                                                                                                                                                                                                        | Vectors                                                                      |
 | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| [`verified-json-v1`](test-vectors/README.md)                     | The canonical JSON encoding every digest and signature is over                                                                                                                                                         | [`test-vectors/canonical-hash-v1.json`](test-vectors/canonical-hash-v1.json) |
+| [`verified-json-v1`](protocols/canonical-json/v1/SPEC.md)        | The canonical JSON encoding every digest and signature is over                                                                                                                                                         | [`test-vectors/canonical-hash-v1.json`](test-vectors/canonical-hash-v1.json) |
 | [Evidence Statement v1](docs/spec/evidence-statement-v1.md)      | Signed evidence, the verifier's trust registry, chains, admission                                                                                                                                                      | [`test-vectors/evidence-statement/v1`](test-vectors/evidence-statement/v1)   |
 | [WVP v0.1](protocols/wvp/v0.1/SPEC.md)                           | Portable verification packages, thirteen ordered checks, refusal codes                                                                                                                                                 | [`test-vectors/wvp/v0.1`](test-vectors/wvp/v0.1)                             |
 | [WVP v0.2](protocols/wvp/v0.2/SPEC.md)                           | Packages whose contract is written in Work Contract Language 1; relying-party expectations                                                                                                                             | [`test-vectors/wvp/v0.2`](test-vectors/wvp/v0.2)                             |
@@ -34,9 +34,20 @@ Under a trust registry the relying party supplies, a package establishes its int
 
 All vectors and examples are synthetic. Names such as `u.lindqvist` are invented, and the keys are test keys derived from seeds published beside them: never trust or provision them.
 
+## How the protocol changes
+
+The protocol is changed in the open, by RFC: [RFC 0001](rfcs/0001-standards-process.md) defines the process, who decides, and what a change must come with. [`governance/`](governance/) holds the list of maintainers, a map of the specifications and what each depends on, an audit of what is normative here and what still depends on unpublished material, and how this repository is published. [`CONTRIBUTING.md`](CONTRIBUTING.md) says how to raise a question or propose a change, and [`conformance/`](conformance/) how an implementation reports what it reproduces.
+
+WVP is stewarded by Krops GmbH. It is not a standard of any standards body, and nothing here claims that it is.
+
 ## Provenance and maintenance
 
-These files are exported from the platform repository where the reference implementation generates them, by a script that copies them byte for byte and removes links to files that are not published. This README and the license files are part of that export too, so the whole repository is replaced at each publication. [`PROVENANCE.md`](PROVENANCE.md) names the source commit and lists every file with its digest. Specifications refer to modules and ADRs of that implementation by name; those are not published.
+This repository has two kinds of content, and each has one place where it is written:
+
+- **Specifications, vectors and examples**, with this README and the license files, are exported from the platform repository where the reference implementation generates the vectors, by a script that copies them byte for byte and removes links to files that are not published. [`PROVENANCE.md`](PROVENANCE.md) names the source commit and the SHA-256 of every exported file. A pull request here that edits one of them is not merged as it is: the change is made at the source, by an accepted RFC where the process requires one, and arrives with the next export.
+- **RFCs, governance documents, conformance reports and the contribution guide** (`rfcs/`, `governance/`, `conformance/`, `CONTRIBUTING.md`) are written here, by pull request. The export never writes, replaces or removes them.
+
+[`governance/publication.md`](governance/publication.md) describes this arrangement, why it is the first step and not the last, and what has to be true before the specifications themselves are written here.
 
 ## License
 
