@@ -1,5 +1,14 @@
 # Claim registration v1
 
+|                      |                                                                                                                                                                                   |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Identifier           | `verified-claim-registration-v1`                                                                                                                                                  |
+| Version              | 1                                                                                                                                                                                 |
+| Status               | Draft                                                                                                                                                                             |
+| Depends on           | [`verified-json-v1`](../../canonical-json/v1/SPEC.md); [`work-unit-1`](../../work-unit/v1/SPEC.md); a [`work-contract-1`](../../work-contract/v1/SPEC.md) contract, by its digest |
+| Normative references | RFC 8032 (Ed25519); RFC 8410 (Ed25519 `SubjectPublicKeyInfo`); RFC 4648 (base64); FIPS 180-4 (SHA-256)                                                                            |
+| Conformance          | [`test-vectors/claim-registration/v1`](../../../test-vectors/claim-registration/v1)                                                                                               |
+
 Status: draft specification with a Scala reference (`modules/claim-registration`), an independent JavaScript implementation (`tooling/claim-registration.mjs`) and vectors (`test-vectors/claim-registration/v1`). A registry service that implements it exists beside the reference (`apps/claim-registry`).
 
 Verification so far checks evidence that someone chose to submit. If the party that holds the evidence never answers, nothing records it. Claim registration closes that gap. A claim is registered **before** any evidence is asked for, at a registry both parties agreed on. The registry's signed receipt lets the claimant show anyone, without the registry's help, that the claim was made and when an answer is due.

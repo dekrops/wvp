@@ -1,5 +1,14 @@
 # Work Verification Protocol v0.1
 
+|                      |                                                                                                                                        |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Identifier           | `wvp-0.1`                                                                                                                              |
+| Version              | 0.1                                                                                                                                    |
+| Status               | Draft                                                                                                                                  |
+| Depends on           | [`verified-json-v1`](../../canonical-json/v1/SPEC.md); [`verified-evidence-statement-v1`](../../../docs/spec/evidence-statement-v1.md) |
+| Normative references | RFC 8032 (Ed25519); RFC 4648 (base64); FIPS 180-4 (SHA-256)                                                                            |
+| Conformance          | [`test-vectors/wvp/v0.1`](../../../test-vectors/wvp/v0.1)                                                                              |
+
 Status: draft. Identifier: `wvp-0.1`.
 
 Implementation status: two verifiers (Scala, JavaScript) agree on the conformance vectors. One application flow produces and exports packages: order fulfilment, on synthetic data, without an issuer signature, with the evidence key held by the deployment that also verifies. Nothing else in the product produces packages.
@@ -9,7 +18,7 @@ A **package** is one file from which a second party can check, offline and witho
 The protocol builds on two existing specifications and does not redefine them:
 
 - [Verified Evidence Statement v1](../../../docs/spec/evidence-statement-v1.md): who asserted a piece of evidence, under which key and authority.
-- `verified-json-v1` canonicalization ([test-vectors/README.md](../../../test-vectors/README.md)): the byte form everything is hashed in.
+- `verified-json-v1` canonicalization ([Canonical JSON](../../canonical-json/v1/SPEC.md)): the byte form everything is hashed in.
 
 ## 1. Objects
 

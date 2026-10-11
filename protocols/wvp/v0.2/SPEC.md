@@ -1,5 +1,14 @@
 # Work Verification Protocol v0.2
 
+|                      |                                                                                                                                                                                                                                                                          |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Identifier           | `wvp-0.2`                                                                                                                                                                                                                                                                |
+| Version              | 0.2                                                                                                                                                                                                                                                                      |
+| Status               | Draft                                                                                                                                                                                                                                                                    |
+| Depends on           | [`wvp-0.1`](../v0.1/SPEC.md), for everything this document does not restate; [`work-contract-1`](../../work-contract/v1/SPEC.md); [`verified-evidence-statement-v1`](../../../docs/spec/evidence-statement-v1.md); [`verified-json-v1`](../../canonical-json/v1/SPEC.md) |
+| Normative references | As `wvp-0.1`                                                                                                                                                                                                                                                             |
+| Conformance          | [`test-vectors/wvp/v0.2`](../../../test-vectors/wvp/v0.2)                                                                                                                                                                                                                |
+
 Status: draft. Identifier: `wvp-0.2`.
 
 Version 0.2 is [version 0.1](../v0.1/SPEC.md) with one change of substance: the contract in a package is written in [Work Contract Language 1](../../work-contract/v1/SPEC.md), so what counts as done is data that any verifier evaluates, not the name of an evaluator each verifier must implement.

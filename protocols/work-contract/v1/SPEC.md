@@ -1,5 +1,14 @@
 # Work Contract Language 1
 
+|                      |                                                                           |
+| -------------------- | ------------------------------------------------------------------------- |
+| Identifier           | `work-contract-1`; evaluation semantics `kleene-1`                        |
+| Version              | 1                                                                         |
+| Status               | Draft                                                                     |
+| Depends on           | [`verified-json-v1`](../../canonical-json/v1/SPEC.md)                     |
+| Normative references | FIPS 180-4 (SHA-256)                                                      |
+| Conformance          | [`test-vectors/work-contract/v1`](../../../test-vectors/work-contract/v1) |
+
 Status: draft. Identifier: `work-contract-1`. Evaluation semantics: `kleene-1`.
 
 A **work contract** in this language states, as data, what must be true for a unit of work to count as done. Given a contract and an **environment** of admitted records, evaluation yields one of three decisions, or refuses. There is no executable code in a contract, no recursion and no user-defined function.
@@ -173,7 +182,7 @@ Checks are made in the order of the table. The result is `{ "refused": code }`.
 
 ## 9. Canonical form and digest
 
-The canonical form of a contract is its JSON object under `verified-json-v1` ([test-vectors/README.md](../../../test-vectors/README.md)): keys sorted, no insignificant whitespace, UTF-8. The **contract digest** is the SHA-256 of those bytes.
+The canonical form of a contract is its JSON object under `verified-json-v1` ([Canonical JSON](../../canonical-json/v1/SPEC.md)): keys sorted, no insignificant whitespace, UTF-8. The **contract digest** is the SHA-256 of those bytes.
 
 Because numbers are strings, requirement order is fixed, absent members have one spelling and unknown members are errors, a contract has exactly one canonical text. A reader of contract text must refuse a text that parses to a valid contract but is not its canonical bytes.
 

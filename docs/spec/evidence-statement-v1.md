@@ -1,5 +1,14 @@
 # Verified Evidence Statement v1
 
+|                      |                                                                                                        |
+| -------------------- | ------------------------------------------------------------------------------------------------------ |
+| Identifier           | `verified-evidence-statement-v1`                                                                       |
+| Version              | 1                                                                                                      |
+| Status               | Draft                                                                                                  |
+| Depends on           | [`verified-json-v1`](../../protocols/canonical-json/v1/SPEC.md)                                        |
+| Normative references | RFC 8032 (Ed25519); RFC 8410 (Ed25519 `SubjectPublicKeyInfo`); RFC 4648 (base64); FIPS 180-4 (SHA-256) |
+| Conformance          | [`test-vectors/evidence-statement/v1`](../../test-vectors/evidence-statement/v1)                       |
+
 `verified-evidence-statement-v1` is the protocol by which an issuer, such as an Evidence Gateway in front of an ERP, signs what it observed so that any verifier can later establish who asserted it and that it was not altered. The Scala reference is `modules/evidence-protocol`; the language-neutral conformance corpus is `test-vectors/evidence-statement/v1`; an independent JavaScript implementation is `tooling/evidence-conformance.mjs`.
 
 ## What a statement is, and is not
@@ -38,7 +47,7 @@ Times use the canonical spelling of an instant: `YYYY-MM-DDTHH:MM:SSZ`, or with 
 
 ## Canonical bytes, digest and signature
 
-- **Canonical bytes** of a statement: `verified-json-v1` (see [the shared vectors](../../test-vectors/README.md) and ADR 0019).
+- **Canonical bytes** of a statement: `verified-json-v1` (see [Canonical JSON](../../protocols/canonical-json/v1/SPEC.md) and ADR 0019).
 - **Statement digest**: SHA-256 of the canonical bytes. It identifies the statement in chains and in admission provenance.
 - **Signing input**: the UTF-8 domain prefix `verified:evidence-statement:v1\n` followed by the canonical bytes. The prefix is the same domain-separation scheme as the commercial protocol's `verified:<purpose>:v1\n`, so a statement signature can never be valid for another Verified object, and vice versa.
 - **Signature**: Ed25519 (RFC 8032) over the signing input, verified strictly by the platform library.
