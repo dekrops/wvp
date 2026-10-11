@@ -1,6 +1,6 @@
 # Provenance
 
-Exported from `dekrops/verified` at commit `0cb34ea86e8b859322d067f882daa81e960bf017` by `tooling/export-protocol.mjs`.
+Exported from `dekrops/verified` at commit `e31576fd423994360799c00b74c7f53a62f21fb7` by `tooling/export-protocol.mjs`.
 
 Every file is a byte-for-byte copy of the file at the same path, except where marked edited, and except `README.md` and the license files at the root, which are copied from `publishing/wvp/`. The only edit is that a Markdown link to a file that is not published is replaced by its text, and `test-vectors/README.md` omits the section on vectors that are not published.
 
@@ -12,7 +12,7 @@ All data in the vectors and examples is synthetic. Names such as `u.lindqvist` a
 | `LICENSE` | `bab419d5c524c31eee6db1d271d03375509a70650b8d2688e4d5628884965046` |  |
 | `LICENSE-APACHE-2.0.txt` | `cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30` |  |
 | `LICENSE-CC-BY-4.0.txt` | `9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411` |  |
-| `protocols/claim-registration/v1/SPEC.md` | `b21eddd6430a79dfe9d20aacfb6442d1d44dd170ee8f11f46e89d915f1a8b2aa` | yes |
+| `protocols/claim-registration/v1/SPEC.md` | `7346e1546502166c18e501c40b243cd0c9f7695fa979036238e92c1b9147859e` | yes |
 | `protocols/work-contract/v1/examples/approved-and-posted/differences.json` | `17807dfee414be7168799ad84413739e4f1c7d1274e2c046840567b906a16d61` |  |
 | `protocols/work-contract/v1/examples/approved-and-posted/reading-any-order.json` | `2aa7d62aa7820907dede36f2528b36f9bbd0e4d1b270ceec9a78d24f62196f25` |  |
 | `protocols/work-contract/v1/examples/approved-and-posted/reading-approval-first-and-standing.json` | `7ada1ffa6812382b94be85784bcd484ee89a6a4e9018163e650f549919b8a2de` |  |
@@ -20,14 +20,14 @@ All data in the vectors and examples is synthetic. Names such as `u.lindqvist` a
 | `protocols/work-contract/v1/examples/invoice-processing/artifact.json` | `5f9427f5cf84b1734f0a2584fe9d1ebbdfd0d2565c5f73ae93070fda8509bece` |  |
 | `protocols/work-contract/v1/examples/invoice-processing/draft.json` | `8ea92a6b4fca375b1fd6f6ddddf1e65a7a639e4d13b04983ccdc66bf16642c5e` |  |
 | `protocols/work-contract/v1/SPEC.md` | `91dc51881661b58e035c7130749d67bb4b402287aabcd619a7152ae396e933c4` | yes |
-| `protocols/work-unit/v1/SPEC.md` | `79b2e3361fb2699e502f310d9f5f5afc302f22647eebf4e8f7cd4dd9478b22bd` | yes |
+| `protocols/work-unit/v1/SPEC.md` | `e7502722b753204f770f31f580490dad6ee2924cafbe64895bd7f2596ab46795` | yes |
 | `protocols/wvp/v0.1/examples/order-transition/package.json` | `6572b58ad9ddfe738f6b52eac1a1dbe32942a63448f68163f4383405c46d0fac` |  |
 | `protocols/wvp/v0.1/examples/order-transition/registry.json` | `c5ea044bc385876bac7cfb49c703fab84e1cb1924e5af559e4369337638e79d5` |  |
 | `protocols/wvp/v0.1/SPEC.md` | `941e4801231ca40256f6465916af74aa52815a439c9b8748d05581aeb9318dc3` | yes |
 | `protocols/wvp/v0.2/examples/invoice-processing/package.json` | `89a46d216806cc2cbfc24032fa96bcf92bdc197a55f7ac0e82ef8bc5233fd1a0` |  |
 | `protocols/wvp/v0.2/examples/invoice-processing/registry.json` | `28655c3adf330951aae88b846af40d0618c12b6ceb41fb9b577ea27c422a49f4` |  |
 | `protocols/wvp/v0.2/SPEC.md` | `df430c4c7c23ab5e511374218c871bdf64b1a73387400afc989e8aefbc2629ad` | yes |
-| `README.md` | `a0362c73b6fda2911d0ee8d7e5b763972c9dc2295e33c5a64334c0180c89a0e0` |  |
+| `README.md` | `ac260818f39081616203f26e57abc700b054e69fe9eaaf576214302455e8dbf0` |  |
 | `test-vectors/canonical-hash-v1.json` | `52d9ce1b6ab87dbd083f5891460d5ef0c077e77fae7b0dafcf3c9bb0b8057cf3` |  |
 | `test-vectors/claim-registration/v1/audit.json` | `732dc3f62fe008442c304762c92a17d323fc8fb9c6aa1575a1c552b3cd6eecf3` |  |
 | `test-vectors/claim-registration/v1/dispute.json` | `888701bfb337ce0adadd03ee796d625443dfe67c192dc5118c35d3c6fc899a4b` |  |

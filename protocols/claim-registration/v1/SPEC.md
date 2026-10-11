@@ -1,6 +1,6 @@
 # Claim registration v1
 
-Status: draft specification with a Scala reference (`modules/claim-registration`), an independent JavaScript implementation (`tooling/claim-registration.mjs`) and vectors (`test-vectors/claim-registration/v1`). A registry service that implements it exists beside the reference (`apps/claim-registry`); it is not deployed.
+Status: draft specification with a Scala reference (`modules/claim-registration`), an independent JavaScript implementation (`tooling/claim-registration.mjs`) and vectors (`test-vectors/claim-registration/v1`). A registry service that implements it exists beside the reference (`apps/claim-registry`).
 
 Verification so far checks evidence that someone chose to submit. If the party that holds the evidence never answers, nothing records it. Claim registration closes that gap. A claim is registered **before** any evidence is asked for, at a registry both parties agreed on. The registry's signed receipt lets the claimant show anyone, without the registry's help, that the claim was made and when an answer is due.
 
