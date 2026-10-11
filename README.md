@@ -11,7 +11,7 @@ Specifications and conformance vectors for checking claims about completed work:
 | [Work Contract Language 1](protocols/work-contract/v1/SPEC.md)   | Contracts as typed data, with three-valued evaluation                                                                                                                                                                  | [`test-vectors/work-contract/v1`](test-vectors/work-contract/v1)             |
 | [Work-unit identity v1](protocols/work-unit/v1/SPEC.md)          | Which unit of work a claim is about, and its nullifier                                                                                                                                                                 | [`test-vectors/work-unit/v1`](test-vectors/work-unit/v1)                     |
 | [Claim registration v1](protocols/claim-registration/v1/SPEC.md) | Registering a claim before evidence is asked for: the agreement both parties sign, the registry's receipts and log, responses, withdrawal and supersession, disputes, an audit of the log, and signed heads of the log | [`test-vectors/claim-registration/v1`](test-vectors/claim-registration/v1)   |
-| [Work relation v1](protocols/work-relation/v1/SPEC.md)           | Signed statements by which a ledger or an application relates records of one unit of work, and what a reader may conclude from them offline. Draft, with one implementation so far                                     | [`test-vectors/work-relation/v1`](test-vectors/work-relation/v1)             |
+| [Work relation v1](protocols/work-relation/v1/SPEC.md)           | Signed statements by which a ledger or an application relates records of one unit of work, and what a reader may conclude from them offline. Draft                                                                     | [`test-vectors/work-relation/v1`](test-vectors/work-relation/v1)             |
 
 ## Conformance
 
@@ -24,7 +24,7 @@ Independent implementations that reproduce these vectors:
 - **Lean 4**, a reference evaluator for Work Contract Language 1, and a model of the claim registry's states (not public);
 - **Rust**, [`verified-cli`](https://github.com/dekrops/verified-cli), written from these specifications. Of claim registration it checks registrations, log segments, audits and units; it does not yet check heads.
 
-Work relation v1 is the exception: only the Scala reference reproduces its vectors so far, so its outcomes have not been checked by agreement between two implementations.
+Work relation v1 is reproduced by the Scala reference and by Rust (the `verified-history` crate of `verified-cli`, a library without a command), and not by JavaScript.
 
 ## What verification establishes, and what it cannot
 

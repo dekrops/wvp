@@ -1,6 +1,6 @@
 # Provenance
 
-Exported from `dekrops/verified` at commit `54bb3b4a116915002dd3c81b35b7f6ff3dcb9e9e` by `tooling/export-protocol.mjs`.
+Exported from `dekrops/verified` at commit `ecae571d7d1402af0f6827d2f5c091887df075c5` by `tooling/export-protocol.mjs`.
 
 Every file is a byte-for-byte copy of the file at the same path, except where marked edited, and except `README.md` and the license files at the root, which are copied from `publishing/wvp/`. The only edit is that a Markdown link to a file that is not published is replaced by its text, and `test-vectors/README.md` omits the section on vectors that are not published.
 
@@ -20,7 +20,7 @@ All data in the vectors and examples is synthetic. Names such as `u.lindqvist` a
 | `protocols/work-contract/v1/examples/invoice-processing/artifact.json` | `5f9427f5cf84b1734f0a2584fe9d1ebbdfd0d2565c5f73ae93070fda8509bece` |  |
 | `protocols/work-contract/v1/examples/invoice-processing/draft.json` | `8ea92a6b4fca375b1fd6f6ddddf1e65a7a639e4d13b04983ccdc66bf16642c5e` |  |
 | `protocols/work-contract/v1/SPEC.md` | `91dc51881661b58e035c7130749d67bb4b402287aabcd619a7152ae396e933c4` | yes |
-| `protocols/work-relation/v1/SPEC.md` | `255adecbd0ef336c0f148be65e98e4c20a0bcd7444759f0412075fc7d1cc7225` | yes |
+| `protocols/work-relation/v1/SPEC.md` | `ea96f1b827ca7810f397147bf2b14e3e54acc4826093fdfd5343de91449cb672` | yes |
 | `protocols/work-unit/v1/SPEC.md` | `e7502722b753204f770f31f580490dad6ee2924cafbe64895bd7f2596ab46795` | yes |
 | `protocols/wvp/v0.1/examples/order-transition/package.json` | `6572b58ad9ddfe738f6b52eac1a1dbe32942a63448f68163f4383405c46d0fac` |  |
 | `protocols/wvp/v0.1/examples/order-transition/registry.json` | `c5ea044bc385876bac7cfb49c703fab84e1cb1924e5af559e4369337638e79d5` |  |
@@ -28,7 +28,7 @@ All data in the vectors and examples is synthetic. Names such as `u.lindqvist` a
 | `protocols/wvp/v0.2/examples/invoice-processing/package.json` | `89a46d216806cc2cbfc24032fa96bcf92bdc197a55f7ac0e82ef8bc5233fd1a0` |  |
 | `protocols/wvp/v0.2/examples/invoice-processing/registry.json` | `28655c3adf330951aae88b846af40d0618c12b6ceb41fb9b577ea27c422a49f4` |  |
 | `protocols/wvp/v0.2/SPEC.md` | `df430c4c7c23ab5e511374218c871bdf64b1a73387400afc989e8aefbc2629ad` | yes |
-| `README.md` | `609bb526cc580c66d2ca6af40bd3264a07378436165760e1fa12324d279acd8e` |  |
+| `README.md` | `10891a3ad2ae241249d1b41643a747fb073e94106ea6760a78c8b4dcb9b4d8c9` |  |
 | `test-vectors/canonical-hash-v1.json` | `52d9ce1b6ab87dbd083f5891460d5ef0c077e77fae7b0dafcf3c9bb0b8057cf3` |  |
 | `test-vectors/claim-registration/v1/audit.json` | `732dc3f62fe008442c304762c92a17d323fc8fb9c6aa1575a1c552b3cd6eecf3` |  |
 | `test-vectors/claim-registration/v1/dispute.json` | `888701bfb337ce0adadd03ee796d625443dfe67c192dc5118c35d3c6fc899a4b` |  |
@@ -77,7 +77,7 @@ All data in the vectors and examples is synthetic. Names such as `u.lindqvist` a
 | `test-vectors/evidence-statement/v1/valid/statement-agent-trace.json` | `580fc4a62873dd11087045eff86c283b7529d0dcc1bde33b82f45204b8e14d9c` |  |
 | `test-vectors/evidence-statement/v1/valid/statement-genesis.json` | `df06bb9ff4dafc3b58445c03cd6e85b3ce856b6bf00c43876c7fe4d922967195` |  |
 | `test-vectors/evidence-statement/v1/valid/statement-unchained.json` | `996566256580e0903beff9e3e0966e30c8a43686b5495c14af6ca16aa9128d37` |  |
-| `test-vectors/README.md` | `d34bd0c9c04e845077e20ab613960e57aa0a8beddc9148445357fb81bbf9ec84` | yes |
+| `test-vectors/README.md` | `af6ab0f8ea847e9ffed462b960af700be38ee14d3f59b2b0bd2b9b1f9a25fe68` | yes |
 | `test-vectors/work-contract/v1/cases/01-valid.json` | `b5b270e7ff2e45fa03e201db6cd9ea2bc64c4dd6376f7c15d52541e3ba09446d` |  |
 | `test-vectors/work-contract/v1/cases/02-variance-exceeds-tolerance.json` | `1f2c86aeff0889a887232038c222e6afd97464d50e62fa5f8abb168290983e8c` |  |
 | `test-vectors/work-contract/v1/cases/03-approval-evidence-missing.json` | `cff36c83edb90a1627b4cee9ba95eea0a0cc3b984eb9e9197f03fc677b4a43e5` |  |

@@ -1,6 +1,6 @@
 # Work relation v1
 
-Status: draft specification with a Scala reference (`modules/work-relation`) and vectors (`test-vectors/work-relation/v1`). There is no second implementation yet, so nothing here has been checked by agreement between two. The platform's ledger issues `recorded` and `linked` (ADR 0042); nothing issues `groups`. The data in the vectors is synthetic.
+Status: draft specification with a Scala reference (`modules/work-relation`) and vectors (`test-vectors/work-relation/v1`). An independent Rust implementation, the `verified-history` crate of [`verified-cli`](https://github.com/dekrops/verified-cli), was written from this text and reproduces every vector. There is no JavaScript implementation. The platform's ledger issues `recorded` and `linked` (ADR 0042); nothing issues `groups`. The data in the vectors is synthetic.
 
 One unit of work leaves several records: a package, a work record in a ledger, a registration at a claim registry. Each is verifiable alone. A **work relation** is a signed statement by which an authority says how records it knows are related, so that someone holding several of them can establish, offline, which belong together and who says so.
 
