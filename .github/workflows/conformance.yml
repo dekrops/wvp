@@ -125,6 +125,8 @@ jobs:
           done
       # Builds everything, audits the axioms of every theorem, and runs the evaluator.
       - run: bash formal/lean/check.sh
+      # The oracle: the reference evaluator as a command, with its interface checked.
+      - run: bash conformance/oracle/check.sh
       # Models that accompany an RFC are proposals, checked the same way.
       - name: Models of proposed changes
         run: |
