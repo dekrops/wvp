@@ -449,6 +449,15 @@ def report(args):
         lines.append(f"| `{part['specification']}` | {part['title']} | {counts[part['id']]} | " + " | ".join(cells) + f" | {whole if whole == some else f'{whole} whole, {some - whole} partial'} |")
     lines += ["", f"**{total} cases.** {once} are in parts that at least one public implementation reproduces, wholly or partially; {twice} in parts that two do; {total - once} in parts that none is run against."]
     lines += [""] + [f"{index}. {note}" for index, note in enumerate(notes, 1)]
+    if corpus.get("profiles"):
+        lines += ["", "### Profiles", "", "Proposed by RFC 0004 and not yet adopted. A profile is reproduced only if every case of every part it names is; anything less is partial, and the table above says where.", ""]
+        lines += ["| Profile | Cases | " + " | ".join(label(n) for n in names) + " |", "| --- | ---: | " + " | ".join("---" for _ in names) + " |"]
+        for profile in corpus["profiles"]:
+            cells = []
+            for name in names:
+                standings = [standing(name, part) for part in profile["parts"]]
+                cells.append("reproduced" if all(s == "whole" for s in standings) else "partial" if any(standings) else "not implemented")
+            lines.append(f"| {profile['title']} | {sum(counts[part] for part in profile['parts'])} | " + " | ".join(cells) + " |")
     lines += ["", "Implementations run:", ""]
     for name in names:
         implementation = corpus["implementations"][name]

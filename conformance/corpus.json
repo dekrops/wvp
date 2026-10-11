@@ -167,6 +167,60 @@
       "lists": { "cases": { "identity": "name", "expectation": ["expected"] } }
     }
   ],
+  "profiles": [
+    {
+      "id": "canonical",
+      "title": "Canonical encoding",
+      "parts": ["canonical"]
+    },
+    {
+      "id": "contract",
+      "title": "Contract evaluation",
+      "parts": ["canonical", "contract-cases", "contract-differential"]
+    },
+    {
+      "id": "evidence",
+      "title": "Evidence authentication",
+      "parts": ["canonical", "statement", "chain", "admission"]
+    },
+    {
+      "id": "verification-0.1",
+      "title": "Offline verification, wvp-0.1",
+      "parts": ["canonical", "statement", "wvp-0.1"]
+    },
+    {
+      "id": "verification-0.2",
+      "title": "Offline verification, wvp-0.2",
+      "parts": [
+        "canonical",
+        "statement",
+        "contract-cases",
+        "contract-differential",
+        "wvp-0.2",
+        "wvp-0.2-expectations"
+      ]
+    },
+    {
+      "id": "registration",
+      "title": "Claim registration and audit",
+      "parts": [
+        "canonical",
+        "work-unit",
+        "registration",
+        "registration-log",
+        "registration-audit",
+        "registration-notice",
+        "registration-dispute",
+        "registration-unit",
+        "registration-head"
+      ]
+    },
+    {
+      "id": "history",
+      "title": "Work history and relations",
+      "parts": ["canonical", "statement", "relation"]
+    }
+  ],
   "implementations": {
     "rust": {
       "name": "verified-cli",
