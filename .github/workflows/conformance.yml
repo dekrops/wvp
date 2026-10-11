@@ -127,6 +127,8 @@ jobs:
       - run: bash formal/lean/check.sh
       # The oracle: the reference evaluator as a command, with its interface checked.
       - run: bash conformance/oracle/check.sh
+      # Theorems that connect the evaluator to the definition, and the test that links them.
+      - run: bash conformance/refinement/check.sh
       # Models that accompany an RFC are proposals, checked the same way.
       - name: Models of proposed changes
         run: |
