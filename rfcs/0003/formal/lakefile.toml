@@ -1,0 +1,9 @@
+name = "wvp-v03-model"
+version = "0.1.0"
+defaultTargets = ["WvpV03"]
+
+[leanOptions]
+warningAsError = true
+
+[[lean_lib]]
+name = "WvpV03"

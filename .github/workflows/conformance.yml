@@ -125,6 +125,12 @@ jobs:
           done
       # Builds everything, audits the axioms of every theorem, and runs the evaluator.
       - run: bash formal/lean/check.sh
+      # Models that accompany an RFC are proposals, checked the same way.
+      - name: Models of proposed changes
+        run: |
+          for check in rfcs/*/formal/check.sh; do
+            [ -f "$check" ] && bash "$check"
+          done
       - run: >
           python3 conformance/tools/conformance.py run --implementation lean
           --source formal/lean --out results/lean.json
