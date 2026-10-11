@@ -7,6 +7,7 @@
 | [Architecture](architecture.md)                        | Every specification, what it depends on, what implements it, and where the protocol ends and products begin                     |
 | [Normative audit, 2026-10](normative-audit-2026-10.md) | What is normative here today, what depends on material that is not public, and where implementers may read the text differently |
 | [Publication](publication.md)                          | How this repository is written and published, and the path to the specifications being written here                             |
+| [Assurance map](assurance-map.md)                      | For each thing a relying party may conclude, whether it is proved, tested, assumed or outside the protocol                      |
 | [Open questions](open-questions.md)                    | The unresolved design questions, in priority order, and the RFCs they need                                                      |
 
 These documents are informative. Only RFC 0001 binds, and only the specifications and vectors define the protocol.
