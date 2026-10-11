@@ -1,6 +1,6 @@
 # Work-unit identity v1
 
-Status: draft specification with a reference implementation and vectors. **Nothing in the product uses it yet**, and nothing here changes how claims are recorded or settled.
+Status: draft specification with a reference implementation and vectors. Claim registration v1 uses its nullifier for the unit a registered claim holds. The stateful registry of section 6 is not built, and nothing here changes how claims are recorded or settled.
 
 A **work unit** is what may be billed once. This document defines how a claim is mapped to the unit it is about, a **nullifier** that lets two claims about the same unit be recognized without disclosing which unit it is, and what a stateful registry must do to make a unit billable at most once. The design follows one reference submission's nullifier construction, and the commercial trial's `BillableWorkKey`, which it generalizes.
 

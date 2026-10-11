@@ -21,7 +21,7 @@ Independent implementations that reproduce these vectors:
 - **Scala**, the reference implementation, which also generates the vectors (not public);
 - **JavaScript**, written separately from the Scala (not public);
 - **Lean 4**, a reference evaluator for Work Contract Language 1, and a model of the claim registry's states (not public);
-- **Rust**, [`verified-cli`](https://github.com/dekrops/verified-cli), written from these specifications. It does not yet implement claim registration.
+- **Rust**, [`verified-cli`](https://github.com/dekrops/verified-cli), written from these specifications. Of claim registration it checks registrations, log segments, audits and units; it does not yet check heads.
 
 ## What verification establishes, and what it cannot
 
