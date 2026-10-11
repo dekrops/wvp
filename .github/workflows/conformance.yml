@@ -34,6 +34,13 @@ jobs:
           persist-credentials: false
       - run: python3 conformance/tools/conformance.py structure
       - run: python3 conformance/tools/conformance.py provenance
+      # Vectors proposed by an RFC are not part of the corpus. They are checked to be exactly what
+      # their generator writes, so that a proposal can be reproduced by anyone.
+      - name: Proposed vectors are as generated
+        run: |
+          for generator in rfcs/*/generate.py; do
+            [ -f "$generator" ] && python3 "$generator" --check
+          done
       - name: Fetch the earlier revision
         id: earlier
         if: env.EARLIER != '' && env.EARLIER != '0000000000000000000000000000000000000000'
