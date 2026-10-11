@@ -1,16 +1,35 @@
 # Provenance
 
-Exported from `dekrops/verified` at commit `3efa12526ae7f08651aad1e726efc9339f7c7cf1` by `tooling/export-protocol.mjs`.
+Exported from `dekrops/verified` at commit `3f1646769b7fabddd6418241753528fad4f31d09` by `tooling/export-protocol.mjs`.
 
 Every file is a byte-for-byte copy of the file at the same path, except where marked edited, and except `README.md` and the license files at the root, which are copied from `publishing/wvp/`. The only edit is that a Markdown link to a file that is not published is replaced by its text, and `test-vectors/README.md` omits the section on vectors that are not published.
 
-This file lists what the export wrote, and nothing else. `rfcs/`, `governance/`, `conformance/`, `CONTRIBUTING.md` are written in this repository by pull request: the export never writes, replaces or removes them, and they are not listed here.
+This file lists what the export wrote, and nothing else. `rfcs/`, `governance/`, `conformance/`, `CONTRIBUTING.md`, `.github/` are written in this repository by pull request: the export never writes, replaces or removes them, and they are not listed here.
 
 All data in the vectors and examples is synthetic. Names such as `u.lindqvist` are invented. Keys are test keys derived from the seeds published beside them, and must never be trusted or provisioned.
 
 | File | SHA-256 | Edited |
 | --- | --- | --- |
 | `docs/spec/evidence-statement-v1.md` | `b81fd5e7ce910fa8b1e342026453087237f0eba7cb54401c779b213dd6ecfc24` | yes |
+| `formal/lean/.gitignore` | `fde850d24186b6e99c8c0debd641fb3ab85198b109eb66f71a1fea02bd6ea1b3` |  |
+| `formal/lean/check.sh` | `d5d7f7ee8d8ac9c49f92069a72320463c609b040567a9d18bec432fab4ed2ef3` |  |
+| `formal/lean/ContractReference.lean` | `9ac1bc2c77dc80ccd5fbb5347eda6eefd2f89efebd59b3b60edbcf0e54ce3fba` |  |
+| `formal/lean/lake-manifest.json` | `3f38e9388aefa3c385358d7d4f45dd57cad33ee744233ba70dd8eeb356da32aa` |  |
+| `formal/lean/lakefile.toml` | `6ed7717c9a9826b05a44bc55f9909d86e99755cb842702d38a5e7b6743372350` |  |
+| `formal/lean/lean-toolchain` | `42779d67b81608af8a12aa4328d2ab47ca201925b3b2bd68369587b5340bb434` |  |
+| `formal/lean/README.md` | `2179de25911d7217acca8fac8802b5c2161e57a966fd192b79ac131e3e9a8bcf` |  |
+| `formal/lean/Verified.lean` | `a09b205d1fa7dca755a971570ebbcf5151b8d290aec63e00a6b7799b885f8265` |  |
+| `formal/lean/Verified/Audit.lean` | `ccd3029485bc03d5f9d46454078ad0ec07a9c979ae18be120ecd6257bbf65c4c` |  |
+| `formal/lean/Verified/Chain.lean` | `5644391aa116c10d057eb9e6a9a902bd2f9f8eb408646225e42166e37bd23064` |  |
+| `formal/lean/Verified/Contract/Limits.lean` | `ab775664692070191c76708b85a7418e4d5be9675ad27f688a0aed699f4ec3cc` |  |
+| `formal/lean/Verified/Contract/Reference.lean` | `099e59e5ba93995d348810da65dc5a433cbb4048c21ebb1a53899fed919f2b5c` |  |
+| `formal/lean/Verified/Contract/Semantics.lean` | `1ba3e2f383174322cce4eae38147ccdbf4a14dd2baad563142932c54e42fa1af` |  |
+| `formal/lean/Verified/Contract/Theorems.lean` | `ddb59a940eaf6977029b4770bb77c845146e4b82d4317498953d467aa9eeb1fa` |  |
+| `formal/lean/Verified/Contract/Truth.lean` | `faba55172f6a70315fa7dfce43eadde7af25a460d1010002b788c85e0896bc73` |  |
+| `formal/lean/Verified/Contract/Typing.lean` | `8b1a35de3e7a425abf48ea8db8976d61d7255b403dfadb8fe5658b25e52ef172` |  |
+| `formal/lean/Verified/Evidence.lean` | `30e52a10556f0e11c1ce643c2305a5fb916478c1a1ee341f94e480f509a7212c` |  |
+| `formal/lean/Verified/Order.lean` | `d881bac591a7f42d4c25f54824e07bea6905ffb452aa1fdc421dfd5e7cee8a45` |  |
+| `formal/lean/Verified/Registry.lean` | `d6e1252077aeaa492b695edb5cb947bf45bf57fff142a54e809604435d3c8cf7` |  |
 | `LICENSE` | `bab419d5c524c31eee6db1d271d03375509a70650b8d2688e4d5628884965046` |  |
 | `LICENSE-APACHE-2.0.txt` | `cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30` |  |
 | `LICENSE-CC-BY-4.0.txt` | `9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411` |  |
@@ -22,7 +41,7 @@ All data in the vectors and examples is synthetic. Names such as `u.lindqvist` a
 | `protocols/work-contract/v1/examples/approved-and-posted/reading-approval-first.json` | `93b60b5b78591e31661e29b6dd4785ee928abdce20193ec7d2dc68c4687449da` |  |
 | `protocols/work-contract/v1/examples/invoice-processing/artifact.json` | `5f9427f5cf84b1734f0a2584fe9d1ebbdfd0d2565c5f73ae93070fda8509bece` |  |
 | `protocols/work-contract/v1/examples/invoice-processing/draft.json` | `8ea92a6b4fca375b1fd6f6ddddf1e65a7a639e4d13b04983ccdc66bf16642c5e` |  |
-| `protocols/work-contract/v1/SPEC.md` | `3dcb29376ed433af5e2cc8a105c75dc57be52df127c0880983e233baa52ef9e7` | yes |
+| `protocols/work-contract/v1/SPEC.md` | `4eab1c390ece1abb06282cf10cfd6a91fa90c45f02ce6e94ab5ad23df1646d0b` |  |
 | `protocols/work-relation/v1/SPEC.md` | `6fd385b040849c97060fbf7382e152026c63c6015df45ac22810ff23f0d463ba` | yes |
 | `protocols/work-unit/v1/SPEC.md` | `e2b56bd5a8aa724bed135d4b8afa1113bc3667a3f087bc2bc20e52f2d3b9a019` | yes |
 | `protocols/wvp/v0.1/examples/order-transition/package.json` | `6572b58ad9ddfe738f6b52eac1a1dbe32942a63448f68163f4383405c46d0fac` |  |
@@ -31,7 +50,7 @@ All data in the vectors and examples is synthetic. Names such as `u.lindqvist` a
 | `protocols/wvp/v0.2/examples/invoice-processing/package.json` | `89a46d216806cc2cbfc24032fa96bcf92bdc197a55f7ac0e82ef8bc5233fd1a0` |  |
 | `protocols/wvp/v0.2/examples/invoice-processing/registry.json` | `28655c3adf330951aae88b846af40d0618c12b6ceb41fb9b577ea27c422a49f4` |  |
 | `protocols/wvp/v0.2/SPEC.md` | `bab0cf7c78cef3e6c65da190e26ab8679346a1f1a7f25a59775e2df7f0412af2` | yes |
-| `README.md` | `e79ff5c32fa6676ed442cd2df5c49875f4dcaee4d17fcce06276c803ad1a6d69` |  |
+| `README.md` | `bb3c1ee661a216a255eeef7ed4766a0f2baf82c40c638c99ce6bb166d48dae09` |  |
 | `test-vectors/canonical-hash-v1.json` | `52d9ce1b6ab87dbd083f5891460d5ef0c077e77fae7b0dafcf3c9bb0b8057cf3` |  |
 | `test-vectors/claim-registration/v1/audit.json` | `732dc3f62fe008442c304762c92a17d323fc8fb9c6aa1575a1c552b3cd6eecf3` |  |
 | `test-vectors/claim-registration/v1/dispute.json` | `888701bfb337ce0adadd03ee796d625443dfe67c192dc5118c35d3c6fc899a4b` |  |
