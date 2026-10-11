@@ -1,10 +1,10 @@
 # Claim registration v1
 
-Status: draft specification with a Scala reference (`modules/claim-registration`), an independent JavaScript implementation (`tooling/claim-registration.mjs`) and vectors (`test-vectors/claim-registration/v1`). **No registry service exists yet**, and nothing in the product uses this protocol.
+Status: draft specification with a Scala reference (`modules/claim-registration`), an independent JavaScript implementation (`tooling/claim-registration.mjs`) and vectors (`test-vectors/claim-registration/v1`). A registry service that implements it exists beside the reference (`apps/claim-registry`); it is not deployed.
 
 Verification so far checks evidence that someone chose to submit. If the party that holds the evidence never answers, nothing records it. Claim registration closes that gap. A claim is registered **before** any evidence is asked for, at a registry both parties agreed on. The registry's signed receipt lets the claimant show anyone, without the registry's help, that the claim was made and when an answer is due.
 
-This version covers registration (the agreement, the claim and the receipt), the respondent's response, the claimant's notice withdrawing or replacing a claim, and how the registry closes a claim: on a response, on a notice, or when the deadline has passed without a response; and disputes of a refused or answered claim, with their resolution. An audit of the log checks the registry's two rules: one open claim per unit, and the agreement's limit on open claims.
+This version covers registration (the agreement, the claim and the receipt), the respondent's response, the claimant's notice withdrawing or replacing a claim, and how the registry closes a claim: on a response, on a notice, or when the deadline has passed without a response; and disputes of a refused or answered claim, with their resolution. An audit of the log checks the registry's two rules: one open claim per unit, and the agreement's limit on open claims. A head, the registry's signed statement of where its log ends, shows whether a log is all of it, and exposes an entry the registry withheld.
 
 ## 1. Roles
 
@@ -165,7 +165,21 @@ A refused claim can be disputed by its claimant, and a claim answered with evide
 
 **A dispute never changes a claim's own state.** A refused claim stays refused in the log; the dispute and its resolution are recorded beside it, and whoever acts on the claim, such as a billing system, reads both. Nothing recorded is rewritten.
 
-The ten signing domains differ, so a signature for one kind of object is never valid for another, or for any other Verified object.
+### 3.11 Head
+
+`{ "head": {…}, "signature": Signature }`, signed by the registry over `"verified:claim-log-head:v1\n" ‖ canonical(head)`, with a key that signs its entries. `head` has exactly:
+
+| Member     | Meaning                                                                                                                 |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `protocol` | `verified-claim-registration-v1`                                                                                        |
+| `registry` | The registry's name                                                                                                     |
+| `size`     | How many entries the log has                                                                                            |
+| `last`     | SHA-256 of the last entry's canonical object, as the next entry's `previous` would name it; or `null` exactly at size 0 |
+| `issuedAt` | When the registry issued the head, by the clock that dates its entries                                                  |
+
+A head is not an entry of the log and changes nothing in it. It is the registry's statement that, at `issuedAt`, its log was these `size` entries and no more. A registry issues heads as often as it is asked.
+
+The eleven signing domains differ, so a signature for one kind of object is never valid for another, or for any other Verified object.
 
 ## 4. Verification
 
@@ -204,6 +218,7 @@ The claim with this ID, committing to these inputs and this unit, was made under
 - **That the claim is true.** Whether the work was done is decided later, by verifying evidence against the contract.
 - **That the registry applied its own rules:** that no earlier open claim held the same unit, or that the open-claim limit was respected. Both need the registry's log from its start: see [audit](#audit).
 - **That nothing was removed from the registry's log.** One receipt shows one entry. A run of the log, checked as in [log segments](#log-segments), shows more.
+- **That the log shown is all of it.** A registry can leave off the end. A [head](#heads) shows where the log ended at a given time.
 - **That the unit is derived correctly from the inputs.** Only holders of the unit key can check that ([section 5](#5-the-unit)).
 
 ### Log segments
@@ -222,7 +237,7 @@ A registry publishes its log as receipts. A relying party can check a run of the
 8. No entry was received before the one before it — `TIME_REVERSED`.
 9. No claim appears at two positions, the anchor included — `DUPLICATE_CLAIM`.
 
-A verified segment establishes that its receipts are consecutive entries of the registry's log, in order, with nothing inserted, removed or altered between the first and the last. It does not establish anything after the last: a truncated tail is not detected.
+A verified segment establishes that its receipts are consecutive entries of the registry's log, in order, with nothing inserted, removed or altered between the first and the last. It does not establish anything after the last: on its own, a segment does not show a truncated tail. A [head](#heads) does.
 
 **A held receipt**, such as the one a claimant was given, is checked on its own as in step 2, must name the segment's registry (`REGISTRY_MISMATCH`), and then is one of:
 
@@ -261,6 +276,40 @@ The result lists every registered claim in log order, with its digest, ID, posit
 
 An audit establishes that the log, up to its last entry, is a consistent history: every claim was registered under an agreement both parties signed, and closed at most once: by the respondent in time, by expiry after the deadline, or by the claimant. A state is the log's state, not a verification result. `ANSWERED` means evidence was offered, not that it supports the claim. That is decided by verifying the package.
 
+### Heads
+
+A head ([section 3.11](#311-head)) is checked on its own, and then against what a relying party holds: an entry, a verified segment, or another head. Each check is between two things the registry signed, so a contradiction is proof against the registry, whatever it now says.
+
+**A head on its own.** Checks run in this order and stop at the first failure: structure and range (`MALFORMED`), protocol (`UNSUPPORTED_PROTOCOL`), `last` is a SHA-256 commitment (`MALFORMED_COMMITMENT`), `size` is not negative and `last` is `null` exactly at size 0 (`CHAIN_INVALID`), and the signature is by a key of the registry the head names, valid at `issuedAt` (`UNKNOWN_KEY`, `UNSUPPORTED_ALGORITHM`, `REGISTRY_MISMATCH`, `KEY_NOT_VALID`, `SIGNATURE_INVALID`).
+
+**An entry against a head.** The entry is checked on its own as in log segments, step 2, and names the head's registry (`REGISTRY_MISMATCH`). Its time is its `receivedAt` or `recordedAt`. Then, in this order:
+
+| Outcome        | When                                                                                                                                                     |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `WITHHELD`     | Its position is `size` or later, and its time is before `issuedAt`. The registry had recorded it and issued a head without it                            |
+| `NOT_COVERED`  | Its position is `size` or later, and its time is not before `issuedAt`: recorded since                                                                   |
+| `EQUIVOCATION` | Its position is `size − 1` and it is not `last`. The registry signed two entries for one position; the outcome gives both digests, `headed` and `logged` |
+| `PREDATED`     | Its position is before `size`, and its time is after `issuedAt`: the head counts an entry that was recorded only later                                   |
+| `INCLUDED`     | It is `last`                                                                                                                                             |
+| `COVERED`      | Its position is before `size − 1`. The head counts its position; that the entry is the one at that position needs a segment                              |
+
+`WITHHELD` and `PREDATED` give the entry's `sequence`. An entry recorded in the same instant as the head was issued is neither.
+
+**A segment against a head.** The segment is verified as in log segments and is the head's registry's (`REGISTRY_MISMATCH`). Each of its entries is taken against the head as above. The outcome is the first `EQUIVOCATION` among them in log order, else the first `PREDATED`, else the first `WITHHELD`. Otherwise it says where the segment ends:
+
+| Outcome       | When                                                                                                              |
+| ------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `BEHIND`      | The segment ends before position `size − 1`: it is not the whole log as of `issuedAt`                             |
+| `NOT_COVERED` | The segment starts after position `size − 1`, and not at 0: it shows nothing about the head                       |
+| `CURRENT`     | The segment ends at position `size − 1`: it is the log as of `issuedAt`, to its last entry                        |
+| `AHEAD`       | The segment contains position `size − 1`, or starts at 0 after a head of size 0, and continues with later entries |
+
+**Two heads.** Both are checked on their own and are one registry's (`REGISTRY_MISMATCH`). With the same `size` they name the same `last`, else `EQUIVOCATION`, with the first head's `last` as `headed` and the second's as `logged`. With different sizes, the smaller one was not issued after the larger one, else `WITHHELD` with the smaller `size` as `sequence`: having stated the longer log, the registry later stated a shorter one. Otherwise `CONSISTENT`.
+
+**What a head establishes.** An audit of a log that is `CURRENT` against a head gives every claim's state as of `issuedAt`, not only up to wherever the log shown happens to end. A party that holds an entry, such as the respondent's closure, can show that a later head without it withheld it. A relying party asks for a head when it reads the log and decides how old a head it accepts.
+
+**What it does not establish.** A head is the registry's own statement. A registry can issue an old head again, or decline to issue one. It cannot issue a head that leaves out an entry it gave someone without that entry proving it. Two relying parties that compare the heads they were given catch a registry that shows them different logs.
+
 ## 5. The unit
 
 `unit` is the work-unit v1 nullifier of the claim, with two differences from [work-unit identity v1](../../work-unit/v1/SPEC.md):
@@ -289,11 +338,13 @@ A registered claim is later verified like any other contract claim. The package'
 
 Changing any member, encoding rule, check, check order or error code requires a new protocol version and a new vector directory. v1 vectors are never regenerated with different expectations. Unknown versions fail closed. Log segments, responses, notices, closures, disputes and audits were added to v1 while it was a draft, before any registry existed. They add objects, procedures and codes; they change no object, check or code of the registration procedure, and the earlier vectors are unchanged.
 
+Heads were added on 2026-10-11, after v1 was published, as its first addition since (v1.1). They add one object, one signing domain, four procedures and seven outcomes: `WITHHELD`, `PREDATED`, `COVERED`, `CURRENT`, `BEHIND`, `AHEAD` and `CONSISTENT`. The outcomes `INCLUDED`, `NOT_COVERED` and `EQUIVOCATION` and every refusal code they use existed before. No object, check, check order, code or vector that existed before is changed, and an implementation without heads still conforms to everything else.
+
 ## 8. Not in this version
 
-- **Proof of the latest entry:** a registry can withhold the end of its log. A signed statement of its current head, or witnesses that compare heads, would show that.
-- **The registry service** itself, and its storage.
+- **Witnesses.** Nobody is appointed to collect a registry's heads and compare them. Relying parties that exchange heads do that for themselves.
+- **How a registry serves** its log, its heads and the documents it holds. That is a service's interface, not this protocol.
 
 ## 9. Conformance
 
-`test-vectors/claim-registration/v1/vectors.json` holds the deterministic test keys, the relying party's trust configuration, the unit key and inputs of the base claim, and 28 cases. Each case gives the exact agreement, claim and receipt text and the expected outcome: the registration's facts, or the first refusal code. The Scala reference (`verified.registration.Registration`) and the JavaScript implementation (`tooling/claim-registration.mjs`) both reproduce every case. The JavaScript implementation also re-derives the base claim's unit, inputs digest and unit-key commitment. `log.json` holds 20 cases of log segments and held receipts under the same keys: each gives the receipts, the anchor and the held receipt, if any, and the segment, the inclusion outcome or the first refusal. `audit.json` holds 22 audits of whole logs with their agreements, claims and responses, and each claim's state or the first refusal. `unit.json` holds 7 unit checks. `notice.json` holds 15 audits of logs in which the claimant withdraws or replaces claims, with the notices they name. `dispute.json` holds 31 audits of logs with disputes, with the dispute terms, disputes and resolutions they name, under its own trust configuration, which adds a resolver's public test key. The test keys are public and must never be trusted or provisioned.
+`test-vectors/claim-registration/v1/vectors.json` holds the deterministic test keys, the relying party's trust configuration, the unit key and inputs of the base claim, and 28 cases. Each case gives the exact agreement, claim and receipt text and the expected outcome: the registration's facts, or the first refusal code. The Scala reference (`verified.registration.Registration`) and the JavaScript implementation (`tooling/claim-registration.mjs`) both reproduce every case. The JavaScript implementation also re-derives the base claim's unit, inputs digest and unit-key commitment. `log.json` holds 20 cases of log segments and held receipts under the same keys: each gives the receipts, the anchor and the held receipt, if any, and the segment, the inclusion outcome or the first refusal. `audit.json` holds 22 audits of whole logs with their agreements, claims and responses, and each claim's state or the first refusal. `unit.json` holds 7 unit checks. `notice.json` holds 15 audits of logs in which the claimant withdraws or replaces claims, with the notices they name. `dispute.json` holds 32 audits of logs with disputes, with the dispute terms, disputes and resolutions they name, under its own trust configuration, which adds a resolver's public test key. `head.json` holds 39 cases of heads under the keys of `vectors.json`: alone, and against a held entry, a segment or another head, each with its outcome or first refusal. The test keys are public and must never be trusted or provisioned.

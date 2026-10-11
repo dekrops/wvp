@@ -1,6 +1,6 @@
 # Provenance
 
-Exported from `dekrops/verified` at commit `5870177365779730fabe3a9c3633c8fd72730a5f` by `tooling/export-protocol.mjs`.
+Exported from `dekrops/verified` at commit `0cb34ea86e8b859322d067f882daa81e960bf017` by `tooling/export-protocol.mjs`.
 
 Every file is a byte-for-byte copy of the file at the same path, except where marked edited, and except `README.md` and the license files at the root, which are copied from `publishing/wvp/`. The only edit is that a Markdown link to a file that is not published is replaced by its text, and `test-vectors/README.md` omits the section on vectors that are not published.
 
@@ -12,7 +12,7 @@ All data in the vectors and examples is synthetic. Names such as `u.lindqvist` a
 | `LICENSE` | `bab419d5c524c31eee6db1d271d03375509a70650b8d2688e4d5628884965046` |  |
 | `LICENSE-APACHE-2.0.txt` | `cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30` |  |
 | `LICENSE-CC-BY-4.0.txt` | `9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411` |  |
-| `protocols/claim-registration/v1/SPEC.md` | `81add8fb310c5bbd860718120d1661e1e7098da9df970a15db6c35192757151b` | yes |
+| `protocols/claim-registration/v1/SPEC.md` | `b21eddd6430a79dfe9d20aacfb6442d1d44dd170ee8f11f46e89d915f1a8b2aa` | yes |
 | `protocols/work-contract/v1/examples/approved-and-posted/differences.json` | `17807dfee414be7168799ad84413739e4f1c7d1274e2c046840567b906a16d61` |  |
 | `protocols/work-contract/v1/examples/approved-and-posted/reading-any-order.json` | `2aa7d62aa7820907dede36f2528b36f9bbd0e4d1b270ceec9a78d24f62196f25` |  |
 | `protocols/work-contract/v1/examples/approved-and-posted/reading-approval-first-and-standing.json` | `7ada1ffa6812382b94be85784bcd484ee89a6a4e9018163e650f549919b8a2de` |  |
@@ -27,10 +27,11 @@ All data in the vectors and examples is synthetic. Names such as `u.lindqvist` a
 | `protocols/wvp/v0.2/examples/invoice-processing/package.json` | `89a46d216806cc2cbfc24032fa96bcf92bdc197a55f7ac0e82ef8bc5233fd1a0` |  |
 | `protocols/wvp/v0.2/examples/invoice-processing/registry.json` | `28655c3adf330951aae88b846af40d0618c12b6ceb41fb9b577ea27c422a49f4` |  |
 | `protocols/wvp/v0.2/SPEC.md` | `df430c4c7c23ab5e511374218c871bdf64b1a73387400afc989e8aefbc2629ad` | yes |
-| `README.md` | `b78f20a72dbcecba1a8c28db031ac8b7214d9bda347f16eb9b6c3c06ba12d8f3` |  |
+| `README.md` | `a0362c73b6fda2911d0ee8d7e5b763972c9dc2295e33c5a64334c0180c89a0e0` |  |
 | `test-vectors/canonical-hash-v1.json` | `52d9ce1b6ab87dbd083f5891460d5ef0c077e77fae7b0dafcf3c9bb0b8057cf3` |  |
 | `test-vectors/claim-registration/v1/audit.json` | `732dc3f62fe008442c304762c92a17d323fc8fb9c6aa1575a1c552b3cd6eecf3` |  |
-| `test-vectors/claim-registration/v1/dispute.json` | `9add945e6aa1d4a44a3311c433b0a11686006468565f5a74d4ca8ef4d9d6f583` |  |
+| `test-vectors/claim-registration/v1/dispute.json` | `888701bfb337ce0adadd03ee796d625443dfe67c192dc5118c35d3c6fc899a4b` |  |
+| `test-vectors/claim-registration/v1/head.json` | `bc10de8b574dc6e83c9d539379b01485bc1d8e20ba196e3fcdf7596ab8ddc6d0` |  |
 | `test-vectors/claim-registration/v1/log.json` | `c7074e6f7d917c89291c55a4255feee590954c80ccc171153a3390c49eaa5947` |  |
 | `test-vectors/claim-registration/v1/notice.json` | `98b21fe128c7723c9a2363bfc1395f1befb209d7ef0c0b31abd1b2ab08d3e00b` |  |
 | `test-vectors/claim-registration/v1/unit.json` | `fef11304ecdde4ddc87ded8eecf9c79b9c973799e4651a99bbaf35b33fcee422` |  |
@@ -75,7 +76,7 @@ All data in the vectors and examples is synthetic. Names such as `u.lindqvist` a
 | `test-vectors/evidence-statement/v1/valid/statement-agent-trace.json` | `580fc4a62873dd11087045eff86c283b7529d0dcc1bde33b82f45204b8e14d9c` |  |
 | `test-vectors/evidence-statement/v1/valid/statement-genesis.json` | `df06bb9ff4dafc3b58445c03cd6e85b3ce856b6bf00c43876c7fe4d922967195` |  |
 | `test-vectors/evidence-statement/v1/valid/statement-unchained.json` | `996566256580e0903beff9e3e0966e30c8a43686b5495c14af6ca16aa9128d37` |  |
-| `test-vectors/README.md` | `3baccc6498b6a75b676746ee3405dab5324222a6a9fc0533db7e949350e3360f` | yes |
+| `test-vectors/README.md` | `c96b6747ebc198278814f4b95a77b2b4a91bbc3d84cab24781db169abc3e58ea` | yes |
 | `test-vectors/work-contract/v1/cases/01-valid.json` | `b5b270e7ff2e45fa03e201db6cd9ea2bc64c4dd6376f7c15d52541e3ba09446d` |  |
 | `test-vectors/work-contract/v1/cases/02-variance-exceeds-tolerance.json` | `1f2c86aeff0889a887232038c222e6afd97464d50e62fa5f8abb168290983e8c` |  |
 | `test-vectors/work-contract/v1/cases/03-approval-evidence-missing.json` | `cff36c83edb90a1627b4cee9ba95eea0a0cc3b984eb9e9197f03fc677b4a43e5` |  |
