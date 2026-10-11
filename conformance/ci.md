@@ -13,6 +13,8 @@ Informative. The [`Conformance`](../.github/workflows/conformance.yml) workflow 
 | **Lean**       | The definitions build, every theorem's axioms are audited, and the reference evaluator reproduces every case of Work Contract Language 1                                                                                                         | Independence of authorship: the evaluator and the generator have one author. The evaluator around the proved core is tested, not proved                   |
 | **Report**     | A table of every part: how many cases it holds, and what each implementation reported for it                                                                                                                                                     | —                                                                                                                                                         |
 
+The Lean job has distinct stages, each of which fails on its own: the definitions compile; every theorem's axioms are audited; the kernel replays the compiled declarations (`lean4checker`, built from the commit of its tag for the pinned toolchain); the reference evaluator reproduces the corpus. A separate job tests properties on generated cases and has `verified-cli` reproduce them. [The assurance map](../governance/assurance-map.md) says which of these is a proof and which is a test.
+
 The earlier revision's own tool and map judge a change where that revision has them, so a pull request cannot loosen the check that judges it.
 
 ## Three outcomes that are kept apart

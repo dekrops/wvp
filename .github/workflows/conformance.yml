@@ -125,6 +125,18 @@ jobs:
           done
       # Builds everything, audits the axioms of every theorem, and runs the evaluator.
       - run: bash formal/lean/check.sh
+      # A second pass over the compiled declarations, by the kernel alone. The checker is built
+      # from the commit of its tag for this toolchain.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: leanprover/lean4checker
+          ref: da26eb05e9959402afcb9bd6dfe5dc4f700f70d6 # v4.24.0
+          path: .tools/lean4checker
+          persist-credentials: false
+      - name: Kernel replay of the compiled declarations
+        run: |
+          (cd .tools/lean4checker && lake build)
+          bash conformance/tools/kernel-check.sh .tools/lean4checker/.lake/build/bin/lean4checker
       # The oracle: the reference evaluator as a command, with its interface checked.
       - run: bash conformance/oracle/check.sh
       # Models that accompany an RFC are proposals, checked the same way.
