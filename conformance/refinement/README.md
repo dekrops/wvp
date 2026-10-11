@@ -65,4 +65,4 @@ Typed terms (`WellTyped` as an index of the syntax) would make step 2 correct by
 
 ## A reading of the text that this work found
 
-The specification's table of predicate forms (section 4) says `and` and `or` take "at least one argument", and its refusal table says a contract that is "not JSON of the forms in sections 2 to 4" is `CONTRACT_MALFORMED`. Both public evaluators, Lean and Rust, refuse `{"and": []}` as `CONTRACT_ILL_FORMED`, the code for a static rule of section 5, and no published vector has an empty connective. The implementations agree with each other and, on one reading, not with the text. It is filed as an issue.
+The specification's table of predicate forms (section 4) says `and` and `or` take "at least one argument", and its refusal table says a contract that is "not JSON of the forms in sections 2 to 4" is `CONTRACT_MALFORMED`. Both public evaluators, Lean and Rust, refuse `{"and": []}` as `CONTRACT_ILL_FORMED`, the code for a static rule of section 5, and no published vector has an empty connective. The implementations agree with each other and, on one reading, not with the text. It is filed as [#30](https://github.com/dekrops/wvp/issues/30).
