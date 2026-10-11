@@ -1,6 +1,6 @@
 # Provenance
 
-Exported from `dekrops/verified` at commit `e31576fd423994360799c00b74c7f53a62f21fb7` by `tooling/export-protocol.mjs`.
+Exported from `dekrops/verified` at commit `11996e8771a8e8aeefc325f198bbe263c6c7f347` by `tooling/export-protocol.mjs`.
 
 Every file is a byte-for-byte copy of the file at the same path, except where marked edited, and except `README.md` and the license files at the root, which are copied from `publishing/wvp/`. The only edit is that a Markdown link to a file that is not published is replaced by its text, and `test-vectors/README.md` omits the section on vectors that are not published.
 
@@ -20,6 +20,7 @@ All data in the vectors and examples is synthetic. Names such as `u.lindqvist` a
 | `protocols/work-contract/v1/examples/invoice-processing/artifact.json` | `5f9427f5cf84b1734f0a2584fe9d1ebbdfd0d2565c5f73ae93070fda8509bece` |  |
 | `protocols/work-contract/v1/examples/invoice-processing/draft.json` | `8ea92a6b4fca375b1fd6f6ddddf1e65a7a639e4d13b04983ccdc66bf16642c5e` |  |
 | `protocols/work-contract/v1/SPEC.md` | `91dc51881661b58e035c7130749d67bb4b402287aabcd619a7152ae396e933c4` | yes |
+| `protocols/work-relation/v1/SPEC.md` | `963fd67145914554b20ae4548a2400541025b08a835514e8242f4c910e38a91d` | yes |
 | `protocols/work-unit/v1/SPEC.md` | `e7502722b753204f770f31f580490dad6ee2924cafbe64895bd7f2596ab46795` | yes |
 | `protocols/wvp/v0.1/examples/order-transition/package.json` | `6572b58ad9ddfe738f6b52eac1a1dbe32942a63448f68163f4383405c46d0fac` |  |
 | `protocols/wvp/v0.1/examples/order-transition/registry.json` | `c5ea044bc385876bac7cfb49c703fab84e1cb1924e5af559e4369337638e79d5` |  |
@@ -27,7 +28,7 @@ All data in the vectors and examples is synthetic. Names such as `u.lindqvist` a
 | `protocols/wvp/v0.2/examples/invoice-processing/package.json` | `89a46d216806cc2cbfc24032fa96bcf92bdc197a55f7ac0e82ef8bc5233fd1a0` |  |
 | `protocols/wvp/v0.2/examples/invoice-processing/registry.json` | `28655c3adf330951aae88b846af40d0618c12b6ceb41fb9b577ea27c422a49f4` |  |
 | `protocols/wvp/v0.2/SPEC.md` | `df430c4c7c23ab5e511374218c871bdf64b1a73387400afc989e8aefbc2629ad` | yes |
-| `README.md` | `ac260818f39081616203f26e57abc700b054e69fe9eaaf576214302455e8dbf0` |  |
+| `README.md` | `609bb526cc580c66d2ca6af40bd3264a07378436165760e1fa12324d279acd8e` |  |
 | `test-vectors/canonical-hash-v1.json` | `52d9ce1b6ab87dbd083f5891460d5ef0c077e77fae7b0dafcf3c9bb0b8057cf3` |  |
 | `test-vectors/claim-registration/v1/audit.json` | `732dc3f62fe008442c304762c92a17d323fc8fb9c6aa1575a1c552b3cd6eecf3` |  |
 | `test-vectors/claim-registration/v1/dispute.json` | `888701bfb337ce0adadd03ee796d625443dfe67c192dc5118c35d3c6fc899a4b` |  |
@@ -76,7 +77,7 @@ All data in the vectors and examples is synthetic. Names such as `u.lindqvist` a
 | `test-vectors/evidence-statement/v1/valid/statement-agent-trace.json` | `580fc4a62873dd11087045eff86c283b7529d0dcc1bde33b82f45204b8e14d9c` |  |
 | `test-vectors/evidence-statement/v1/valid/statement-genesis.json` | `df06bb9ff4dafc3b58445c03cd6e85b3ce856b6bf00c43876c7fe4d922967195` |  |
 | `test-vectors/evidence-statement/v1/valid/statement-unchained.json` | `996566256580e0903beff9e3e0966e30c8a43686b5495c14af6ca16aa9128d37` |  |
-| `test-vectors/README.md` | `c96b6747ebc198278814f4b95a77b2b4a91bbc3d84cab24781db169abc3e58ea` | yes |
+| `test-vectors/README.md` | `d34bd0c9c04e845077e20ab613960e57aa0a8beddc9148445357fb81bbf9ec84` | yes |
 | `test-vectors/work-contract/v1/cases/01-valid.json` | `b5b270e7ff2e45fa03e201db6cd9ea2bc64c4dd6376f7c15d52541e3ba09446d` |  |
 | `test-vectors/work-contract/v1/cases/02-variance-exceeds-tolerance.json` | `1f2c86aeff0889a887232038c222e6afd97464d50e62fa5f8abb168290983e8c` |  |
 | `test-vectors/work-contract/v1/cases/03-approval-evidence-missing.json` | `cff36c83edb90a1627b4cee9ba95eea0a0cc3b984eb9e9197f03fc677b4a43e5` |  |
@@ -164,6 +165,7 @@ All data in the vectors and examples is synthetic. Names such as `u.lindqvist` a
 | `test-vectors/work-contract/v1/differential/approved-and-posted.approval-first.json` | `f3126a36024b1444bc54746aee0014fc4f98864dfce969c00ba3ee6300f562fd` |  |
 | `test-vectors/work-contract/v1/differential/invoice-processing.json` | `d3f62be7bb345605f5a279898826cf909b190bb9f6cbda31923089d389d93a3b` |  |
 | `test-vectors/work-contract/v1/differential/invoice-processing.source-order.json` | `efc028c375485efb18e5a586569c15fc3820cbaf93a5024a498876be55733031` |  |
+| `test-vectors/work-relation/v1/vectors.json` | `65665a9571f42d2f66ff85d6595ff59effc945903024d87db8e5a58489cddf81` |  |
 | `test-vectors/work-unit/v1/vectors.json` | `8555ac6bd9381177436b489b58bc8a17614866244d883628de7b21e4bbea89e5` |  |
 | `test-vectors/wvp/v0.1/invalid/body-case-not-carried.json` | `e4a8f85a3733ee8285226c0581862fd5549e70a073e9762ad067592278de0ee0` |  |
 | `test-vectors/wvp/v0.1/invalid/enumeration-case-with-payload.json` | `348d0e11debcdf409a935d35ea8b1f863a4d1ac5583f75dc1bd44af9f069144e` |  |
