@@ -1,6 +1,6 @@
 # Provenance
 
-Exported from `dekrops/verified` at commit `11996e8771a8e8aeefc325f198bbe263c6c7f347` by `tooling/export-protocol.mjs`.
+Exported from `dekrops/verified` at commit `549545dba8c4770d45920d6a1f657a56409c007e` by `tooling/export-protocol.mjs`.
 
 Every file is a byte-for-byte copy of the file at the same path, except where marked edited, and except `README.md` and the license files at the root, which are copied from `publishing/wvp/`. The only edit is that a Markdown link to a file that is not published is replaced by its text, and `test-vectors/README.md` omits the section on vectors that are not published.
 
@@ -20,7 +20,7 @@ All data in the vectors and examples is synthetic. Names such as `u.lindqvist` a
 | `protocols/work-contract/v1/examples/invoice-processing/artifact.json` | `5f9427f5cf84b1734f0a2584fe9d1ebbdfd0d2565c5f73ae93070fda8509bece` |  |
 | `protocols/work-contract/v1/examples/invoice-processing/draft.json` | `8ea92a6b4fca375b1fd6f6ddddf1e65a7a639e4d13b04983ccdc66bf16642c5e` |  |
 | `protocols/work-contract/v1/SPEC.md` | `91dc51881661b58e035c7130749d67bb4b402287aabcd619a7152ae396e933c4` | yes |
-| `protocols/work-relation/v1/SPEC.md` | `963fd67145914554b20ae4548a2400541025b08a835514e8242f4c910e38a91d` | yes |
+| `protocols/work-relation/v1/SPEC.md` | `99e2f9349dbd2c15e03e177f85250091d4b86cae800e318f17264142914eb7f8` | yes |
 | `protocols/work-unit/v1/SPEC.md` | `e7502722b753204f770f31f580490dad6ee2924cafbe64895bd7f2596ab46795` | yes |
 | `protocols/wvp/v0.1/examples/order-transition/package.json` | `6572b58ad9ddfe738f6b52eac1a1dbe32942a63448f68163f4383405c46d0fac` |  |
 | `protocols/wvp/v0.1/examples/order-transition/registry.json` | `c5ea044bc385876bac7cfb49c703fab84e1cb1924e5af559e4369337638e79d5` |  |
