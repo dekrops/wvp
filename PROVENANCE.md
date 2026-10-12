@@ -1,6 +1,6 @@
 # Provenance
 
-Exported from `dekrops/verified` at commit `3f1646769b7fabddd6418241753528fad4f31d09` by `tooling/export-protocol.mjs`.
+Exported from `dekrops/verified` at commit `f60abf09e6a474afdabd9e2f5c4d97bdda20578c` by `tooling/export-protocol.mjs`.
 
 Every file is a byte-for-byte copy of the file at the same path, except where marked edited, and except `README.md` and the license files at the root, which are copied from `publishing/wvp/`. The only edit is that a Markdown link to a file that is not published is replaced by its text, and `test-vectors/README.md` omits the section on vectors that are not published.
 
@@ -12,7 +12,7 @@ All data in the vectors and examples is synthetic. Names such as `u.lindqvist` a
 | --- | --- | --- |
 | `docs/spec/evidence-statement-v1.md` | `b81fd5e7ce910fa8b1e342026453087237f0eba7cb54401c779b213dd6ecfc24` | yes |
 | `formal/lean/.gitignore` | `fde850d24186b6e99c8c0debd641fb3ab85198b109eb66f71a1fea02bd6ea1b3` |  |
-| `formal/lean/check.sh` | `d5d7f7ee8d8ac9c49f92069a72320463c609b040567a9d18bec432fab4ed2ef3` |  |
+| `formal/lean/check.sh` | `e68b00dd1b3bfe3c2988dc38b6fb155c15e666f30c99104de689d401f2509618` |  |
 | `formal/lean/ContractReference.lean` | `9ac1bc2c77dc80ccd5fbb5347eda6eefd2f89efebd59b3b60edbcf0e54ce3fba` |  |
 | `formal/lean/lake-manifest.json` | `3f38e9388aefa3c385358d7d4f45dd57cad33ee744233ba70dd8eeb356da32aa` |  |
 | `formal/lean/lakefile.toml` | `6ed7717c9a9826b05a44bc55f9909d86e99755cb842702d38a5e7b6743372350` |  |
@@ -41,6 +41,13 @@ All data in the vectors and examples is synthetic. Names such as `u.lindqvist` a
 | `protocols/work-contract/v1/examples/approved-and-posted/reading-approval-first.json` | `93b60b5b78591e31661e29b6dd4785ee928abdce20193ec7d2dc68c4687449da` |  |
 | `protocols/work-contract/v1/examples/invoice-processing/artifact.json` | `5f9427f5cf84b1734f0a2584fe9d1ebbdfd0d2565c5f73ae93070fda8509bece` |  |
 | `protocols/work-contract/v1/examples/invoice-processing/draft.json` | `8ea92a6b4fca375b1fd6f6ddddf1e65a7a639e4d13b04983ccdc66bf16642c5e` |  |
+| `protocols/work-contract/v1/examples/purchase-order-approval/cases/1-valid.json` | `b58a3ca25d2888dfdc9de878fe58f80af1cb69127882a3e54098a3eda094dcad` |  |
+| `protocols/work-contract/v1/examples/purchase-order-approval/cases/2-unauthorized-approver.json` | `a0c3b185cd078807df7804a4bdfddf1bb8c734be79b802f5682322918fa75bfa` |  |
+| `protocols/work-contract/v1/examples/purchase-order-approval/cases/3-limit-exceeded.json` | `4b62650ba3228a5bfb434567463cb758145269553339536e4ad257dcd172cece` |  |
+| `protocols/work-contract/v1/examples/purchase-order-approval/cases/4-confirmation-missing.json` | `eef24fdc07dc4a8d14b2e2efc712bc4a42d63095cde5798e875de6055647f673` |  |
+| `protocols/work-contract/v1/examples/purchase-order-approval/cases/5-confirmations-contradict.json` | `a685e7c0b83d5cf5e77397c63ed9663863838f5be3695beb5c1268882824e41f` |  |
+| `protocols/work-contract/v1/examples/purchase-order-approval/cases/6-check-after-approval.json` | `e95191531d264feb22c73801a582b4c1b09c79b49ab50c4083cfa8858aad2df6` |  |
+| `protocols/work-contract/v1/examples/purchase-order-approval/draft.json` | `ae8b84b6125ec6b71b16659e387c13e66ad5347849238004dd39269090817361` |  |
 | `protocols/work-contract/v1/SPEC.md` | `4eab1c390ece1abb06282cf10cfd6a91fa90c45f02ce6e94ab5ad23df1646d0b` |  |
 | `protocols/work-relation/v1/SPEC.md` | `6fd385b040849c97060fbf7382e152026c63c6015df45ac22810ff23f0d463ba` | yes |
 | `protocols/work-unit/v1/SPEC.md` | `e2b56bd5a8aa724bed135d4b8afa1113bc3667a3f087bc2bc20e52f2d3b9a019` | yes |
