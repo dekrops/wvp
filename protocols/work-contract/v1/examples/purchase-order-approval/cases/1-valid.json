@@ -1,0 +1,467 @@
+{
+  "contract" : {
+    "evaluation" : {
+      "semantics" : "kleene-1"
+    },
+    "evidence" : {
+      "conflicts" : "unknown",
+      "sources" : {
+        "approval" : [
+          "erp"
+        ],
+        "authority" : [
+          "identity-directory"
+        ],
+        "check" : [
+          "compliance"
+        ],
+        "confirmation" : [
+          "erp"
+        ],
+        "purchaseOrder" : [
+          "erp"
+        ]
+      }
+    },
+    "identity" : {
+      "id" : "purchase-order-approval",
+      "version" : "1.0.0"
+    },
+    "inputs" : {
+      "order" : {
+        "type" : "text"
+      }
+    },
+    "kinds" : {
+      "approval" : {
+        "fields" : {
+          "approver" : {
+            "type" : "text"
+          },
+          "at" : {
+            "type" : "time"
+          },
+          "id" : {
+            "type" : "text"
+          },
+          "order" : {
+            "type" : "text"
+          }
+        },
+        "key" : [
+          "id"
+        ]
+      },
+      "authority" : {
+        "fields" : {
+          "limit" : {
+            "currency" : "EUR",
+            "scale" : 2,
+            "type" : "money"
+          },
+          "principal" : {
+            "type" : "text"
+          }
+        },
+        "key" : [
+          "principal"
+        ]
+      },
+      "check" : {
+        "fields" : {
+          "at" : {
+            "type" : "time"
+          },
+          "id" : {
+            "type" : "text"
+          },
+          "order" : {
+            "type" : "text"
+          }
+        },
+        "key" : [
+          "id"
+        ]
+      },
+      "confirmation" : {
+        "fields" : {
+          "order" : {
+            "type" : "text"
+          },
+          "state" : {
+            "type" : "text"
+          }
+        },
+        "key" : [
+          "order"
+        ]
+      },
+      "purchaseOrder" : {
+        "fields" : {
+          "amount" : {
+            "currency" : "EUR",
+            "scale" : 2,
+            "type" : "money"
+          },
+          "number" : {
+            "type" : "text"
+          }
+        },
+        "key" : [
+          "number"
+        ]
+      }
+    },
+    "language" : "work-contract-1",
+    "policy" : {
+      "approvedState" : {
+        "policy" : {
+          "id" : "po-lifecycle",
+          "version" : "1"
+        },
+        "type" : {
+          "type" : "text"
+        },
+        "value" : "APPROVED"
+      }
+    },
+    "requires" : [
+      {
+        "id" : "APPROVAL_RECORDED",
+        "predicate" : {
+          "exists" : "a",
+          "in" : "approval",
+          "where" : {
+            "cmp" : "eq",
+            "left" : {
+              "field" : "order",
+              "var" : "a"
+            },
+            "right" : {
+              "input" : "order"
+            }
+          }
+        }
+      },
+      {
+        "id" : "APPROVER_AUTHORIZED",
+        "predicate" : {
+          "forall" : "a",
+          "holds" : {
+            "or" : [
+              {
+                "cmp" : "ne",
+                "left" : {
+                  "field" : "order",
+                  "var" : "a"
+                },
+                "right" : {
+                  "input" : "order"
+                }
+              },
+              {
+                "exists" : "u",
+                "in" : "authority",
+                "where" : {
+                  "cmp" : "eq",
+                  "left" : {
+                    "field" : "principal",
+                    "var" : "u"
+                  },
+                  "right" : {
+                    "field" : "approver",
+                    "var" : "a"
+                  }
+                }
+              }
+            ]
+          },
+          "in" : "approval"
+        }
+      },
+      {
+        "id" : "CHECKED_BEFORE_APPROVAL",
+        "predicate" : {
+          "forall" : "a",
+          "holds" : {
+            "or" : [
+              {
+                "cmp" : "ne",
+                "left" : {
+                  "field" : "order",
+                  "var" : "a"
+                },
+                "right" : {
+                  "input" : "order"
+                }
+              },
+              {
+                "exists" : "c",
+                "in" : "check",
+                "where" : {
+                  "and" : [
+                    {
+                      "cmp" : "eq",
+                      "left" : {
+                        "field" : "order",
+                        "var" : "c"
+                      },
+                      "right" : {
+                        "input" : "order"
+                      }
+                    },
+                    {
+                      "cmp" : "lt",
+                      "left" : {
+                        "field" : "at",
+                        "var" : "c"
+                      },
+                      "right" : {
+                        "field" : "at",
+                        "var" : "a"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "in" : "approval"
+        }
+      },
+      {
+        "id" : "FINAL_STATE_CONFIRMED",
+        "predicate" : {
+          "exists" : "s",
+          "in" : "confirmation",
+          "where" : {
+            "and" : [
+              {
+                "cmp" : "eq",
+                "left" : {
+                  "field" : "order",
+                  "var" : "s"
+                },
+                "right" : {
+                  "input" : "order"
+                }
+              },
+              {
+                "cmp" : "eq",
+                "left" : {
+                  "field" : "state",
+                  "var" : "s"
+                },
+                "right" : {
+                  "param" : "approvedState"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id" : "ORDER_EXISTS",
+        "predicate" : {
+          "exists" : "po",
+          "in" : "purchaseOrder",
+          "where" : {
+            "cmp" : "eq",
+            "left" : {
+              "field" : "number",
+              "var" : "po"
+            },
+            "right" : {
+              "input" : "order"
+            }
+          }
+        }
+      },
+      {
+        "id" : "WITHIN_AUTHORITY",
+        "predicate" : {
+          "forall" : "a",
+          "holds" : {
+            "or" : [
+              {
+                "cmp" : "ne",
+                "left" : {
+                  "field" : "order",
+                  "var" : "a"
+                },
+                "right" : {
+                  "input" : "order"
+                }
+              },
+              {
+                "exists" : "u",
+                "in" : "authority",
+                "where" : {
+                  "and" : [
+                    {
+                      "cmp" : "eq",
+                      "left" : {
+                        "field" : "principal",
+                        "var" : "u"
+                      },
+                      "right" : {
+                        "field" : "approver",
+                        "var" : "a"
+                      }
+                    },
+                    {
+                      "exists" : "po",
+                      "in" : "purchaseOrder",
+                      "where" : {
+                        "and" : [
+                          {
+                            "cmp" : "eq",
+                            "left" : {
+                              "field" : "number",
+                              "var" : "po"
+                            },
+                            "right" : {
+                              "input" : "order"
+                            }
+                          },
+                          {
+                            "cmp" : "le",
+                            "left" : {
+                              "field" : "amount",
+                              "var" : "po"
+                            },
+                            "right" : {
+                              "field" : "limit",
+                              "var" : "u"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "in" : "approval"
+        }
+      }
+    ]
+  },
+  "description" : "The order exists, the approver is in the directory with a limit above the amount, the compliance check came before the approval, and the ERP confirms the final state.",
+  "environment" : {
+    "complete" : [
+      {
+        "asOf" : "1767225600",
+        "kind" : "approval",
+        "source" : "erp"
+      },
+      {
+        "asOf" : "1767225600",
+        "kind" : "authority",
+        "source" : "identity-directory"
+      },
+      {
+        "asOf" : "1767225600",
+        "kind" : "check",
+        "source" : "compliance"
+      },
+      {
+        "asOf" : "1767225600",
+        "kind" : "confirmation",
+        "source" : "erp"
+      },
+      {
+        "asOf" : "1767225600",
+        "kind" : "purchaseOrder",
+        "source" : "erp"
+      }
+    ],
+    "facts" : [
+      {
+        "fields" : {
+          "amount" : "1800000",
+          "number" : "PO-123"
+        },
+        "id" : "f1-order",
+        "kind" : "purchaseOrder",
+        "source" : "erp"
+      },
+      {
+        "fields" : {
+          "approver" : "m.okafor",
+          "at" : "1766200000",
+          "id" : "WF-7",
+          "order" : "PO-123"
+        },
+        "id" : "f2-approval",
+        "kind" : "approval",
+        "source" : "erp"
+      },
+      {
+        "fields" : {
+          "limit" : "2500000",
+          "principal" : "m.okafor"
+        },
+        "id" : "f3-authority",
+        "kind" : "authority",
+        "source" : "identity-directory"
+      },
+      {
+        "fields" : {
+          "at" : "1766100000",
+          "id" : "CK-1",
+          "order" : "PO-123"
+        },
+        "id" : "f4-check",
+        "kind" : "check",
+        "source" : "compliance"
+      },
+      {
+        "fields" : {
+          "order" : "PO-123",
+          "state" : "APPROVED"
+        },
+        "id" : "f5-confirmation",
+        "kind" : "confirmation",
+        "source" : "erp"
+      }
+    ],
+    "inputs" : {
+      "order" : "PO-123"
+    }
+  },
+  "expected" : {
+    "conflicts" : [
+    ],
+    "decision" : "SUPPORTED",
+    "ignored" : [
+    ],
+    "requirements" : [
+      {
+        "id" : "APPROVAL_RECORDED",
+        "value" : "TRUE"
+      },
+      {
+        "id" : "APPROVER_AUTHORIZED",
+        "value" : "TRUE"
+      },
+      {
+        "id" : "CHECKED_BEFORE_APPROVAL",
+        "value" : "TRUE"
+      },
+      {
+        "id" : "FINAL_STATE_CONFIRMED",
+        "value" : "TRUE"
+      },
+      {
+        "id" : "ORDER_EXISTS",
+        "value" : "TRUE"
+      },
+      {
+        "id" : "WITHIN_AUTHORITY",
+        "value" : "TRUE"
+      }
+    ]
+  }
+}
