@@ -53,9 +53,15 @@ For every derivation a verifier reports two things, kept apart.
 
 The **core**, which every implementation of the method must reproduce byte for byte: the method, its version and language version; the profile's digest; the event's identifier and the request; the digests of the inputs and the interval over which they were valid; every statement relied on, by digest and role; the outcome; the failed preconditions. Its digest is the derivation's **commitment**.
 
-The **diagnostics**, which are one implementation's own: the engine binding it used and its messages. They are committed to separately and are never compared between implementations.
+The **diagnostics**, which are one implementation's own: the engine binding it used, the engine's raw answer whenever it gave one, and its messages. They are committed to separately. The raw answer is kept apart from the outcome and never becomes it: an engine that answers Allow after skipping a policy that failed to evaluate is reported as having answered Allow, and the outcome is that nothing was derived.
 
-The decision's commitments gain the commitments of the derivations, so that a record of the decision names what was derived and from what. A report states, for every requirement, whether the records that decided it were attested or derived. The two are never merged into one word.
+The decision's commitments gain the commitments of the derivations, so that a record of the decision names what was derived and from what.
+
+**Bindings.** The evaluation also commits to which requirements depend on which derivations. A derivation is not about a requirement, and one derivation may serve several, so the binding belongs to the evaluation and not to the derivation. It is read from the contract: a requirement depends on a method's derivations if its predicate quantifies over the derived kind and the contract accepts the method's reserved source for that kind. Such a requirement is bound to every derivation of that kind, including one that yielded no record, because that absence is what its quantifier saw. A binding names the requirement, the method and version, and each derivation by its event and commitment.
+
+This says exactly which requirements a derivation can affect. It does not say which record satisfied or refuted a requirement: the evaluator of Work Contract Language 1 reports a value per requirement and no witnesses. Whether it should is an open question below.
+
+A report states, for every requirement, whether the records it read were attested or derived. The two are never merged into one word.
 
 ### 4. Replay
 
@@ -111,7 +117,9 @@ For `cedar-authorization`: one case per precondition where Cedar alone gives a d
 
 For replay: a statement altered after signing; a body altered; a statement removed; the profile altered; the contract altered; a presented outcome altered with digests to match; the same statements in another order.
 
-A corpus of 21 such cases exists with the experimental implementation named below and would be proposed with this RFC's review.
+Also: a contract with two requirements over one derived kind, bound to the same derivation; and an engine that answers Allow beside an evaluation error.
+
+A corpus of 22 such cases exists with the experimental implementation named below and would be proposed with this RFC's review.
 
 ## Security considerations
 
@@ -128,7 +136,7 @@ This touches what a verifier accepts as a fact, so it is required.
 
 - **Proved** (Lean, with the engine as a parameter, so for any engine): a definite outcome implies no failed precondition and an error-free answer; a failed precondition gives no record whatever the engine would answer; without a usable policy statement, from an unaccepted source, or without declared completeness, there is no definite outcome; every dependency of a derivation is a presented, usable statement; a reproduced replay means the presented result equals the recomputation; a result under a profile with another digest is refused.
 - **Assumed:** that different profiles have different digests (collision resistance); that the engine implements its specification.
-- **Tested:** two implementations of the method, in Scala and in Rust, reproduce each other's commitments on the 21 cases.
+- **Tested:** two implementations of the method, in Scala and in Rust, reproduce each other's commitments on the 22 cases.
 - **Neither:** the correspondence between the formal model and either implementation; the entity preconditions and the rule for closing a derived kind in the formal model.
 
 The proofs are not yet published in this repository. They would be, with the method's specification, before Review.
@@ -149,7 +157,8 @@ The proofs are not yet published in this repository. They would be, with the met
 4. Which Cedar features belong to the method: request context (which needs the context as evidence of the request), templates and links, entity tags.
 5. **Independence.** The two implementations that exist call the same Cedar engine, one through its Java binding and one directly, and have one author. They are two implementations of the method and one of Cedar. Does that satisfy RFC 0001's requirement of two independent implementations for Final, and if not, what does?
 6. What does a verifier report when it stops an evaluation that takes too long: a failed precondition, which every verifier must then agree on, or its own resource limit, which they need not?
-7. How does a binding state the language version of the engine it carries? One binding examined reports a fixed string whatever engine it contains. The method must name the engine's version, and an implementation must be able to establish it.
+7. Should the evaluator report, for each requirement, the records that decided it? Bindings could then name a witness. It would change the specified output of Work Contract Language 1.
+8. How does a binding state the language version of the engine it carries? One binding examined reports a fixed string whatever engine it contains. The method must name the engine's version, and an implementation must be able to establish it.
 
 ## Decision
 
