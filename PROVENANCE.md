@@ -1,6 +1,6 @@
 # Provenance
 
-Exported from `dekrops/verified` at commit `f22fe7473c4289c005d11ffdce512917d53d4849` by `tooling/export-protocol.mjs`.
+Exported from `dekrops/verified` at commit `7b9622260196ff3ae199a24db0a98ec36450dde3` by `tooling/export-protocol.mjs`.
 
 Every file is a byte-for-byte copy of the file at the same path, except where marked edited, and except `README.md` and the license files at the root, which are copied from `publishing/wvp/`. The only edit is that a Markdown link to a file that is not published is replaced by its text, and `test-vectors/README.md` omits the section on vectors that are not published.
 
@@ -12,7 +12,7 @@ All data in the vectors and examples is synthetic. Names such as `u.lindqvist` a
 | --- | --- | --- |
 | `docs/spec/evidence-statement-v1.md` | `b81fd5e7ce910fa8b1e342026453087237f0eba7cb54401c779b213dd6ecfc24` | yes |
 | `formal/lean/.gitignore` | `fde850d24186b6e99c8c0debd641fb3ab85198b109eb66f71a1fea02bd6ea1b3` |  |
-| `formal/lean/check.sh` | `925dcf2a3d65eb6b39b36e6c8fb8184aacd0248129a492b6eb791ecb7c29a3ec` |  |
+| `formal/lean/check.sh` | `927770f5e223647863ace8327484fa7c2ebee53d15d400fffb9d8b767b24bfb2` |  |
 | `formal/lean/ContractReference.lean` | `9ac1bc2c77dc80ccd5fbb5347eda6eefd2f89efebd59b3b60edbcf0e54ce3fba` |  |
 | `formal/lean/lake-manifest.json` | `3f38e9388aefa3c385358d7d4f45dd57cad33ee744233ba70dd8eeb356da32aa` |  |
 | `formal/lean/lakefile.toml` | `6ed7717c9a9826b05a44bc55f9909d86e99755cb842702d38a5e7b6743372350` |  |
