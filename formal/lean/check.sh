@@ -8,7 +8,7 @@ lake build
 # Every file that prints the axioms its theorems depend on: the protocol's, and the ledger
 # model's where that is present.
 report=""
-for audit in Verified/Audit.lean Verified/LedgerAudit.lean; do
+for audit in Verified/Audit.lean Verified/LedgerAudit.lean Verified/AuthorizationAudit.lean; do
   if [ -f "$audit" ]; then
     report+=$(lake env lean -DwarningAsError=true "$audit")$'\n'
   fi
