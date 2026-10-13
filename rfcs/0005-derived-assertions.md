@@ -119,7 +119,7 @@ For replay: a statement altered after signing; a body altered; a statement remov
 
 Also: a contract with two requirements over one derived kind, bound to the same derivation; and an engine that answers Allow beside an evaluation error.
 
-A corpus of 22 such cases exists with the experimental implementation named below and would be proposed with this RFC's review.
+A corpus of 23 such cases exists with the experimental implementation named below and would be proposed with this RFC's review.
 
 ## Security considerations
 
@@ -136,7 +136,7 @@ This touches what a verifier accepts as a fact, so it is required.
 
 - **Proved** (Lean, with the engine as a parameter, so for any engine): a definite outcome implies no failed precondition and an error-free answer; a failed precondition gives no record whatever the engine would answer; without a usable policy statement, from an unaccepted source, or without declared completeness, there is no definite outcome; every dependency of a derivation is a presented, usable statement; a reproduced replay means the presented result equals the recomputation; a result under a profile with another digest is refused.
 - **Assumed:** that different profiles have different digests (collision resistance); that the engine implements its specification.
-- **Tested:** two implementations of the method, in Scala and in Rust, reproduce each other's commitments on the 22 cases.
+- **Tested:** two implementations of the method, in Scala and in Rust, reproduce each other's commitments on the 23 cases.
 - **Neither:** the correspondence between the formal model and either implementation; the entity preconditions and the rule for closing a derived kind in the formal model.
 
 The proofs are not yet published in this repository. They would be, with the method's specification, before Review.
