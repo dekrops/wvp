@@ -47,3 +47,5 @@ lake build contract-reference
 lake exe contract-reference ../../test-vectors/work-contract/v1/cases ../../test-vectors/work-contract/v1/differential
 # A worked example outside the corpus, in the same form: the same evaluator must agree on it.
 lake exe contract-reference ../../protocols/work-contract/v1/examples/purchase-order-approval/cases
+lake exe contract-reference ../../protocols/work-contract/v1/examples/purchase-order-authorization/attested/cases
+lake exe contract-reference ../../protocols/work-contract/v1/examples/purchase-order-authorization/recomputed/cases
