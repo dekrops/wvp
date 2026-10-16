@@ -1,6 +1,6 @@
 # Provenance
 
-Exported from `dekrops/verified` at commit `7b9622260196ff3ae199a24db0a98ec36450dde3` by `tooling/export-protocol.mjs`.
+Exported from `dekrops/verified` at commit `5dc5fba0320b18f2c861f05e0201f48c9b6948f1` by `tooling/export-protocol.mjs`.
 
 Every file is a byte-for-byte copy of the file at the same path, except where marked edited, and except `README.md` and the license files at the root, which are copied from `publishing/wvp/`. The only edit is that a Markdown link to a file that is not published is replaced by its text, and `test-vectors/README.md` omits the section on vectors that are not published.
 
@@ -125,7 +125,7 @@ All data in the vectors and examples is synthetic. Names such as `u.lindqvist` a
 | `test-vectors/evidence-statement/v1/valid/statement-agent-trace.json` | `580fc4a62873dd11087045eff86c283b7529d0dcc1bde33b82f45204b8e14d9c` |  |
 | `test-vectors/evidence-statement/v1/valid/statement-genesis.json` | `df06bb9ff4dafc3b58445c03cd6e85b3ce856b6bf00c43876c7fe4d922967195` |  |
 | `test-vectors/evidence-statement/v1/valid/statement-unchained.json` | `996566256580e0903beff9e3e0966e30c8a43686b5495c14af6ca16aa9128d37` |  |
-| `test-vectors/README.md` | `e168c8b6ab4f9b825691f1a1ec0e945d6280f6ba23e885d474eafb3a23233fc7` | yes |
+| `test-vectors/README.md` | `ecfde7d4ed45d16df72c42df6967f76a21e0829c715c0555d673aea8e2ecee8a` | yes |
 | `test-vectors/work-contract/v1/cases/01-valid.json` | `b5b270e7ff2e45fa03e201db6cd9ea2bc64c4dd6376f7c15d52541e3ba09446d` |  |
 | `test-vectors/work-contract/v1/cases/02-variance-exceeds-tolerance.json` | `1f2c86aeff0889a887232038c222e6afd97464d50e62fa5f8abb168290983e8c` |  |
 | `test-vectors/work-contract/v1/cases/03-approval-evidence-missing.json` | `cff36c83edb90a1627b4cee9ba95eea0a0cc3b984eb9e9197f03fc677b4a43e5` |  |
