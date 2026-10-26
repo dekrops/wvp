@@ -239,8 +239,8 @@
       "name": "verified-cli",
       "language": "Rust",
       "repository": "https://github.com/dekrops/verified-cli",
-      "tag": "v0.1.4",
-      "commit": "4d41004eed165a2df65523f0d9753cbf050f306e",
+      "tag": "v0.2.0",
+      "commit": "9fd5b2d357835795e40abad50329c4196a58863b",
       "independent": "Written from the published specifications. It shares no code with the implementation that generates the expectations."
     },
     "lean": {
@@ -534,6 +534,24 @@
         "--nocapture"
       ],
       "reproduced": "work relation v1: (\\d+) cases"
+    },
+    {
+      "implementation": "rust",
+      "covers": ["contract-approval"],
+      "argv": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "verified-verifier",
+        "--test",
+        "approval_conformance",
+        "--",
+        "--exact",
+        "every_approval_gives_its_expected_outcome",
+        "--nocapture"
+      ],
+      "reproduced": "contract-approval-1: (\\d+) valid, (\\d+) invalid"
     }
   ]
 }
