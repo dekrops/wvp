@@ -165,6 +165,14 @@
       "files": "test-vectors/work-relation/v1/vectors.json",
       "layout": "lists",
       "lists": { "cases": { "identity": "name", "expectation": ["expected"] } }
+    },
+    {
+      "id": "contract-approval",
+      "specification": "verified.contract-approval/1",
+      "title": "Contract approvals",
+      "files": "test-vectors/contract-approval/v1/vectors.json",
+      "layout": "lists",
+      "lists": { "cases": { "identity": "name", "expectation": ["expected"] } }
     }
   ],
   "profiles": [
@@ -219,6 +227,11 @@
       "id": "history",
       "title": "Work history and relations",
       "parts": ["canonical", "statement", "relation"]
+    },
+    {
+      "id": "approval",
+      "title": "Signed contract approvals",
+      "parts": ["canonical", "contract-approval"]
     }
   ],
   "implementations": {
