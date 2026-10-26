@@ -8,7 +8,7 @@ lake build
 # Every file that prints the axioms its theorems depend on: the protocol's, and the ledger
 # model's where that is present.
 report=""
-for audit in Verified/Audit.lean Verified/LedgerAudit.lean Verified/AuthorizationAudit.lean; do
+for audit in Verified/Audit.lean Verified/LedgerAudit.lean Verified/AuthorizationAudit.lean Verified/RevocationAudit.lean Verified/PolicyThresholdAudit.lean Verified/SensitiveSectionsAudit.lean; do
   if [ -f "$audit" ]; then
     report+=$(lake env lean -DwarningAsError=true "$audit")$'\n'
   fi
@@ -49,3 +49,24 @@ lake exe contract-reference ../../test-vectors/work-contract/v1/cases ../../test
 lake exe contract-reference ../../protocols/work-contract/v1/examples/purchase-order-approval/cases
 lake exe contract-reference ../../protocols/work-contract/v1/examples/purchase-order-authorization/attested/cases
 lake exe contract-reference ../../protocols/work-contract/v1/examples/purchase-order-authorization/recomputed/cases
+# The revocation-transition model (Verified/Revocation.lean) must agree with every experimental
+# fixture. It is not part of the protocol, so the published build, which has no runner, skips this.
+if [ -f RevocationReference.lean ]; then
+  lake build revocation-reference
+  lake exe revocation-reference ../../test-vectors/experimental/revocation-transition/v1
+fi
+# The policy-threshold model (Verified/PolicyThreshold.lean) must agree with every experimental
+# fixture. Like the revocation model it is not part of the protocol: the published build skips it.
+if [ -f PolicyThresholdReference.lean ]; then
+  lake build policy-threshold-reference
+  lake exe policy-threshold-reference ../../test-vectors/experimental/policy-threshold/v1
+fi
+# The sensitive-sections template (Verified/SensitiveSections.lean) prints the requirements it
+# builds; the committed copy must be its output, and the Scala template is checked against it
+# (TemplateSuite). Not part of the protocol: the published build skips this.
+if [ -f SensitiveSectionsTemplate.lean ]; then
+  lake build sensitive-sections-template
+  lake exe sensitive-sections-template |
+    diff -u ../../test-vectors/experimental/sensitive-sections-template/v1/requirements.json - ||
+    { echo 'The committed template requirements are not the Lean model'"'"'s output.' >&2; exit 1; }
+fi
