@@ -73,6 +73,10 @@ A package verifies against its own claim and contract. That the claim and contra
 
 An expectation that is not given is not checked, and nothing in the package can supply one. A later version of the agreed contract verifies on its own and is refused only by this check.
 
+The contract is the expectation that matters most. Whoever assembles a package chooses the contract in it, and a contract whose requirements hold whatever the evidence, with no evidence at all, is reproduced as `SUPPORTED` like any other. A report therefore shows whether the contract was expected: without an expected contract it says that the decision is about the contract the package carries, not one the relying party named (section 5).
+
+This is a clarification of the report. It changes no check, refusal, decision or vector, and a package verifies exactly as before. What a tool does with a decision about a contract nobody pinned, for example when asked whether a required decision was met, is that tool's policy and outside this version.
+
 ## 4. Decision object
 
 ```json
@@ -103,10 +107,11 @@ decision reproduced   SUPPORTED, matches the package
   APPROVAL_RECORDED             TRUE
   …
 issuer signature      absent
+contract pinned       NO: the decision is about the contract the package carries
 source truthfulness   NOT established: no check can establish it
 ```
 
-The `contract` line identifies which agreement the decision is about. Whether it is the agreement the relying party has in mind is theirs to check, by digest. A reproduced decision says that the signed records from the accepted sources establish the requirements under that contract. It does not say the sources told the truth, that a completeness statement was honest, or that the package contains everything the sources know.
+The `contract` line identifies which agreement the decision is about. Whether it is the agreement the relying party has in mind is theirs to check, by digest: with an expected contract (section 3.1) the `contract pinned` line is replaced by the expectations that were met; without one it is present, as above. A reproduced decision says that the signed records from the accepted sources establish the requirements under that contract. It does not say the sources told the truth, that a completeness statement was honest, or that the package contains everything the sources know.
 
 ## 6. Evidence evaluated and evidence disclosed
 
