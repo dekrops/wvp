@@ -1,0 +1,801 @@
+{
+  "protocol": "verified.contract-approval/1",
+  "cases": [
+    {
+      "expected": {
+        "valid": true,
+        "statement": {
+          "type": "verified.contract-approval/1",
+          "tenant": "tenant-1",
+          "repository": "example/repository",
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "shown": "sha-256:370fe16dd4643cab9a647b438d8b7a7f1314f1c03adace3a88627bca9ef6d92d",
+          "approver": "approver-1",
+          "issuedAt": "2026-10-26T12:00:00Z",
+          "nonce": "n-es256"
+        },
+        "challenge": "6HpjT7IgouoN6TzUW0iKh6c5GBc-vNEy8sJDusWStUc"
+      },
+      "name": "valid-es256",
+      "rpId": "approvals.example",
+      "origins": ["https://approvals.example"],
+      "approval": {
+        "statement": {
+          "type": "verified.contract-approval/1",
+          "tenant": "tenant-1",
+          "repository": "example/repository",
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "shown": "sha-256:370fe16dd4643cab9a647b438d8b7a7f1314f1c03adace3a88627bca9ef6d92d",
+          "approver": "approver-1",
+          "issuedAt": "2026-10-26T12:00:00Z",
+          "nonce": "n-es256"
+        },
+        "assertion": {
+          "credentialId": "credential-es256-0001",
+          "authenticatorData": "isa3hwuRDLq5XLX1pv8q6crLzD9ymayLjlqZsqdOsIMFAAAABw",
+          "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiNkhwalQ3SWdvdW9ONlR6VVcwaUtoNmM1R0JjLXZORXk4c0pEdXNXU3RVYyIsIm9yaWdpbiI6Imh0dHBzOi8vYXBwcm92YWxzLmV4YW1wbGUiLCJjcm9zc09yaWdpbiI6ZmFsc2V9",
+          "signature": "MEQCIG3TRmU6CuTbGRLgJji0F6zQNAp3WksrrbOfABNoiQYxAiBFb5KsxBGa8OECLBNHTNNBUx5srB4doqhhecEHU2c--g"
+        },
+        "key": {
+          "credentialId": "credential-es256-0001",
+          "publicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEJwPC4OjO6W3by_3J2HOWB2hMakQSi60_UrjYAXDFWZipZDHZTuvoJi4VPm0jaqs2nharlC9qHJxIt66T82KYgQ",
+          "algorithm": -7
+        },
+        "rpId": "approvals.example",
+        "shown": {
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "view": {
+            "summary": [
+              "For finance, only the approval of finance-lead counts."
+            ],
+            "situations": 12
+          }
+        }
+      }
+    },
+    {
+      "expected": {
+        "valid": true,
+        "statement": {
+          "type": "verified.contract-approval/1",
+          "tenant": "tenant-1",
+          "repository": "example/repository",
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "shown": "sha-256:370fe16dd4643cab9a647b438d8b7a7f1314f1c03adace3a88627bca9ef6d92d",
+          "approver": "approver-1",
+          "issuedAt": "2026-10-26T12:00:00Z",
+          "nonce": "n-eddsa"
+        },
+        "challenge": "T9Yf0t9ketWJpl8AG5UsXh_b2g59TDBO0DaYxpRqOcM"
+      },
+      "name": "valid-eddsa",
+      "rpId": "approvals.example",
+      "origins": ["https://approvals.example"],
+      "approval": {
+        "statement": {
+          "type": "verified.contract-approval/1",
+          "tenant": "tenant-1",
+          "repository": "example/repository",
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "shown": "sha-256:370fe16dd4643cab9a647b438d8b7a7f1314f1c03adace3a88627bca9ef6d92d",
+          "approver": "approver-1",
+          "issuedAt": "2026-10-26T12:00:00Z",
+          "nonce": "n-eddsa"
+        },
+        "assertion": {
+          "credentialId": "credential-eddsa-0001",
+          "authenticatorData": "isa3hwuRDLq5XLX1pv8q6crLzD9ymayLjlqZsqdOsIMFAAAABw",
+          "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiVDlZZjB0OWtldFdKcGw4QUc1VXNYaF9iMmc1OVREQk8wRGFZeHBScU9jTSIsIm9yaWdpbiI6Imh0dHBzOi8vYXBwcm92YWxzLmV4YW1wbGUiLCJjcm9zc09yaWdpbiI6ZmFsc2V9",
+          "signature": "tAZTEUVAimxdWtBjXpNjPK5KoqqypSH1H_kjHaj-3SesI6brkv-4kuMASsneIwZgpF42bwljYdcpOZSexJrlAw"
+        },
+        "key": {
+          "credentialId": "credential-eddsa-0001",
+          "publicKey": "MCowBQYDK2VwAyEAzqSDUbNXoNTxeds5twqX6h3lM_pk8w7xau1Lc0xjjVQ",
+          "algorithm": -8
+        },
+        "rpId": "approvals.example",
+        "shown": {
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "view": {
+            "summary": [
+              "For finance, only the approval of finance-lead counts."
+            ],
+            "situations": 12
+          }
+        }
+      }
+    },
+    {
+      "expected": {
+        "valid": true,
+        "statement": {
+          "type": "verified.contract-approval/1",
+          "tenant": "tenant-1",
+          "repository": "example/repository",
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "shown": "sha-256:370fe16dd4643cab9a647b438d8b7a7f1314f1c03adace3a88627bca9ef6d92d",
+          "approver": "approver-1",
+          "issuedAt": "2026-10-26T12:00:00Z",
+          "nonce": "n-rs256"
+        },
+        "challenge": "SkV2i0ZUxdUY6baPVvg-GDzCpfWAAnihd1vdKc2iLVE"
+      },
+      "name": "valid-rs256",
+      "rpId": "approvals.example",
+      "origins": ["https://approvals.example"],
+      "approval": {
+        "statement": {
+          "type": "verified.contract-approval/1",
+          "tenant": "tenant-1",
+          "repository": "example/repository",
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "shown": "sha-256:370fe16dd4643cab9a647b438d8b7a7f1314f1c03adace3a88627bca9ef6d92d",
+          "approver": "approver-1",
+          "issuedAt": "2026-10-26T12:00:00Z",
+          "nonce": "n-rs256"
+        },
+        "assertion": {
+          "credentialId": "credential-rs256-0001",
+          "authenticatorData": "isa3hwuRDLq5XLX1pv8q6crLzD9ymayLjlqZsqdOsIMFAAAABw",
+          "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiU2tWMmkwWlV4ZFVZNmJhUFZ2Zy1HRHpDcGZXQUFuaWhkMXZkS2MyaUxWRSIsIm9yaWdpbiI6Imh0dHBzOi8vYXBwcm92YWxzLmV4YW1wbGUiLCJjcm9zc09yaWdpbiI6ZmFsc2V9",
+          "signature": "DhNvXnsMC_Hq6oLHtgPf8cTc6JLX9BQ5flGb8VjJGlGC8bdY_AXIJ8i8wrv-Jkl440O7MCLhjpxDsYITVGkbAgQBhatY9BkAppPQ602VkqZaKWEODogiJWFIdXDv0lW70OpgIaGntMTrS1sQ88JZ9Luja6AU_fGeCg_6c7wd4jHwWD_BgUKibnY0LHt5B4ysDbDOhAWYKk439Ys9KSb45zVvobYObyfLOBsYyNg_plqW0c6mDApRO2aR1mwyhu4DWv244oSZH_cXkRLebD_qlQ-0DOa5XQ3vFcN8B9MYxhX3PukhXsh5s68v_zCHzGvkTbri5vYkIL1JAR4coFeQ-w"
+        },
+        "key": {
+          "credentialId": "credential-rs256-0001",
+          "publicKey": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnuw4wcsN7LeOLhKpFJRBEXCBab-mTbW_iaYvUnrqpobBQifZYzxeVwmsB6bu-KhYMwtbzoUcsBad8S9z-4UvpsNyuzaRlAeNL_VLUOTXwIxoOADfVelKObep6gRGzIXZqzhwexHh73ilP7BcXdrus5Ysannh4GsarydDAg99pzj2Da6bLOHWXl0_FKVYLbf0jpphLTDNklEWD8qlYZiequZsQwvk2aD1gJnhbK_be6Jf6PGoVvLujGDr1c6CDHwFvHiBXg2gxJSoDqkw7a3Tr7r52h6uhlqIPgnGE42Yk8IDuzuUhLk3B6DEBmel-EBAykZmCtcrXvAV88KBLVuluQIDAQAB",
+          "algorithm": -257
+        },
+        "rpId": "approvals.example",
+        "shown": {
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "view": {
+            "summary": [
+              "For finance, only the approval of finance-lead counts."
+            ],
+            "situations": 12
+          }
+        }
+      }
+    },
+    {
+      "expected": {
+        "valid": true,
+        "statement": {
+          "type": "verified.contract-approval/1",
+          "tenant": "tenant-1",
+          "repository": "example/repository",
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "shown": "sha-256:7717f637939f115c3ee38659e03f25a690f90da98bb09b34f39c65d07de8f94d",
+          "approver": "approver-1",
+          "issuedAt": "2026-10-26T12:00:00Z",
+          "nonce": "n-canonical"
+        },
+        "challenge": "pY9FKJyLdnB7pih6Od4oGwfG-Q4GBuWCVtXqp5V7AYI"
+      },
+      "name": "valid-snapshot-canonical-form",
+      "rpId": "approvals.example",
+      "origins": ["https://approvals.example"],
+      "approval": {
+        "statement": {
+          "type": "verified.contract-approval/1",
+          "tenant": "tenant-1",
+          "repository": "example/repository",
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "shown": "sha-256:7717f637939f115c3ee38659e03f25a690f90da98bb09b34f39c65d07de8f94d",
+          "approver": "approver-1",
+          "issuedAt": "2026-10-26T12:00:00Z",
+          "nonce": "n-canonical"
+        },
+        "assertion": {
+          "credentialId": "credential-es256-0001",
+          "authenticatorData": "isa3hwuRDLq5XLX1pv8q6crLzD9ymayLjlqZsqdOsIMFAAAABw",
+          "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoicFk5RktKeUxkbkI3cGloNk9kNG9Hd2ZHLVE0R0J1V0NWdFhxcDVWN0FZSSIsIm9yaWdpbiI6Imh0dHBzOi8vYXBwcm92YWxzLmV4YW1wbGUiLCJjcm9zc09yaWdpbiI6ZmFsc2V9",
+          "signature": "MEYCIQDbbsoRRR2aKJ8HY74LKMs9Y2UPGHtaods1gbKHaBf0ugIhAIvAwKMKgJmTFbUbH8wLiDV0XCH-ugUhL13v1ix_SuFu"
+        },
+        "key": {
+          "credentialId": "credential-es256-0001",
+          "publicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEJwPC4OjO6W3by_3J2HOWB2hMakQSi60_UrjYAXDFWZipZDHZTuvoJi4VPm0jaqs2nharlC9qHJxIt66T82KYgQ",
+          "algorithm": -7
+        },
+        "rpId": "approvals.example",
+        "shown": {
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "view": {
+            "summary": ["Zürich \u0085 next line", "tab\there"],
+            "situations": 1.2e1
+          }
+        }
+      }
+    },
+    {
+      "expected": {
+        "valid": true,
+        "statement": {
+          "type": "verified.contract-approval/1",
+          "tenant": "tenant-1",
+          "repository": "example/repository",
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "shown": "sha-256:370fe16dd4643cab9a647b438d8b7a7f1314f1c03adace3a88627bca9ef6d92d",
+          "approver": "approver-1",
+          "issuedAt": "2026-10-26T12:00:00Z",
+          "nonce": "n-origins"
+        },
+        "challenge": "Le3kUuPk8cNz3mN8c7sZAL--IHdnO3IBxpmbtO-mDxg"
+      },
+      "name": "valid-one-of-several-origins",
+      "rpId": "approvals.example",
+      "origins": ["https://other.example", "https://approvals.example"],
+      "approval": {
+        "statement": {
+          "type": "verified.contract-approval/1",
+          "tenant": "tenant-1",
+          "repository": "example/repository",
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "shown": "sha-256:370fe16dd4643cab9a647b438d8b7a7f1314f1c03adace3a88627bca9ef6d92d",
+          "approver": "approver-1",
+          "issuedAt": "2026-10-26T12:00:00Z",
+          "nonce": "n-origins"
+        },
+        "assertion": {
+          "credentialId": "credential-es256-0001",
+          "authenticatorData": "isa3hwuRDLq5XLX1pv8q6crLzD9ymayLjlqZsqdOsIMFAAAABw",
+          "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiTGUza1V1UGs4Y056M21OOGM3c1pBTC0tSUhkbk8zSUJ4cG1idE8tbUR4ZyIsIm9yaWdpbiI6Imh0dHBzOi8vYXBwcm92YWxzLmV4YW1wbGUiLCJjcm9zc09yaWdpbiI6ZmFsc2V9",
+          "signature": "MEYCIQCSck0YclcyEor-xq4E_10wUlGsSxmXO2XWPGkhtYtg5wIhANJ69I8B3heP-EFyy8hdINwY-L_VtR05LA8NIHYnS7tq"
+        },
+        "key": {
+          "credentialId": "credential-es256-0001",
+          "publicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEJwPC4OjO6W3by_3J2HOWB2hMakQSi60_UrjYAXDFWZipZDHZTuvoJi4VPm0jaqs2nharlC9qHJxIt66T82KYgQ",
+          "algorithm": -7
+        },
+        "rpId": "approvals.example",
+        "shown": {
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "view": {
+            "summary": [
+              "For finance, only the approval of finance-lead counts."
+            ],
+            "situations": 12
+          }
+        }
+      }
+    },
+    {
+      "expected": {
+        "valid": false,
+        "refusal": "SNAPSHOT_MISMATCH"
+      },
+      "name": "invalid-snapshot-changed",
+      "rpId": "approvals.example",
+      "origins": ["https://approvals.example"],
+      "approval": {
+        "statement": {
+          "type": "verified.contract-approval/1",
+          "tenant": "tenant-1",
+          "repository": "example/repository",
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "shown": "sha-256:370fe16dd4643cab9a647b438d8b7a7f1314f1c03adace3a88627bca9ef6d92d",
+          "approver": "approver-1",
+          "issuedAt": "2026-10-26T12:00:00Z",
+          "nonce": "n-invalid"
+        },
+        "assertion": {
+          "credentialId": "credential-es256-0001",
+          "authenticatorData": "isa3hwuRDLq5XLX1pv8q6crLzD9ymayLjlqZsqdOsIMFAAAABw",
+          "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiQWZaTlhLbGQwckVuU2JCcHM1SjEtODRmQjF5OVFYdjJYaFBZUU9tZHE5cyIsIm9yaWdpbiI6Imh0dHBzOi8vYXBwcm92YWxzLmV4YW1wbGUiLCJjcm9zc09yaWdpbiI6ZmFsc2V9",
+          "signature": "MEUCIQDtVP2nEDi8Ln18zborTwRhNi_GVicIrD-myGPHvmQ7dwIgVVQ4vxUh_FnwhyLWcdgheg3G_f7_b_xm23jrp3CnttA"
+        },
+        "key": {
+          "credentialId": "credential-es256-0001",
+          "publicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEJwPC4OjO6W3by_3J2HOWB2hMakQSi60_UrjYAXDFWZipZDHZTuvoJi4VPm0jaqs2nharlC9qHJxIt66T82KYgQ",
+          "algorithm": -7
+        },
+        "rpId": "approvals.example",
+        "shown": {
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "view": {
+            "summary": ["For finance, any owner counts."],
+            "situations": 12
+          }
+        }
+      }
+    },
+    {
+      "expected": {
+        "valid": false,
+        "refusal": "SNAPSHOT_CONTRACT"
+      },
+      "name": "invalid-snapshot-of-another-contract",
+      "rpId": "approvals.example",
+      "origins": ["https://approvals.example"],
+      "approval": {
+        "statement": {
+          "type": "verified.contract-approval/1",
+          "tenant": "tenant-1",
+          "repository": "example/repository",
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "shown": "sha-256:e0f4d90e3d632d3195c0cbb897dc931c876107b47dcc1d139db16f37504625a6",
+          "approver": "approver-1",
+          "issuedAt": "2026-10-26T12:00:00Z",
+          "nonce": "n-invalid"
+        },
+        "assertion": {
+          "credentialId": "credential-es256-0001",
+          "authenticatorData": "isa3hwuRDLq5XLX1pv8q6crLzD9ymayLjlqZsqdOsIMFAAAABw",
+          "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoia0k0WnlrU3ZMT1FNRjBTdkhtLWNLcS1RZURsd2FWWFJxR2Z4aUduTnB0RSIsIm9yaWdpbiI6Imh0dHBzOi8vYXBwcm92YWxzLmV4YW1wbGUiLCJjcm9zc09yaWdpbiI6ZmFsc2V9",
+          "signature": "MEUCIEW5FAlyLG2xZKGL7p888rZLQeBTqbay0N8H0pvC9vnbAiEAnlBMdlRAO-AY1mujmKyknZ3zOTWkWajf4EtRQdH5ftw"
+        },
+        "key": {
+          "credentialId": "credential-es256-0001",
+          "publicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEJwPC4OjO6W3by_3J2HOWB2hMakQSi60_UrjYAXDFWZipZDHZTuvoJi4VPm0jaqs2nharlC9qHJxIt66T82KYgQ",
+          "algorithm": -7
+        },
+        "rpId": "approvals.example",
+        "shown": {
+          "contract": "sha-256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+          "view": {
+            "summary": ["Another contract."],
+            "situations": 12
+          }
+        }
+      }
+    },
+    {
+      "expected": {
+        "valid": false,
+        "refusal": "MALFORMED"
+      },
+      "name": "invalid-snapshot-not-canonical",
+      "rpId": "approvals.example",
+      "origins": ["https://approvals.example"],
+      "approval": {
+        "statement": {
+          "type": "verified.contract-approval/1",
+          "tenant": "tenant-1",
+          "repository": "example/repository",
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "shown": "sha-256:370fe16dd4643cab9a647b438d8b7a7f1314f1c03adace3a88627bca9ef6d92d",
+          "approver": "approver-1",
+          "issuedAt": "2026-10-26T12:00:00Z",
+          "nonce": "n-invalid"
+        },
+        "assertion": {
+          "credentialId": "credential-es256-0001",
+          "authenticatorData": "isa3hwuRDLq5XLX1pv8q6crLzD9ymayLjlqZsqdOsIMFAAAABw",
+          "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiQWZaTlhLbGQwckVuU2JCcHM1SjEtODRmQjF5OVFYdjJYaFBZUU9tZHE5cyIsIm9yaWdpbiI6Imh0dHBzOi8vYXBwcm92YWxzLmV4YW1wbGUiLCJjcm9zc09yaWdpbiI6ZmFsc2V9",
+          "signature": "MEUCIQDtVP2nEDi8Ln18zborTwRhNi_GVicIrD-myGPHvmQ7dwIgVVQ4vxUh_FnwhyLWcdgheg3G_f7_b_xm23jrp3CnttA"
+        },
+        "key": {
+          "credentialId": "credential-es256-0001",
+          "publicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEJwPC4OjO6W3by_3J2HOWB2hMakQSi60_UrjYAXDFWZipZDHZTuvoJi4VPm0jaqs2nharlC9qHJxIt66T82KYgQ",
+          "algorithm": -7
+        },
+        "rpId": "approvals.example",
+        "shown": {
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "x": 1.5
+        }
+      }
+    },
+    {
+      "expected": {
+        "valid": false,
+        "refusal": "CHALLENGE"
+      },
+      "name": "invalid-statement-changed-after-signing",
+      "rpId": "approvals.example",
+      "origins": ["https://approvals.example"],
+      "approval": {
+        "statement": {
+          "type": "verified.contract-approval/1",
+          "tenant": "tenant-1",
+          "repository": "example/repository",
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "shown": "sha-256:370fe16dd4643cab9a647b438d8b7a7f1314f1c03adace3a88627bca9ef6d92d",
+          "approver": "approver-1",
+          "issuedAt": "2026-10-27T12:00:00Z",
+          "nonce": "n-invalid"
+        },
+        "assertion": {
+          "credentialId": "credential-es256-0001",
+          "authenticatorData": "isa3hwuRDLq5XLX1pv8q6crLzD9ymayLjlqZsqdOsIMFAAAABw",
+          "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiQWZaTlhLbGQwckVuU2JCcHM1SjEtODRmQjF5OVFYdjJYaFBZUU9tZHE5cyIsIm9yaWdpbiI6Imh0dHBzOi8vYXBwcm92YWxzLmV4YW1wbGUiLCJjcm9zc09yaWdpbiI6ZmFsc2V9",
+          "signature": "MEUCIQDtVP2nEDi8Ln18zborTwRhNi_GVicIrD-myGPHvmQ7dwIgVVQ4vxUh_FnwhyLWcdgheg3G_f7_b_xm23jrp3CnttA"
+        },
+        "key": {
+          "credentialId": "credential-es256-0001",
+          "publicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEJwPC4OjO6W3by_3J2HOWB2hMakQSi60_UrjYAXDFWZipZDHZTuvoJi4VPm0jaqs2nharlC9qHJxIt66T82KYgQ",
+          "algorithm": -7
+        },
+        "rpId": "approvals.example",
+        "shown": {
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "view": {
+            "summary": [
+              "For finance, only the approval of finance-lead counts."
+            ],
+            "situations": 12
+          }
+        }
+      }
+    },
+    {
+      "expected": {
+        "valid": false,
+        "refusal": "OTHER_PASSKEY"
+      },
+      "name": "invalid-other-passkey",
+      "rpId": "approvals.example",
+      "origins": ["https://approvals.example"],
+      "approval": {
+        "statement": {
+          "type": "verified.contract-approval/1",
+          "tenant": "tenant-1",
+          "repository": "example/repository",
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "shown": "sha-256:370fe16dd4643cab9a647b438d8b7a7f1314f1c03adace3a88627bca9ef6d92d",
+          "approver": "approver-1",
+          "issuedAt": "2026-10-26T12:00:00Z",
+          "nonce": "n-invalid"
+        },
+        "assertion": {
+          "credentialId": "credential-es256-0002",
+          "authenticatorData": "isa3hwuRDLq5XLX1pv8q6crLzD9ymayLjlqZsqdOsIMFAAAABw",
+          "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiQWZaTlhLbGQwckVuU2JCcHM1SjEtODRmQjF5OVFYdjJYaFBZUU9tZHE5cyIsIm9yaWdpbiI6Imh0dHBzOi8vYXBwcm92YWxzLmV4YW1wbGUiLCJjcm9zc09yaWdpbiI6ZmFsc2V9",
+          "signature": "MEUCIQDtVP2nEDi8Ln18zborTwRhNi_GVicIrD-myGPHvmQ7dwIgVVQ4vxUh_FnwhyLWcdgheg3G_f7_b_xm23jrp3CnttA"
+        },
+        "key": {
+          "credentialId": "credential-es256-0001",
+          "publicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEJwPC4OjO6W3by_3J2HOWB2hMakQSi60_UrjYAXDFWZipZDHZTuvoJi4VPm0jaqs2nharlC9qHJxIt66T82KYgQ",
+          "algorithm": -7
+        },
+        "rpId": "approvals.example",
+        "shown": {
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "view": {
+            "summary": [
+              "For finance, only the approval of finance-lead counts."
+            ],
+            "situations": 12
+          }
+        }
+      }
+    },
+    {
+      "expected": {
+        "valid": false,
+        "refusal": "CEREMONY"
+      },
+      "name": "invalid-create-ceremony",
+      "rpId": "approvals.example",
+      "origins": ["https://approvals.example"],
+      "approval": {
+        "statement": {
+          "type": "verified.contract-approval/1",
+          "tenant": "tenant-1",
+          "repository": "example/repository",
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "shown": "sha-256:370fe16dd4643cab9a647b438d8b7a7f1314f1c03adace3a88627bca9ef6d92d",
+          "approver": "approver-1",
+          "issuedAt": "2026-10-26T12:00:00Z",
+          "nonce": "n-invalid"
+        },
+        "assertion": {
+          "credentialId": "credential-es256-0001",
+          "authenticatorData": "isa3hwuRDLq5XLX1pv8q6crLzD9ymayLjlqZsqdOsIMFAAAABw",
+          "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoiQWZaTlhLbGQwckVuU2JCcHM1SjEtODRmQjF5OVFYdjJYaFBZUU9tZHE5cyIsIm9yaWdpbiI6Imh0dHBzOi8vYXBwcm92YWxzLmV4YW1wbGUiLCJjcm9zc09yaWdpbiI6ZmFsc2V9",
+          "signature": "MEYCIQCOsTOl5IKuthVhu1kN6iQwEeS65VNQqtEtcfiQvMjzCgIhAMSmf8NKnREyfcX-b52n18H-Yt0ub6Yw_F-6SxIBmozP"
+        },
+        "key": {
+          "credentialId": "credential-es256-0001",
+          "publicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEJwPC4OjO6W3by_3J2HOWB2hMakQSi60_UrjYAXDFWZipZDHZTuvoJi4VPm0jaqs2nharlC9qHJxIt66T82KYgQ",
+          "algorithm": -7
+        },
+        "rpId": "approvals.example",
+        "shown": {
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "view": {
+            "summary": [
+              "For finance, only the approval of finance-lead counts."
+            ],
+            "situations": 12
+          }
+        }
+      }
+    },
+    {
+      "expected": {
+        "valid": false,
+        "refusal": "ORIGIN"
+      },
+      "name": "invalid-other-origin",
+      "rpId": "approvals.example",
+      "origins": ["https://approvals.example"],
+      "approval": {
+        "statement": {
+          "type": "verified.contract-approval/1",
+          "tenant": "tenant-1",
+          "repository": "example/repository",
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "shown": "sha-256:370fe16dd4643cab9a647b438d8b7a7f1314f1c03adace3a88627bca9ef6d92d",
+          "approver": "approver-1",
+          "issuedAt": "2026-10-26T12:00:00Z",
+          "nonce": "n-invalid"
+        },
+        "assertion": {
+          "credentialId": "credential-es256-0001",
+          "authenticatorData": "isa3hwuRDLq5XLX1pv8q6crLzD9ymayLjlqZsqdOsIMFAAAABw",
+          "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiQWZaTlhLbGQwckVuU2JCcHM1SjEtODRmQjF5OVFYdjJYaFBZUU9tZHE5cyIsIm9yaWdpbiI6Imh0dHBzOi8vYXBwcm92YWxzLmV4YW1wbGUuZXZpbCIsImNyb3NzT3JpZ2luIjpmYWxzZX0",
+          "signature": "MEQCID-bXGf_xIeGEKarE2emvli70MD-9RPLlkVZH1RgV7H2AiB44_YUCRJb7KQ1GZNB4bHqN4odOLXckjK8N9e2lrDzMg"
+        },
+        "key": {
+          "credentialId": "credential-es256-0001",
+          "publicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEJwPC4OjO6W3by_3J2HOWB2hMakQSi60_UrjYAXDFWZipZDHZTuvoJi4VPm0jaqs2nharlC9qHJxIt66T82KYgQ",
+          "algorithm": -7
+        },
+        "rpId": "approvals.example",
+        "shown": {
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "view": {
+            "summary": [
+              "For finance, only the approval of finance-lead counts."
+            ],
+            "situations": 12
+          }
+        }
+      }
+    },
+    {
+      "expected": {
+        "valid": false,
+        "refusal": "RELYING_PARTY"
+      },
+      "name": "invalid-other-relying-party",
+      "rpId": "approvals.example",
+      "origins": ["https://approvals.example"],
+      "approval": {
+        "statement": {
+          "type": "verified.contract-approval/1",
+          "tenant": "tenant-1",
+          "repository": "example/repository",
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "shown": "sha-256:370fe16dd4643cab9a647b438d8b7a7f1314f1c03adace3a88627bca9ef6d92d",
+          "approver": "approver-1",
+          "issuedAt": "2026-10-26T12:00:00Z",
+          "nonce": "n-invalid"
+        },
+        "assertion": {
+          "credentialId": "credential-es256-0001",
+          "authenticatorData": "6e-yH3QOSH9Sm0SbsRl8QPNuRD-r_Y8AFKDl7FGoxYwFAAAABw",
+          "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiQWZaTlhLbGQwckVuU2JCcHM1SjEtODRmQjF5OVFYdjJYaFBZUU9tZHE5cyIsIm9yaWdpbiI6Imh0dHBzOi8vYXBwcm92YWxzLmV4YW1wbGUiLCJjcm9zc09yaWdpbiI6ZmFsc2V9",
+          "signature": "MEQCIDACp7ZsV0r22aFep2lpb3-n2W91J_5f7-j_mm8SiekKAiAjr9heEDYI_8Y64rvcM5IQo054LmfWg6jOAVbdGK4QDQ"
+        },
+        "key": {
+          "credentialId": "credential-es256-0001",
+          "publicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEJwPC4OjO6W3by_3J2HOWB2hMakQSi60_UrjYAXDFWZipZDHZTuvoJi4VPm0jaqs2nharlC9qHJxIt66T82KYgQ",
+          "algorithm": -7
+        },
+        "rpId": "approvals.example",
+        "shown": {
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "view": {
+            "summary": [
+              "For finance, only the approval of finance-lead counts."
+            ],
+            "situations": 12
+          }
+        }
+      }
+    },
+    {
+      "expected": {
+        "valid": false,
+        "refusal": "USER_NOT_PRESENT"
+      },
+      "name": "invalid-user-not-present",
+      "rpId": "approvals.example",
+      "origins": ["https://approvals.example"],
+      "approval": {
+        "statement": {
+          "type": "verified.contract-approval/1",
+          "tenant": "tenant-1",
+          "repository": "example/repository",
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "shown": "sha-256:370fe16dd4643cab9a647b438d8b7a7f1314f1c03adace3a88627bca9ef6d92d",
+          "approver": "approver-1",
+          "issuedAt": "2026-10-26T12:00:00Z",
+          "nonce": "n-invalid"
+        },
+        "assertion": {
+          "credentialId": "credential-es256-0001",
+          "authenticatorData": "isa3hwuRDLq5XLX1pv8q6crLzD9ymayLjlqZsqdOsIMEAAAABw",
+          "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiQWZaTlhLbGQwckVuU2JCcHM1SjEtODRmQjF5OVFYdjJYaFBZUU9tZHE5cyIsIm9yaWdpbiI6Imh0dHBzOi8vYXBwcm92YWxzLmV4YW1wbGUiLCJjcm9zc09yaWdpbiI6ZmFsc2V9",
+          "signature": "MEYCIQDdsZxbBg7DwyIKOeqx1BdLdXR8TFQu4mL8QwJdZ3YnDAIhAOqspb27Sj_0RLen96gzNaWHzCN6g5FlznMeBMRxDveo"
+        },
+        "key": {
+          "credentialId": "credential-es256-0001",
+          "publicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEJwPC4OjO6W3by_3J2HOWB2hMakQSi60_UrjYAXDFWZipZDHZTuvoJi4VPm0jaqs2nharlC9qHJxIt66T82KYgQ",
+          "algorithm": -7
+        },
+        "rpId": "approvals.example",
+        "shown": {
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "view": {
+            "summary": [
+              "For finance, only the approval of finance-lead counts."
+            ],
+            "situations": 12
+          }
+        }
+      }
+    },
+    {
+      "expected": {
+        "valid": false,
+        "refusal": "SIGNATURE"
+      },
+      "name": "invalid-signature-by-another-key",
+      "rpId": "approvals.example",
+      "origins": ["https://approvals.example"],
+      "approval": {
+        "statement": {
+          "type": "verified.contract-approval/1",
+          "tenant": "tenant-1",
+          "repository": "example/repository",
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "shown": "sha-256:370fe16dd4643cab9a647b438d8b7a7f1314f1c03adace3a88627bca9ef6d92d",
+          "approver": "approver-1",
+          "issuedAt": "2026-10-26T12:00:00Z",
+          "nonce": "n-invalid"
+        },
+        "assertion": {
+          "credentialId": "credential-es256-0001",
+          "authenticatorData": "isa3hwuRDLq5XLX1pv8q6crLzD9ymayLjlqZsqdOsIMFAAAABw",
+          "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiQWZaTlhLbGQwckVuU2JCcHM1SjEtODRmQjF5OVFYdjJYaFBZUU9tZHE5cyIsIm9yaWdpbiI6Imh0dHBzOi8vYXBwcm92YWxzLmV4YW1wbGUiLCJjcm9zc09yaWdpbiI6ZmFsc2V9",
+          "signature": "MEUCIQDtVP2nEDi8Ln18zborTwRhNi_GVicIrD-myGPHvmQ7dwIgVVQ4vxUh_FnwhyLWcdgheg3G_f7_b_xm23jrp3CnttA"
+        },
+        "key": {
+          "credentialId": "credential-es256-0001",
+          "publicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEBALYGXEOFnpiJZq6BdPygSRWqZVLRpfxjX8NoQ9IcHGby025QNZjiHXnx2c1oGgrfJ3uaRuYuCP4g8eK0ILRDw",
+          "algorithm": -7
+        },
+        "rpId": "approvals.example",
+        "shown": {
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "view": {
+            "summary": [
+              "For finance, only the approval of finance-lead counts."
+            ],
+            "situations": 12
+          }
+        }
+      }
+    },
+    {
+      "expected": {
+        "valid": false,
+        "refusal": "UNSUPPORTED_ALGORITHM"
+      },
+      "name": "invalid-unsupported-algorithm",
+      "rpId": "approvals.example",
+      "origins": ["https://approvals.example"],
+      "approval": {
+        "statement": {
+          "type": "verified.contract-approval/1",
+          "tenant": "tenant-1",
+          "repository": "example/repository",
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "shown": "sha-256:370fe16dd4643cab9a647b438d8b7a7f1314f1c03adace3a88627bca9ef6d92d",
+          "approver": "approver-1",
+          "issuedAt": "2026-10-26T12:00:00Z",
+          "nonce": "n-invalid"
+        },
+        "assertion": {
+          "credentialId": "credential-es256-0001",
+          "authenticatorData": "isa3hwuRDLq5XLX1pv8q6crLzD9ymayLjlqZsqdOsIMFAAAABw",
+          "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiQWZaTlhLbGQwckVuU2JCcHM1SjEtODRmQjF5OVFYdjJYaFBZUU9tZHE5cyIsIm9yaWdpbiI6Imh0dHBzOi8vYXBwcm92YWxzLmV4YW1wbGUiLCJjcm9zc09yaWdpbiI6ZmFsc2V9",
+          "signature": "MEUCIQDtVP2nEDi8Ln18zborTwRhNi_GVicIrD-myGPHvmQ7dwIgVVQ4vxUh_FnwhyLWcdgheg3G_f7_b_xm23jrp3CnttA"
+        },
+        "key": {
+          "credentialId": "credential-es256-0001",
+          "publicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEJwPC4OjO6W3by_3J2HOWB2hMakQSi60_UrjYAXDFWZipZDHZTuvoJi4VPm0jaqs2nharlC9qHJxIt66T82KYgQ",
+          "algorithm": -35
+        },
+        "rpId": "approvals.example",
+        "shown": {
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "view": {
+            "summary": [
+              "For finance, only the approval of finance-lead counts."
+            ],
+            "situations": 12
+          }
+        }
+      }
+    },
+    {
+      "expected": {
+        "valid": false,
+        "refusal": "MALFORMED"
+      },
+      "name": "invalid-statement-extra-member",
+      "rpId": "approvals.example",
+      "origins": ["https://approvals.example"],
+      "approval": {
+        "statement": {
+          "type": "verified.contract-approval/1",
+          "tenant": "tenant-1",
+          "repository": "example/repository",
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "shown": "sha-256:370fe16dd4643cab9a647b438d8b7a7f1314f1c03adace3a88627bca9ef6d92d",
+          "approver": "approver-1",
+          "issuedAt": "2026-10-26T12:00:00Z",
+          "nonce": "n-invalid",
+          "scope": "all"
+        },
+        "assertion": {
+          "credentialId": "credential-es256-0001",
+          "authenticatorData": "isa3hwuRDLq5XLX1pv8q6crLzD9ymayLjlqZsqdOsIMFAAAABw",
+          "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiQWZaTlhLbGQwckVuU2JCcHM1SjEtODRmQjF5OVFYdjJYaFBZUU9tZHE5cyIsIm9yaWdpbiI6Imh0dHBzOi8vYXBwcm92YWxzLmV4YW1wbGUiLCJjcm9zc09yaWdpbiI6ZmFsc2V9",
+          "signature": "MEUCIQDtVP2nEDi8Ln18zborTwRhNi_GVicIrD-myGPHvmQ7dwIgVVQ4vxUh_FnwhyLWcdgheg3G_f7_b_xm23jrp3CnttA"
+        },
+        "key": {
+          "credentialId": "credential-es256-0001",
+          "publicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEJwPC4OjO6W3by_3J2HOWB2hMakQSi60_UrjYAXDFWZipZDHZTuvoJi4VPm0jaqs2nharlC9qHJxIt66T82KYgQ",
+          "algorithm": -7
+        },
+        "rpId": "approvals.example",
+        "shown": {
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "view": {
+            "summary": [
+              "For finance, only the approval of finance-lead counts."
+            ],
+            "situations": 12
+          }
+        }
+      }
+    },
+    {
+      "expected": {
+        "valid": false,
+        "refusal": "MALFORMED"
+      },
+      "name": "invalid-not-base64url",
+      "rpId": "approvals.example",
+      "origins": ["https://approvals.example"],
+      "approval": {
+        "statement": {
+          "type": "verified.contract-approval/1",
+          "tenant": "tenant-1",
+          "repository": "example/repository",
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "shown": "sha-256:370fe16dd4643cab9a647b438d8b7a7f1314f1c03adace3a88627bca9ef6d92d",
+          "approver": "approver-1",
+          "issuedAt": "2026-10-26T12:00:00Z",
+          "nonce": "n-invalid"
+        },
+        "assertion": {
+          "credentialId": "credential-es256-0001",
+          "authenticatorData": "isa3hwuRDLq5XLX1pv8q6crLzD9ymayLjlqZsqdOsIMFAAAABw",
+          "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiQWZaTlhLbGQwckVuU2JCcHM1SjEtODRmQjF5OVFYdjJYaFBZUU9tZHE5cyIsIm9yaWdpbiI6Imh0dHBzOi8vYXBwcm92YWxzLmV4YW1wbGUiLCJjcm9zc09yaWdpbiI6ZmFsc2V9",
+          "signature": "not base64url!"
+        },
+        "key": {
+          "credentialId": "credential-es256-0001",
+          "publicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEJwPC4OjO6W3by_3J2HOWB2hMakQSi60_UrjYAXDFWZipZDHZTuvoJi4VPm0jaqs2nharlC9qHJxIt66T82KYgQ",
+          "algorithm": -7
+        },
+        "rpId": "approvals.example",
+        "shown": {
+          "contract": "sha-256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "view": {
+            "summary": [
+              "For finance, only the approval of finance-lead counts."
+            ],
+            "situations": 12
+          }
+        }
+      }
+    }
+  ]
+}
