@@ -1,0 +1,15 @@
+name = "wcl2"
+version = "0.1.0"
+defaultTargets = ["WCL2"]
+
+[leanOptions]
+warningAsError = true
+
+# Work Contract Language 1, as formal/lean defines it: WCL2 reuses its values, records,
+# environments and truth values, and is proved to extend its evaluation.
+[[require]]
+name = "verified"
+path = "../../../formal/lean"
+
+[[lean_lib]]
+name = "WCL2"
