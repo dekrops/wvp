@@ -74,7 +74,7 @@ The Lean model proves that a Language 1 contract, written in Language 2's form, 
 
 ## Vectors
 
-`test-vectors/work-contract/v2` will hold, at least:
+The proposed vectors are in [`0008/vectors`](0008/vectors/work-contract/v2/README.md), written by [`0008/generate.py`](0008/generate.py). For every case with a result, `0008/formal/WCL2/Vectors.lean` states that the model gives exactly its expected requirement values and decision, proved by `decide` and audited by `check.sh`; the refusals are not in the model, and the README lists them. On acceptance they become `test-vectors/work-contract/v2`, which will hold, at least:
 
 - every Language 1 case, restated in Language 2's form, with its Language 1 expectation;
 - arithmetic: within and outside a tolerance, `time − time`, an absent operand (`unknown`), `scale` by a negative factor, `abs` of a negative amount;
