@@ -37,7 +37,7 @@ A new language, identifier `work-contract-2`, evaluation semantics `kleene-1` un
 | ------------------------------------ | ------------------------------------- | ----------------------------------------------------------------------- |
 | `{"add": [term, term]}`              | the sum                               | both operands of one numeric type; the result has that type             |
 | `{"sub": [term, term]}`              | the difference                        | one numeric type, except `time − time`, which is an `int` of seconds    |
-| `{"scale": number, "of": term}`      | the term times a whole number          | the result has the term's type                                          |
+| `{"scale": "<number>", "of": term}`  | the term times a whole number (a number string, as every value) | the result has the term's type                                          |
 | `{"abs": term}`                      | the absolute value                    | a numeric type                                                          |
 
 A term whose operand has no value (an absent optional field, an input not supplied) has no value, as in Language 1, and a comparison with it is `unknown`. "Within 1 %" is `100 × |a − b| ≤ b`, with no fraction anywhere.
@@ -61,7 +61,7 @@ An aggregate **has a value only when the kind is closed** (a completeness statem
 
 ## Outcomes that change
 
-None for any published input: `work-contract-1` and its vectors are untouched. `work-contract-2` is a new identifier in a new directory, with its own vectors ([RFC 0001](0001-standards-process.md), invariant 2). An implementation of Language 1 refuses a `work-contract-2` contract as `CONTRACT_MALFORMED`, and the reverse: versions are never interchanged (invariant 3).
+None for any published input: `work-contract-1` and its vectors are untouched. `work-contract-2` is a new identifier in a new directory, with its own vectors ([RFC 0001](0001-standards-process.md), invariant 2). An implementation of Language 1 refuses a `work-contract-2` contract as `CONTRACT_ILL_FORMED` (its `language` is not Language 1's identifier, static rule 1; published case `27-contract-other-language`), and the reverse: versions are never interchanged (invariant 3).
 
 The Lean model proves that a Language 1 contract, written in Language 2's form, decides every environment exactly as it does in Language 1 (`same_decision_as_language_1`). A producer may therefore move a contract to Language 2 without changing what it decides. Doing so is a new contract with a new digest, which its approvers sign again.
 
@@ -89,7 +89,7 @@ This RFC changes what a verified result may be relied on for, so it needs securi
 - **Completeness carries more weight.** An aggregate's value rests on a completeness statement, as a false `exists` or a true `forall` does in Language 1. A source that declares a listing complete when it is not can make a sum too small or a count too low. This is the same trust Language 1 already places in completeness statements, now used by more requirements. Who may make one for which kind remains the relying party's registry, never the package (invariant 7).
 - **No new source of truth.** Arithmetic computes from accepted values only. It removes a reason to trust a source's own computed fields.
 - **Work.** An aggregate visits the records of one kind once per binding of the enclosing variables, as a quantifier does; the work bound (Language 1 section 7, step 4) covers it unchanged. Arithmetic is bounded by the term's size.
-- **Range.** Values on the wire lie strictly between −2⁶³ and 2⁶³. A sum of many large amounts can leave that range; the evaluation then refuses (`ARITHMETIC_RANGE`) rather than wrap or saturate, and since only final values are checked, every implementation refuses the same inputs. The model uses unbounded integers, so it says nothing about the refusal itself.
+- **Range.** Values on the wire lie strictly between −2⁶³ and 2⁶³. A sum of many large amounts can leave that range; the evaluation then refuses (`ARITHMETIC_RANGE`) rather than wrap or saturate, and since only final values are checked, every implementation refuses the same inputs. `ARITHMETIC_RANGE` is found during evaluation, so it comes after every refusal of Language 1's table (section 8), whose order is unchanged. The model uses unbounded integers, so it says nothing about the refusal itself.
 - **Counting listings instead of records.** If a source could list the same approval twice, it could pass a count with one person. Language 1's step 5 makes equal-key facts one record (or a conflict), so that cannot reach evaluation; a contract must still key a counted kind by what it means to count. The model shows both the danger and why it is excluded (`duplicate_approval_counts_twice`, `duplicate_listing_is_not_distinct`).
 
 ## Formal semantics
