@@ -79,7 +79,7 @@ The Lean model proves that a Language 1 contract, written in Language 2's form, 
 - every Language 1 case, restated in Language 2's form, with its Language 1 expectation;
 - arithmetic: within and outside a tolerance, `time − time`, an absent operand (`unknown`), `scale` by a negative factor, `abs` of a negative amount;
 - aggregates: `count` and `sum` over a closed kind with zero, one and several matching records; over an open kind (`unknown`); with one body `unknown` (`unknown`); a record of another kind or not matching the body (not counted);
-- the worked examples of the Lean model (tolerance, overpayment by one cent, open listing, four eyes);
+- the worked examples of the Lean model (tolerance, overpayment by one cent, open listing, four eyes), and the same approver under two approval identifiers, counted twice, to mark where keying (or a distinct count) decides;
 - refusals: operands of two currencies or scales, `time + time`, `sum` of a text or optional field, an aggregate variable used outside its body, depth over 3 with aggregates, the arithmetic range (once decided, below).
 
 ## Security considerations
@@ -94,7 +94,7 @@ This RFC changes what a verified result may be relied on for, so it needs securi
 
 ## Formal semantics
 
-`0008/formal` is a Lake package that depends on `formal/lean` and reuses Language 1's values, records, environments and truth values. `./check.sh` builds it and audits every theorem's axioms under the rules of `formal/lean/check.sh`: no `sorry`, `admit`, custom axiom or `native_decide`, and only `propext`, `Classical.choice` and `Quot.sound`. 25 theorems:
+`0008/formal` is a Lake package that depends on `formal/lean` and reuses Language 1's values, records, environments and truth values. `./check.sh` builds it and audits every theorem's axioms under the rules of `formal/lean/check.sh`: no `sorry`, `admit`, custom axiom or `native_decide`, and only `propext`, `Classical.choice` and `Quot.sound`. 27 theorems:
 
 | Theorem | Statement |
 | --- | --- |
@@ -107,6 +107,7 @@ This RFC changes what a verified result may be relied on for, so it needs securi
 | `term_eval_extends`, `settled_bodies_kept` | Terms, arithmetic included, do not depend on records; bodies settled over a listing stay so over a reordering of it. |
 | `eval_monotone`, `definite_decision_is_stable` | Along a settled extension of the environment, a `TRUE` requirement stays `TRUE`, a `FALSE` one stays `FALSE`, and a supported or contradicted decision stays so, aggregates included. |
 | `within_tolerance_and_paid_once`, `overpaid_is_contradicted`, `open_listing_is_undetermined`, `two_other_approvers_suffice`, `creator_approval_not_counted` | The worked examples, decided by the model. |
+| `same_approver_under_two_ids_is_counted_twice`, `two_ids_of_one_approver_are_distinct` | Where the key decides: an approval keyed by its own identifier is two records for one approver who approves twice. Both are listed once, so the environment is `Distinct`, and the count is 2. One record per key protects a count only when the kind is keyed by what it counts. |
 | `duplicate_approval_counts_twice`, `duplicate_listing_is_not_distinct` | The model counts listings: one approval listed twice passes four eyes. Such an environment lists a record twice, so it is not `Distinct`: Language 1's step 5 never produces one. |
 
 **The hypothesis to read first.** Stability is proved along `Settled`: Language 1's `Extends`, between two environments that each list a record once (`Distinct`). Nothing more is assumed: that a closed kind is then listed as a reordering of what it was is proved (`closed_listing_is_reordered`), and that counts and sums do not depend on the order is proved (`value_perm`). `Distinct` is what Language 1's step 5 already produces: one record per key.
@@ -133,7 +134,7 @@ Decided in review (Srishti, in this RFC's pull request), and moved into the sect
 Still open:
 
 1. **Lower-bound counts** over open kinds (`count ≥ n` is monotone without a completeness statement). Wanted for approvals, but as a separate RFC, so that `count` always means one thing.
-2. **`count distinct`** over a field, for kinds whose key is not the thing to count. One record per key covers the cases in this RFC; whether a distinct count is needed besides is open.
+2. **`count distinct`** over a field, for kinds whose key is not the thing to count. One record per key covers a kind keyed by what is counted. A kind keyed by something else, such as an approval keyed by its own identifier, counts one approver twice (`same_approver_under_two_ids_is_counted_twice`; raised by Srishti in review). Whether Language 2 needs a distinct count, or a static rule that a counted kind's key covers what the contract compares, is open.
 
 ## Decision
 

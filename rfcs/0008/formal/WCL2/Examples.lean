@@ -113,4 +113,26 @@ theorem duplicate_listing_is_not_distinct :
   have := distinct "approval"
   simp [runEnvironment] at this
 
+/-- Where the key decides (raised in review): an approval keyed by its own identifier, not by the
+    approver. Lea approving twice is then two different records, the environment lists each once
+    (`Distinct`), and the count is 2: one person passes four eyes. Listing each record once does not
+    protect a count whose kind is keyed by something other than what it counts; keying the kind by
+    the approver, or a count of distinct approvers, does. -/
+def approvalWithId (id who : String) : Record :=
+  ⟨[("id", text id), ("run", text "RUN-3"), ("approver", text who)]⟩
+
+theorem same_approver_under_two_ids_is_counted_twice :
+    evaluate (runEnvironment [approvalWithId "AP-1" "lea", approvalWithId "AP-2" "lea"]) [fourEyes] = .supported := by
+  decide
+
+theorem two_ids_of_one_approver_are_distinct :
+    Distinct (runEnvironment [approvalWithId "AP-1" "lea", approvalWithId "AP-2" "lea"]) := by
+  intro kind
+  simp only [runEnvironment]
+  split
+  · simp
+  · split
+    · decide
+    · simp
+
 end WCL2.Examples

@@ -26,3 +26,5 @@ import WCL2
 #print axioms WCL2.Examples.creator_approval_not_counted
 #print axioms WCL2.Examples.duplicate_approval_counts_twice
 #print axioms WCL2.Examples.duplicate_listing_is_not_distinct
+#print axioms WCL2.Examples.same_approver_under_two_ids_is_counted_twice
+#print axioms WCL2.Examples.two_ids_of_one_approver_are_distinct
