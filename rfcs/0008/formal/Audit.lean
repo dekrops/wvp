@@ -11,8 +11,12 @@ import WCL2
 #print axioms WCL2.exists_false_requires_closed
 #print axioms WCL2.forall_true_requires_closed
 #print axioms WCL2.forall_false_has_counterexample
-#print axioms WCL2.term_eval_extends
+#print axioms WCL2.closed_listing_is_reordered
+#print axioms WCL2.sumOf_perm
+#print axioms WCL2.definite_perm
+#print axioms WCL2.value_perm
 #print axioms WCL2.settled_bodies_kept
+#print axioms WCL2.term_eval_extends
 #print axioms WCL2.eval_monotone
 #print axioms WCL2.definite_decision_is_stable
 #print axioms WCL2.Examples.within_tolerance_and_paid_once
@@ -20,3 +24,5 @@ import WCL2
 #print axioms WCL2.Examples.open_listing_is_undetermined
 #print axioms WCL2.Examples.two_other_approvers_suffice
 #print axioms WCL2.Examples.creator_approval_not_counted
+#print axioms WCL2.Examples.duplicate_approval_counts_twice
+#print axioms WCL2.Examples.duplicate_listing_is_not_distinct

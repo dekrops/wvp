@@ -100,4 +100,17 @@ theorem creator_approval_not_counted :
     evaluate (runEnvironment [approval "kim", approval "lea"]) [fourEyes] = .contradicted := by
   decide
 
+/-- The model counts what it is given: the same approval listed twice is counted twice, and one
+    person passes four eyes. Such an environment is not `Distinct`, and none is evaluated:
+    Language 1's step 5 makes facts with equal keys one record. With the approver part of the
+    approval's key, a second approval by the same person is the same record. -/
+theorem duplicate_approval_counts_twice :
+    evaluate (runEnvironment [approval "lea", approval "lea"]) [fourEyes] = .supported := by decide
+
+theorem duplicate_listing_is_not_distinct :
+    ¬ Distinct (runEnvironment [approval "lea", approval "lea"]) := by
+  intro distinct
+  have := distinct "approval"
+  simp [runEnvironment] at this
+
 end WCL2.Examples

@@ -161,13 +161,77 @@ theorem forall_false_has_counterexample (env : Env) (var kind : String) (body : 
 
 /-! ## Stability along a settled extension -/
 
-/-- `Extends`, as Language 1 states it, and in addition: a closed kind is listed as it was.
-    Language 1's `Extends` already says a closed kind keeps exactly its records; an aggregate
-    also needs the listing itself unchanged, which holds when records are distinct by key and
-    listed in key order. RFC 0008 asks for that to be proved rather than assumed. -/
+-- Records compare field by field, so lists of them can be counted and compared.
+deriving instance DecidableEq for Verified.Contract.Record
+
+/-- No record of a kind is listed twice. Every environment evaluation sees is so: Language 1's
+    section 7, step 5 makes accepted facts with equal keys one record, or a conflict. -/
+def Distinct (env : Env) : Prop := ∀ kind, (env.records kind).Nodup
+
+/-- `Extends`, as Language 1 states it, between two environments that each list a record once. -/
 structure Settled (earlier later : Env) : Prop where
   ext : Extends earlier later
-  listed : ∀ kind, earlier.closed kind = true → later.records kind = earlier.records kind
+  earlierDistinct : Distinct earlier
+  laterDistinct : Distinct later
+
+/-- A closed kind is listed later in some order, but with exactly the records it had: `Extends`
+    gives the same records, and listing each once makes the two listings permutations. -/
+theorem closed_listing_is_reordered {earlier later : Env} (settled : Settled earlier later)
+    (kind : String) (closed : earlier.closed kind = true) :
+    (later.records kind).Perm (earlier.records kind) := by
+  have nothingNew := (settled.ext.closed kind closed).2
+  apply List.perm_iff_count.mpr
+  intro record
+  rw [List.Nodup.count (settled.laterDistinct kind), List.Nodup.count (settled.earlierDistinct kind)]
+  have same : record ∈ later.records kind ↔ record ∈ earlier.records kind :=
+    ⟨nothingNew record, settled.ext.records kind record⟩
+  simp only [same]
+
+theorem sumOf_perm {xs ys : List (Option Int)} (h : xs.Perm ys) : sumOf xs = sumOf ys := by
+  induction h with
+  | nil => rfl
+  | cons x _ ih => cases x <;> simp only [sumOf, ih]
+  | swap x y rest =>
+    cases x <;> cases y <;> cases h : sumOf rest <;> simp [sumOf, h, Int.add_left_comm]
+  | trans _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+theorem definite_perm {a b : Judged} (h : a.Perm b) : definite a = definite b := by
+  unfold definite
+  apply Bool.eq_iff_iff.mpr
+  simp only [List.all_eq_true]
+  exact ⟨fun all x member => all x (h.mem_iff.mpr member), fun all x member => all x (h.mem_iff.mp member)⟩
+
+/-- An aggregate does not depend on the order its records are listed in. -/
+theorem value_perm (fn : Aggregate) (closed : Bool) {a b : Judged} (h : a.Perm b) :
+    fn.value closed a = fn.value closed b := by
+  have selectedPerm : (selected a).Perm (selected b) := (h.filter _).map _
+  unfold Aggregate.value
+  rw [definite_perm h]
+  cases fn with
+  | count => simp only [selectedPerm.length_eq]
+  | sum field => simp only [sumOf_perm (selectedPerm.map _)]
+
+/-- Bodies settled over a listing stay as they were over a reordering of it. -/
+theorem settled_bodies_kept (records later : List Record) (reordered : later.Perm records)
+    (body : Record → Truth) (body' : Record → Truth)
+    (keep : ∀ record, (body record = .true → body' record = .true) ∧
+      (body record = .false → body' record = .false))
+    (settled : definite (records.map fun record => (record, body record)) = true) :
+    (later.map fun record => (record, body' record)).Perm
+      (records.map fun record => (record, body record)) := by
+  have same : (later.map fun record => (record, body' record)) =
+      (later.map fun record => (record, body record)) := by
+    apply List.map_congr_left
+    intro record member
+    have hs := List.all_eq_true.mp settled (record, body record)
+      (List.mem_map.mpr ⟨record, reordered.mem_iff.mp member, rfl⟩)
+    simp only [decide_eq_true_eq] at hs
+    cases hb : body record with
+    | true => rw [(keep record).1 hb]
+    | false => rw [(keep record).2 hb]
+    | unknown => exact absurd hb hs
+  rw [same]
+  exact reordered.map _
 
 theorem term_eval_extends {earlier later : Env} (ext : Extends earlier later) (scope : Scope)
     (term : Term) : term.eval later scope = term.eval earlier scope := by
@@ -180,24 +244,6 @@ theorem term_eval_extends {earlier later : Env} (ext : Extends earlier later) (s
   | sub left right ihl ihr => simp only [Term.eval, ihl, ihr]
   | scale factor arg ih => simp only [Term.eval, ih]
   | abs arg ih => simp only [Term.eval, ih]
-
-/-- A settled truth value is kept, for each record of a listing whose bodies were all settled. -/
-theorem settled_bodies_kept (records : List Record)
-    (body : Record → Truth) (body' : Record → Truth)
-    (keep : ∀ record, (body record = .true → body' record = .true) ∧
-      (body record = .false → body' record = .false))
-    (settled : definite (records.map fun record => (record, body record)) = true) :
-    (records.map fun record => (record, body' record)) =
-      (records.map fun record => (record, body record)) := by
-  apply List.map_congr_left
-  intro record member
-  have hs := List.all_eq_true.mp settled (record, body record)
-    (List.mem_map.mpr ⟨record, member, rfl⟩)
-  simp only [decide_eq_true_eq] at hs
-  cases hb : body record with
-  | true => rw [(keep record).1 hb]
-  | false => rw [(keep record).2 hb]
-  | unknown => exact absurd hb hs
 
 /-- Monotonicity along `Settled`: a requirement that is true stays true and one that is false
     stays false, aggregates included. Only `unknown` can change. -/
@@ -312,7 +358,7 @@ theorem eval_monotone {earlier later : Env} (settled : Settled earlier later) (p
       obtain ⟨closed, _⟩ := aggregate_settled_requires_closed earlier fn var kind body op bound
         scope (by rw [h]; exact hv)
       have stillClosed := (ext.closed kind closed).1
-      have listed := settled.listed kind closed
+      have reordered := closed_listing_is_reordered settled kind closed
       have bodiesSettled : definite ((earlier.records kind).map fun record =>
           (record, body.eval earlier ((var, record) :: scope))) = true := by
         simp only [Pred.eval] at h
@@ -320,12 +366,12 @@ theorem eval_monotone {earlier later : Env} (settled : Settled earlier later) (p
         · rename_i n b hval _
           exact (aggregate_value_requires_closed fn _ _ n hval).2
         · exact absurd h.symm hv
-      have judged := settled_bodies_kept (earlier.records kind)
+      have judged := settled_bodies_kept (earlier.records kind) (later.records kind) reordered
         (fun record => body.eval earlier ((var, record) :: scope))
         (fun record => body.eval later ((var, record) :: scope))
         (fun record => ih ((var, record) :: scope)) bodiesSettled
       simp only [Pred.eval] at h ⊢
-      rw [stillClosed, listed, judged, term_eval_extends ext, ← closed]
+      rw [stillClosed, value_perm fn true judged, term_eval_extends ext, ← closed]
       exact h
     exact ⟨same .true (by decide), same .false (by decide)⟩
 

@@ -73,10 +73,8 @@ def Term.eval (env : Env) (scope : Scope) : Term → Option Value
 /-- The sum of numbers, or nothing if any is missing. -/
 def sumOf : List (Option Int) → Option Int
   | [] => some 0
-  | x :: rest =>
-    match x, sumOf rest with
-    | some a, some b => some (a + b)
-    | _, _ => none
+  | none :: _ => none
+  | some a :: rest => (sumOf rest).map (a + ·)
 
 /-- Each record of a kind with the value of the body for it. -/
 abbrev Judged := List (Record × Truth)

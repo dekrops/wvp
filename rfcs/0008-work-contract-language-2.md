@@ -55,6 +55,10 @@ An aggregate **has a value only when the kind is closed** (a completeness statem
 
 **Static rules**, in addition to Language 1 section 5: an aggregate's variable is bound in its body only, as a quantifier's is; its nesting counts toward the quantifier depth limit of 3; `sum` names a non-optional field of a numeric type of the kind; the operand types of arithmetic and of `than` follow the table above. Every node counts toward the 512-node limit.
 
+**One record per key.** Language 1 already settles it ([section 7, step 5](../protocols/work-contract/v1/SPEC.md#7-evaluation)): accepted facts of one kind with equal key fields describe one object, are one record if their fields are identical, and are a conflict if they differ. So the environment evaluation sees lists each record of a kind once, and an aggregate counts records, not listings. Language 2 keeps that step unchanged and states it as what aggregates rely on. A contract that counts people must therefore key the kind by the person (an `approval` keyed by run and approver): a second approval by the same person is then the same record, or a conflict, never a second approval.
+
+**Exact arithmetic, range on the result.** Terms and aggregates are evaluated exactly, without intermediate limits, so the order of addition never changes a result. Only the final value of a term or an aggregate must lie strictly between −2⁶³ and 2⁶³; one that does not makes the evaluation refuse with `ARITHMETIC_RANGE`. (Exact here is cheap: the at most 10 000 facts of an environment, each below 2⁶³ in magnitude, sum to well within 128 bits.) A refusal, not `unknown`: `unknown` says the evidence was not enough, which would be false.
+
 ## Outcomes that change
 
 None for any published input: `work-contract-1` and its vectors are untouched. `work-contract-2` is a new identifier in a new directory, with its own vectors ([RFC 0001](0001-standards-process.md), invariant 2). An implementation of Language 1 refuses a `work-contract-2` contract as `CONTRACT_MALFORMED`, and the reverse: versions are never interchanged (invariant 3).
@@ -65,7 +69,7 @@ The Lean model proves that a Language 1 contract, written in Language 2's form, 
 
 - **Producers** keep producing Language 1 contracts until they need the new forms. Nothing changes for them otherwise.
 - **Verifiers** that implement only Language 1 refuse Language 2 contracts. They do not misread them.
-- **Packages.** WVP v0.2 names `work-contract-1`. Carrying a Language 2 contract needs a package version that names `work-contract-2` (with [RFC 0003](0003-wvp-0.3.md), or a revision of it). Until then a Language 2 contract cannot be verified from a package.
+- **Packages.** WVP v0.2 names `work-contract-1`, and a v0.2 verifier refuses a package whose contract is another language. A package that carries `work-contract-2` would turn that refusal into a decision, which is a change of outcome and therefore a new package version ([RFC 0001](0001-standards-process.md), invariant 2), not a revision of v0.2. So Language 2 reaches packages with [RFC 0003](0003-wvp-0.3.md) or with a small version of its own, whichever is accepted first; the language itself does not have to wait for either.
 - **Relying parties** see no change in what a decision means: `SUPPORTED`, `CONTRADICTED` and `UNDETERMINED` keep Language 1's definitions, and `UNDETERMINED` still means the evidence was not enough.
 
 ## Vectors
@@ -85,11 +89,12 @@ This RFC changes what a verified result may be relied on for, so it needs securi
 - **Completeness carries more weight.** An aggregate's value rests on a completeness statement, as a false `exists` or a true `forall` does in Language 1. A source that declares a listing complete when it is not can make a sum too small or a count too low. This is the same trust Language 1 already places in completeness statements, now used by more requirements. Who may make one for which kind remains the relying party's registry, never the package (invariant 7).
 - **No new source of truth.** Arithmetic computes from accepted values only. It removes a reason to trust a source's own computed fields.
 - **Work.** An aggregate visits the records of one kind once per binding of the enclosing variables, as a quantifier does; the work bound (Language 1 section 7, step 4) covers it unchanged. Arithmetic is bounded by the term's size.
-- **Range.** Values on the wire lie strictly between −2⁶³ and 2⁶³. A sum of many large amounts can leave that range. How that is handled is open (below). The model uses unbounded integers, so it says nothing about it.
+- **Range.** Values on the wire lie strictly between −2⁶³ and 2⁶³. A sum of many large amounts can leave that range; the evaluation then refuses (`ARITHMETIC_RANGE`) rather than wrap or saturate, and since only final values are checked, every implementation refuses the same inputs. The model uses unbounded integers, so it says nothing about the refusal itself.
+- **Counting listings instead of records.** If a source could list the same approval twice, it could pass a count with one person. Language 1's step 5 makes equal-key facts one record (or a conflict), so that cannot reach evaluation; a contract must still key a counted kind by what it means to count. The model shows both the danger and why it is excluded (`duplicate_approval_counts_twice`, `duplicate_listing_is_not_distinct`).
 
 ## Formal semantics
 
-`0008/formal` is a Lake package that depends on `formal/lean` and reuses Language 1's values, records, environments and truth values. `./check.sh` builds it and audits every theorem's axioms under the rules of `formal/lean/check.sh`: no `sorry`, `admit`, custom axiom or `native_decide`, and only `propext`, `Classical.choice` and `Quot.sound`. 19 theorems:
+`0008/formal` is a Lake package that depends on `formal/lean` and reuses Language 1's values, records, environments and truth values. `./check.sh` builds it and audits every theorem's axioms under the rules of `formal/lean/check.sh`: no `sorry`, `admit`, custom axiom or `native_decide`, and only `propext`, `Classical.choice` and `Quot.sound`. 25 theorems:
 
 | Theorem | Statement |
 | --- | --- |
@@ -97,11 +102,14 @@ This RFC changes what a verified result may be relied on for, so it needs securi
 | `aggregate_value_requires_closed`, `aggregate_settled_requires_closed` | An aggregate comparison that is `TRUE` or `FALSE` was taken over a closed kind, with every body settled. |
 | `aggregate_open_kind_is_unknown` | Over a kind no source declared complete, every aggregate comparison is `unknown`, however many records were seen. |
 | `exists_true_has_witness`, `exists_false_requires_closed`, `forall_true_requires_closed`, `forall_false_has_counterexample` | As in Language 1, for Language 2's quantifiers. |
-| `term_eval_extends`, `settled_bodies_kept` | Terms, arithmetic included, do not depend on records; a listing whose bodies were settled stays settled. |
+| `closed_listing_is_reordered` | Along `Extends`, between environments that list each record once, a closed kind is listed later as a reordering of what it was. |
+| `sumOf_perm`, `definite_perm`, `value_perm` | A count or a sum does not depend on the order its records are listed in. |
+| `term_eval_extends`, `settled_bodies_kept` | Terms, arithmetic included, do not depend on records; bodies settled over a listing stay so over a reordering of it. |
 | `eval_monotone`, `definite_decision_is_stable` | Along a settled extension of the environment, a `TRUE` requirement stays `TRUE`, a `FALSE` one stays `FALSE`, and a supported or contradicted decision stays so, aggregates included. |
 | `within_tolerance_and_paid_once`, `overpaid_is_contradicted`, `open_listing_is_undetermined`, `two_other_approvers_suffice`, `creator_approval_not_counted` | The worked examples, decided by the model. |
+| `duplicate_approval_counts_twice`, `duplicate_listing_is_not_distinct` | The model counts listings: one approval listed twice passes four eyes. Such an environment lists a record twice, so it is not `Distinct`: Language 1's step 5 never produces one. |
 
-**The hypothesis to read first.** Stability is proved along `Settled`: Language 1's `Extends`, and in addition that a closed kind is **listed as it was**. Language 1's `Extends` already says a closed kind keeps exactly its records. An aggregate also needs the listing to be the same list. That holds when a kind's records are distinct by key and listed in key order, which the specification will require, but the model assumes it rather than proves it (open question 2).
+**The hypothesis to read first.** Stability is proved along `Settled`: Language 1's `Extends`, between two environments that each list a record once (`Distinct`). Nothing more is assumed: that a closed kind is then listed as a reordering of what it was is proved (`closed_listing_is_reordered`), and that counts and sums do not depend on the order is proved (`value_perm`). `Distinct` is what Language 1's step 5 already produces: one record per key.
 
 **Not covered by any proof:** the typing rules of arithmetic (units, currencies, `time − time`), the numeric range, the wire form, the work bound, and every implementation. The Scala, JavaScript and Rust implementations are tied to this model by the shared vectors, as they are for Language 1.
 
@@ -114,11 +122,18 @@ This RFC changes what a verified result may be relied on for, so it needs securi
 
 ## Open questions
 
-1. **Range.** A result outside (−2⁶³, 2⁶³): a refusal (`ARITHMETIC_RANGE`), or `unknown`? A refusal is honest but lets a large record turn a decision into no decision; `unknown` reads as "the evidence was not enough", which is wrong. The author leans to the refusal.
-2. **Settled listings.** Prove, rather than assume, that a closed kind's listing is unchanged along `Extends`, from records being distinct by key and listed in key order. This needs list permutation lemmas that are not in Lean's core library today.
-3. **Lower-bound counts** over open kinds for `ge` and `gt` (above).
-4. **Durations.** Is `time − time` as an `int` of seconds enough for "within n days", or should `days` be a type?
-5. **The package version** that first carries `work-contract-2`, and whether it waits for RFC 0003.
+Decided in review (Srishti, in this RFC's pull request), and moved into the sections above:
+
+- *Range:* a refusal, `ARITHMETIC_RANGE`, checked on final values only, with exact arithmetic before it, so the order of addition cannot change the outcome.
+- *Settled listings:* proved, not assumed, from one record per key (`Distinct`).
+- *Durations:* `time − time` in seconds is enough; "within 30 days" is `30 × 86 400`.
+- *The package version:* a new one, with RFC 0003 or on its own; not a revision of v0.2.
+- *Counting the same record twice:* excluded by one record per key, which Language 1's step 5 already gives; contracts that count people key the kind by the person.
+
+Still open:
+
+1. **Lower-bound counts** over open kinds (`count ≥ n` is monotone without a completeness statement). Wanted for approvals, but as a separate RFC, so that `count` always means one thing.
+2. **`count distinct`** over a field, for kinds whose key is not the thing to count. One record per key covers the cases in this RFC; whether a distinct count is needed besides is open.
 
 ## Decision
 
