@@ -1,0 +1,247 @@
+{
+  "contract": {
+    "evaluation": {
+      "cutoff": "cutoff",
+      "semantics": "kleene-1"
+    },
+    "evidence": {
+      "conflicts": "unknown",
+      "sources": {
+        "invoice": [
+          "erp"
+        ],
+        "paymentMatch": [
+          "erp"
+        ],
+        "refund": [
+          "erp"
+        ]
+      }
+    },
+    "identity": {
+      "id": "invoice-not-overpaid",
+      "version": "1"
+    },
+    "inputs": {
+      "cutoff": {
+        "type": "time"
+      },
+      "invoice": {
+        "type": "text"
+      }
+    },
+    "kinds": {
+      "invoice": {
+        "fields": {
+          "amount": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          },
+          "id": {
+            "type": "text"
+          }
+        },
+        "key": [
+          "id"
+        ]
+      },
+      "paymentMatch": {
+        "fields": {
+          "amount": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          },
+          "id": {
+            "type": "text"
+          },
+          "invoice": {
+            "type": "text"
+          },
+          "status": {
+            "optional": true,
+            "type": "text"
+          }
+        },
+        "key": [
+          "id"
+        ]
+      },
+      "refund": {
+        "fields": {
+          "amount": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          },
+          "id": {
+            "type": "text"
+          },
+          "invoice": {
+            "type": "text"
+          }
+        },
+        "key": [
+          "id"
+        ]
+      }
+    },
+    "language": "work-contract-2",
+    "policy": {},
+    "requires": [
+      {
+        "id": "AT_MOST_ONE_POSTED_MATCH",
+        "predicate": {
+          "aggregate": "count",
+          "cmp": "le",
+          "in": "paymentMatch",
+          "of": "m",
+          "than": {
+            "lit": "1",
+            "of": {
+              "type": "int"
+            }
+          },
+          "where": {
+            "and": [
+              {
+                "cmp": "eq",
+                "left": {
+                  "field": "invoice",
+                  "var": "m"
+                },
+                "right": {
+                  "input": "invoice"
+                }
+              },
+              {
+                "cmp": "eq",
+                "left": {
+                  "field": "status",
+                  "var": "m"
+                },
+                "right": {
+                  "lit": "posted",
+                  "of": {
+                    "type": "text"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "NOT_OVERPAID",
+        "predicate": {
+          "exists": "i",
+          "in": "invoice",
+          "where": {
+            "and": [
+              {
+                "cmp": "eq",
+                "left": {
+                  "field": "id",
+                  "var": "i"
+                },
+                "right": {
+                  "input": "invoice"
+                }
+              },
+              {
+                "aggregate": "sum",
+                "cmp": "le",
+                "field": "amount",
+                "in": "paymentMatch",
+                "of": "m",
+                "than": {
+                  "field": "amount",
+                  "var": "i"
+                },
+                "where": {
+                  "cmp": "eq",
+                  "left": {
+                    "field": "invoice",
+                    "var": "m"
+                  },
+                  "right": {
+                    "field": "id",
+                    "var": "i"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "description": "Two posted matches for one invoice: the count is 2.",
+  "environment": {
+    "complete": [
+      {
+        "asOf": "1767225600",
+        "kind": "invoice",
+        "source": "erp"
+      },
+      {
+        "asOf": "1767225600",
+        "kind": "paymentMatch",
+        "source": "erp"
+      }
+    ],
+    "facts": [
+      {
+        "fields": {
+          "amount": "10050",
+          "id": "INV-1"
+        },
+        "id": "f01-invoice",
+        "kind": "invoice",
+        "source": "erp"
+      },
+      {
+        "fields": {
+          "amount": "6000",
+          "id": "M-1",
+          "invoice": "INV-1",
+          "status": "posted"
+        },
+        "id": "f02-paymentMatch",
+        "kind": "paymentMatch",
+        "source": "erp"
+      },
+      {
+        "fields": {
+          "amount": "4050",
+          "id": "M-2",
+          "invoice": "INV-1",
+          "status": "posted"
+        },
+        "id": "f03-paymentMatch",
+        "kind": "paymentMatch",
+        "source": "erp"
+      }
+    ],
+    "inputs": {
+      "cutoff": "1767225600",
+      "invoice": "INV-1"
+    }
+  },
+  "expected": {
+    "conflicts": [],
+    "decision": "CONTRADICTED",
+    "ignored": [],
+    "requirements": [
+      {
+        "id": "AT_MOST_ONE_POSTED_MATCH",
+        "value": "FALSE"
+      },
+      {
+        "id": "NOT_OVERPAID",
+        "value": "TRUE"
+      }
+    ]
+  }
+}

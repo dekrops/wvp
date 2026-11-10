@@ -1,0 +1,299 @@
+{
+  "contract": {
+    "evaluation": {
+      "cutoff": "cutoff",
+      "semantics": "kleene-1"
+    },
+    "evidence": {
+      "conflicts": "unknown",
+      "sources": {
+        "invoice": [
+          "erp"
+        ],
+        "purchaseOrder": [
+          "erp"
+        ]
+      }
+    },
+    "identity": {
+      "id": "invoice-arithmetic",
+      "version": "1"
+    },
+    "inputs": {
+      "cutoff": {
+        "type": "time"
+      },
+      "invoice": {
+        "type": "text"
+      }
+    },
+    "kinds": {
+      "invoice": {
+        "fields": {
+          "amount": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          },
+          "dueAt": {
+            "type": "time"
+          },
+          "id": {
+            "type": "text"
+          },
+          "net": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          },
+          "order": {
+            "type": "text"
+          },
+          "paidAt": {
+            "optional": true,
+            "type": "time"
+          },
+          "tax": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          }
+        },
+        "key": [
+          "id"
+        ]
+      },
+      "purchaseOrder": {
+        "fields": {
+          "amount": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          },
+          "id": {
+            "type": "text"
+          }
+        },
+        "key": [
+          "id"
+        ]
+      }
+    },
+    "language": "work-contract-2",
+    "policy": {},
+    "requires": [
+      {
+        "id": "GROSS_IS_NET_PLUS_TAX",
+        "predicate": {
+          "exists": "i",
+          "in": "invoice",
+          "where": {
+            "and": [
+              {
+                "cmp": "eq",
+                "left": {
+                  "field": "id",
+                  "var": "i"
+                },
+                "right": {
+                  "input": "invoice"
+                }
+              },
+              {
+                "cmp": "eq",
+                "left": {
+                  "add": [
+                    {
+                      "field": "net",
+                      "var": "i"
+                    },
+                    {
+                      "field": "tax",
+                      "var": "i"
+                    }
+                  ]
+                },
+                "right": {
+                  "field": "amount",
+                  "var": "i"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "PAID_WITHIN_TERM",
+        "predicate": {
+          "exists": "i",
+          "in": "invoice",
+          "where": {
+            "and": [
+              {
+                "cmp": "eq",
+                "left": {
+                  "field": "id",
+                  "var": "i"
+                },
+                "right": {
+                  "input": "invoice"
+                }
+              },
+              {
+                "cmp": "le",
+                "left": {
+                  "sub": [
+                    {
+                      "field": "paidAt",
+                      "var": "i"
+                    },
+                    {
+                      "field": "dueAt",
+                      "var": "i"
+                    }
+                  ]
+                },
+                "right": {
+                  "of": {
+                    "lit": "86400",
+                    "of": {
+                      "type": "int"
+                    }
+                  },
+                  "scale": "30"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "WITHIN_ONE_PERCENT",
+        "predicate": {
+          "exists": "i",
+          "in": "invoice",
+          "where": {
+            "and": [
+              {
+                "cmp": "eq",
+                "left": {
+                  "field": "id",
+                  "var": "i"
+                },
+                "right": {
+                  "input": "invoice"
+                }
+              },
+              {
+                "exists": "o",
+                "in": "purchaseOrder",
+                "where": {
+                  "and": [
+                    {
+                      "cmp": "eq",
+                      "left": {
+                        "field": "id",
+                        "var": "o"
+                      },
+                      "right": {
+                        "field": "order",
+                        "var": "i"
+                      }
+                    },
+                    {
+                      "cmp": "le",
+                      "left": {
+                        "of": {
+                          "abs": {
+                            "sub": [
+                              {
+                                "field": "amount",
+                                "var": "i"
+                              },
+                              {
+                                "field": "amount",
+                                "var": "o"
+                              }
+                            ]
+                          }
+                        },
+                        "scale": "100"
+                      },
+                      "right": {
+                        "field": "amount",
+                        "var": "o"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "description": "1.5 % above the order: 100 × 150 > 10000.",
+  "environment": {
+    "complete": [
+      {
+        "asOf": "1767225600",
+        "kind": "invoice",
+        "source": "erp"
+      },
+      {
+        "asOf": "1767225600",
+        "kind": "purchaseOrder",
+        "source": "erp"
+      }
+    ],
+    "facts": [
+      {
+        "fields": {
+          "amount": "10150",
+          "dueAt": "1764633600",
+          "id": "INV-1",
+          "net": "8530",
+          "order": "PO-7",
+          "paidAt": "1767139200",
+          "tax": "1620"
+        },
+        "id": "f01-invoice",
+        "kind": "invoice",
+        "source": "erp"
+      },
+      {
+        "fields": {
+          "amount": "10000",
+          "id": "PO-7"
+        },
+        "id": "f02-purchaseOrder",
+        "kind": "purchaseOrder",
+        "source": "erp"
+      }
+    ],
+    "inputs": {
+      "cutoff": "1767225600",
+      "invoice": "INV-1"
+    }
+  },
+  "expected": {
+    "conflicts": [],
+    "decision": "CONTRADICTED",
+    "ignored": [],
+    "requirements": [
+      {
+        "id": "GROSS_IS_NET_PLUS_TAX",
+        "value": "TRUE"
+      },
+      {
+        "id": "PAID_WITHIN_TERM",
+        "value": "TRUE"
+      },
+      {
+        "id": "WITHIN_ONE_PERCENT",
+        "value": "FALSE"
+      }
+    ]
+  }
+}

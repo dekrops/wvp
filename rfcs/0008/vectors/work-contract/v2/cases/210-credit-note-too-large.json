@@ -1,0 +1,166 @@
+{
+  "contract": {
+    "evaluation": {
+      "cutoff": "cutoff",
+      "semantics": "kleene-1"
+    },
+    "evidence": {
+      "conflicts": "unknown",
+      "sources": {
+        "creditNote": [
+          "erp"
+        ]
+      }
+    },
+    "identity": {
+      "id": "credit-note",
+      "version": "1"
+    },
+    "inputs": {
+      "cutoff": {
+        "type": "time"
+      },
+      "note": {
+        "type": "text"
+      }
+    },
+    "kinds": {
+      "creditNote": {
+        "fields": {
+          "amount": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          },
+          "id": {
+            "type": "text"
+          }
+        },
+        "key": [
+          "id"
+        ]
+      }
+    },
+    "language": "work-contract-2",
+    "policy": {},
+    "requires": [
+      {
+        "id": "AT_MOST_TEN_EUROS",
+        "predicate": {
+          "exists": "n",
+          "in": "creditNote",
+          "where": {
+            "and": [
+              {
+                "cmp": "eq",
+                "left": {
+                  "field": "id",
+                  "var": "n"
+                },
+                "right": {
+                  "input": "note"
+                }
+              },
+              {
+                "cmp": "le",
+                "left": {
+                  "abs": {
+                    "field": "amount",
+                    "var": "n"
+                  }
+                },
+                "right": {
+                  "lit": "1000",
+                  "of": {
+                    "currency": "EUR",
+                    "scale": 2,
+                    "type": "money"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "IS_A_CREDIT",
+        "predicate": {
+          "exists": "n",
+          "in": "creditNote",
+          "where": {
+            "and": [
+              {
+                "cmp": "eq",
+                "left": {
+                  "field": "id",
+                  "var": "n"
+                },
+                "right": {
+                  "input": "note"
+                }
+              },
+              {
+                "cmp": "gt",
+                "left": {
+                  "of": {
+                    "field": "amount",
+                    "var": "n"
+                  },
+                  "scale": "-1"
+                },
+                "right": {
+                  "lit": "0",
+                  "of": {
+                    "currency": "EUR",
+                    "scale": 2,
+                    "type": "money"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "description": "|−1500| > 1000.",
+  "environment": {
+    "complete": [
+      {
+        "asOf": "1767225600",
+        "kind": "creditNote",
+        "source": "erp"
+      }
+    ],
+    "facts": [
+      {
+        "fields": {
+          "amount": "-1500",
+          "id": "CN-1"
+        },
+        "id": "f01-creditNote",
+        "kind": "creditNote",
+        "source": "erp"
+      }
+    ],
+    "inputs": {
+      "cutoff": "1767225600",
+      "note": "CN-1"
+    }
+  },
+  "expected": {
+    "conflicts": [],
+    "decision": "CONTRADICTED",
+    "ignored": [],
+    "requirements": [
+      {
+        "id": "AT_MOST_TEN_EUROS",
+        "value": "FALSE"
+      },
+      {
+        "id": "IS_A_CREDIT",
+        "value": "TRUE"
+      }
+    ]
+  }
+}

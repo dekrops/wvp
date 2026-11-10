@@ -1,0 +1,169 @@
+{
+  "contract": {
+    "evaluation": {
+      "cutoff": "cutoff",
+      "semantics": "kleene-1"
+    },
+    "evidence": {
+      "conflicts": "unknown",
+      "sources": {
+        "approval": [
+          "erp"
+        ],
+        "paymentRun": [
+          "erp"
+        ]
+      }
+    },
+    "identity": {
+      "id": "four-eyes",
+      "version": "1"
+    },
+    "inputs": {
+      "cutoff": {
+        "type": "time"
+      },
+      "run": {
+        "type": "text"
+      }
+    },
+    "kinds": {
+      "approval": {
+        "fields": {
+          "approver": {
+            "type": "text"
+          },
+          "at": {
+            "type": "time"
+          },
+          "id": {
+            "type": "text"
+          },
+          "run": {
+            "type": "text"
+          }
+        },
+        "key": [
+          "id"
+        ]
+      },
+      "paymentRun": {
+        "fields": {
+          "createdBy": {
+            "type": "text"
+          },
+          "id": {
+            "type": "text"
+          }
+        },
+        "key": [
+          "id"
+        ]
+      }
+    },
+    "language": "work-contract-2",
+    "policy": {},
+    "requires": [
+      {
+        "id": "FOUR_EYES",
+        "predicate": {
+          "exists": "r",
+          "in": "paymentRun",
+          "where": {
+            "and": [
+              {
+                "cmp": "eq",
+                "left": {
+                  "field": "id",
+                  "var": "r"
+                },
+                "right": {
+                  "input": "run"
+                }
+              },
+              {
+                "aggregate": "count",
+                "cmp": "ge",
+                "in": "approval",
+                "of": "a",
+                "than": {
+                  "lit": "2",
+                  "of": {
+                    "type": "int"
+                  }
+                },
+                "where": {
+                  "and": [
+                    {
+                      "cmp": "eq",
+                      "left": {
+                        "field": "run",
+                        "var": "a"
+                      },
+                      "right": {
+                        "field": "id",
+                        "var": "r"
+                      }
+                    },
+                    {
+                      "cmp": "ne",
+                      "left": {
+                        "field": "approver",
+                        "var": "a"
+                      },
+                      "right": {
+                        "field": "createdBy",
+                        "var": "r"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "description": "No approvals, listing complete: the count is 0.",
+  "environment": {
+    "complete": [
+      {
+        "asOf": "1767225600",
+        "kind": "approval",
+        "source": "erp"
+      },
+      {
+        "asOf": "1767225600",
+        "kind": "paymentRun",
+        "source": "erp"
+      }
+    ],
+    "facts": [
+      {
+        "fields": {
+          "createdBy": "kim",
+          "id": "RUN-3"
+        },
+        "id": "f01-paymentRun",
+        "kind": "paymentRun",
+        "source": "erp"
+      }
+    ],
+    "inputs": {
+      "cutoff": "1767225600",
+      "run": "RUN-3"
+    }
+  },
+  "expected": {
+    "conflicts": [],
+    "decision": "CONTRADICTED",
+    "ignored": [],
+    "requirements": [
+      {
+        "id": "FOUR_EYES",
+        "value": "FALSE"
+      }
+    ]
+  }
+}
