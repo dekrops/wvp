@@ -3,7 +3,7 @@
 |            |                                                                                             |
 | ---------- | ------------------------------------------------------------------------------------------- |
 | RFC        | 0008                                                                                        |
-| Status     | Draft                                                                                       |
+| Status     | Review, from 2026-11-10 (the review period runs at least until 2026-11-24)                  |
 | Author     | Zin Nam                                                                                     |
 | Created    | 2026-10-29                                                                                  |
 | Affects    | New: `work-contract-2`. `work-contract-1` is unchanged. A WVP package version to carry it.  |
