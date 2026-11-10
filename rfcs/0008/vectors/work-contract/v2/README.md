@@ -7,13 +7,13 @@ acceptance they become `test-vectors/work-contract/v2`.
 - `cases/` and `differential/` with the names of Language 1's: every published Language 1 case,
   restated (`language` is `work-contract-2`), with its Language 1 expectation. Case 27 names
   `work-contract-1` instead, the language this one does not define.
-- `cases/2*`: new. Arithmetic (`20x`, `21x`), sums (`22x`, `230`), counts (`24x`, with `distinct` from `247`) and refusals (`26x`, `27x`); `231` is an open sum, not range-checked.
+- `cases/2*`: new. Arithmetic (`20x`, `21x`), sums (`22x`, `230`), counts (`24x`, with `distinct` from `247`) and refusals (`26x`, `27x`, `280`, `281`); `231` is an open sum, not range-checked; `278` and `279` evaluate terms on the records step 5 keeps only.
 
-**Checked against the model.** 603 cases have a result. For each, `formal/WCL2/Vectors.lean`
+**Checked against the model.** 605 cases have a result. For each, `formal/WCL2/Vectors.lean`
 states that the Lean model of RFC 0008 gives exactly its requirement values and decision, proved by
 `decide` and audited by `formal/check.sh`.
 
-**Not checked against the model.** 91 cases are refusals. The model has no static rules,
+**Not checked against the model.** 93 cases are refusals. The model has no static rules,
 conformance, work bound or arithmetic range, so these rest on the specification and, for the new ones,
 on the RFC's text:
 
@@ -107,6 +107,8 @@ on the RFC's text:
 | `cases/275-abs-of-time.json` | `CONTRACT_ILL_FORMED` | abs of a time. |
 | `cases/276-time-minus-int.json` | `CONTRACT_ILL_FORMED` | time − int: a number cannot be subtracted from a time; compare time − time with an int instead. |
 | `cases/277-arithmetic-nodes-count.json` | `CONTRACT_ILL_FORMED` | 511 add nodes, 9 levels deep, under one exists and one comparison: 513 nodes, over the limit of 512 only because arithmetic nodes count toward it. |
+| `cases/280-out-of-range-under-absent-operand.json` | `ARITHMETIC_RANGE` | (9e18 + 9e18) + fee, with fee absent: the outer add has no value, but the inner one has, and is out of range. Each node with a value is checked, whatever its parent. |
+| `cases/281-scale-factor-out-of-range.json` | `CONTRACT_ILL_FORMED` | scale by 2^63: the factor is a value like any other and must lie strictly between -2^63 and 2^63. |
 | `cases/268-distinct-of-optional.json` | `CONTRACT_ILL_FORMED` | count distinct over an optional field. |
 | `cases/269-distinct-undeclared-field.json` | `CONTRACT_ILL_FORMED` | count distinct over a field the kind does not declare. |
 | `cases/270-distinct-on-sum.json` | `CONTRACT_ILL_FORMED` | distinct belongs to count only; a sum of distinct values is not defined. |

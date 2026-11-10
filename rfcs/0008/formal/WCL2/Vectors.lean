@@ -11636,4 +11636,36 @@ theorem v_cases_249_distinct_open_approvals_json :
       WCL2.evaluate v_cases_249_distinct_open_approvals_json.env v_cases_249_distinct_open_approvals_json.requirements = .undetermined := by
   decide
 
+/-- `cases/278-conflict-not-evaluated.json` -/
+def v_cases_278_conflict_not_evaluated_json.env : Env where
+  inputs := fun n => if n = "cutoff" then some (.num (1767225600)) else if n = "invoice" then some (.text "INV-1") else none
+  params := fun _ => none
+  records := fun _ => []
+  closed := fun _ => false
+
+def v_cases_278_conflict_not_evaluated_json.requirements : List WCL2.Pred := [
+  (.ex "i" "invoice" (.and (.cmp .eq (.field "i" "id") (.input "invoice")) (.cmp .le (.field "i" "amount") (.add (.field "i" "amount") (.field "i" "amount")))))
+]
+
+theorem v_cases_278_conflict_not_evaluated_json :
+    v_cases_278_conflict_not_evaluated_json.requirements.map (fun r => r.eval v_cases_278_conflict_not_evaluated_json.env []) = [.unknown] ∧
+      WCL2.evaluate v_cases_278_conflict_not_evaluated_json.env v_cases_278_conflict_not_evaluated_json.requirements = .undetermined := by
+  decide
+
+/-- `cases/279-source-order-loser-not-evaluated.json` -/
+def v_cases_279_source_order_loser_not_evaluated_json.env : Env where
+  inputs := fun n => if n = "cutoff" then some (.num (1767225600)) else if n = "invoice" then some (.text "INV-1") else none
+  params := fun _ => none
+  records := fun k => if k = "invoice" then [⟨[("amount", (.num (10050))), ("id", (.text "INV-1"))]⟩] else []
+  closed := fun k => if k = "invoice" then true else false
+
+def v_cases_279_source_order_loser_not_evaluated_json.requirements : List WCL2.Pred := [
+  (.ex "i" "invoice" (.and (.cmp .eq (.field "i" "id") (.input "invoice")) (.cmp .le (.field "i" "amount") (.add (.field "i" "amount") (.field "i" "amount")))))
+]
+
+theorem v_cases_279_source_order_loser_not_evaluated_json :
+    v_cases_279_source_order_loser_not_evaluated_json.requirements.map (fun r => r.eval v_cases_279_source_order_loser_not_evaluated_json.env []) = [.true] ∧
+      WCL2.evaluate v_cases_279_source_order_loser_not_evaluated_json.env v_cases_279_source_order_loser_not_evaluated_json.requirements = .supported := by
+  decide
+
 end WCL2.Vectors

@@ -613,6 +613,23 @@ def build_counts():
         [approval("AP-1", "lea"), approval("AP-2", "max"), approval("AP-3", "ola")], "UNKNOWN", "UNDETERMINED", complete=("paymentRun",))
 
 
+def build_bindings():
+    """Terms are evaluated on the records step 5 keeps, never on facts it does not use."""
+    big = "9000000000000000000"
+    amount = field("i", "amount")
+    twice = {"add": [amount, amount]}
+    kinds = {"invoice": {"fields": {"amount": eur(), "id": text()}, "key": ["id"]}}
+    pred = {"exists": "i", "in": "invoice", "where": {"and": [cmp("eq", field("i", "id"), {"input": "invoice"}), cmp("le", amount, twice)]}}
+    unknown = contract("bindings", {"invoice": text()}, kinds, [{"id": "R", "predicate": pred}])
+    env = environment({"invoice": "INV-1"}, facts(("invoice", {"amount": "10050", "id": "INV-1"}), ("invoice", {"amount": big, "id": "INV-1"})), {"invoice"})
+    new_case("278-conflict-not-evaluated", "Two facts about INV-1 disagree, under conflicts: unknown. Neither is used (step 5), so the out-of-range term on the second is never evaluated: UNKNOWN, not a refusal.",
+             unknown, env, result(unknown, env, ["UNKNOWN"], "UNDETERMINED", conflicts=[{"facts": ["f01-invoice", "f02-invoice"], "kind": "invoice"}]))
+    preferred = dict(unknown, evidence={"conflicts": "source-order", "sources": {"invoice": ["erp", "legacy"]}})
+    env = environment({"invoice": "INV-1"}, facts(("invoice", {"amount": "10050", "id": "INV-1"}), ("invoice", {"amount": big, "id": "INV-1"}, "legacy")), {"invoice"})
+    new_case("279-source-order-loser-not-evaluated", "The same disagreement under source-order: the erp fact is used, the legacy one is not, so its out-of-range term is never evaluated, and the requirement is decided on the erp fact.",
+             preferred, env, result(preferred, env, ["TRUE"], "SUPPORTED", conflicts=[{"facts": ["f01-invoice", "f02-invoice"], "kind": "invoice", "resolvedTo": "f01-invoice"}]))
+
+
 def refusal(name, description, contract_value, env, code):
     new_case(name, description, contract_value, env, {"refused": code})
 
@@ -673,6 +690,11 @@ def build_refusals():
         tree = {"add": [tree, tree]}
     refusal("277-arithmetic-nodes-count", "511 add nodes, 9 levels deep, under one exists and one comparison: 513 nodes, over the limit of 512 only because arithmetic nodes count toward it.",
             with_requirement(about_invoice(cmp("le", tree, inv_amount))), base_env, "CONTRACT_ILL_FORMED")
+    with_fee = dict(PAYMENT_KINDS, invoice={"fields": {"amount": eur(), "fee": dict(eur(), optional=True), "id": text()}, "key": ["id"]})
+    refusal("280-out-of-range-under-absent-operand", "(9e18 + 9e18) + fee, with fee absent: the outer add has no value, but the inner one has, and is out of range. Each node with a value is checked, whatever its parent.",
+            with_requirement(about_invoice(cmp("le", {"add": [twice, field("i", "fee")]}, inv_amount)), kinds=with_fee), big_env, "ARITHMETIC_RANGE")
+    refusal("281-scale-factor-out-of-range", "scale by 2^63: the factor is a value like any other and must lie strictly between -2^63 and 2^63.",
+            with_requirement(about_invoice(cmp("le", {"scale": "9223372036854775808", "of": inv_amount}, inv_amount))), base_env, "CONTRACT_ILL_FORMED")
     refusal("268-distinct-of-optional", "count distinct over an optional field.",
             with_requirement(dict(count, distinct="fee"), kinds=dict(PAYMENT_KINDS, paymentMatch={"fields": dict(PAYMENT_KINDS["paymentMatch"]["fields"], fee=dict(eur(), optional=True)), "key": ["id"]})),
             base_env, "CONTRACT_ILL_FORMED")
@@ -728,7 +750,7 @@ def readme():
         "- `cases/` and `differential/` with the names of Language 1's: every published Language 1 case,",
         "  restated (`language` is `work-contract-2`), with its Language 1 expectation. Case 27 names",
         "  `work-contract-1` instead, the language this one does not define.",
-        "- `cases/2*`: new. Arithmetic (`20x`, `21x`), sums (`22x`, `230`), counts (`24x`, with `distinct` from `247`) and refusals (`26x`, `27x`); `231` is an open sum, not range-checked.",
+        "- `cases/2*`: new. Arithmetic (`20x`, `21x`), sums (`22x`, `230`), counts (`24x`, with `distinct` from `247`) and refusals (`26x`, `27x`, `280`, `281`); `231` is an open sum, not range-checked; `278` and `279` evaluate terms on the records step 5 keeps only.",
         "",
         f"**Checked against the model.** {len(CHECKED)} cases have a result. For each, `formal/WCL2/Vectors.lean`",
         "states that the Lean model of RFC 0008 gives exactly its requirement values and decision, proved by",
@@ -752,6 +774,7 @@ def main():
     build_arithmetic()
     build_sums()
     build_counts()
+    build_bindings()
     build_refusals()
     outputs = [(OUT / path, json.dumps(value, indent=2, sort_keys=True, ensure_ascii=False) + "\n") for path, value in FILES]
     outputs.append((OUT / "README.md", readme()))

@@ -638,4 +638,6 @@ import WCL2
 #print axioms WCL2.Vectors.v_cases_247_distinct_same_approver_two_identifiers_json
 #print axioms WCL2.Vectors.v_cases_248_distinct_reapproval_json
 #print axioms WCL2.Vectors.v_cases_249_distinct_open_approvals_json
+#print axioms WCL2.Vectors.v_cases_278_conflict_not_evaluated_json
+#print axioms WCL2.Vectors.v_cases_279_source_order_loser_not_evaluated_json
 -- End of generated vector theorems.
