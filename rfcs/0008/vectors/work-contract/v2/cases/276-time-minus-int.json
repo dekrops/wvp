@@ -1,0 +1,161 @@
+{
+  "contract": {
+    "evaluation": {
+      "cutoff": "cutoff",
+      "semantics": "kleene-1"
+    },
+    "evidence": {
+      "conflicts": "unknown",
+      "sources": {
+        "invoice": [
+          "erp"
+        ],
+        "purchaseOrder": [
+          "erp"
+        ]
+      }
+    },
+    "identity": {
+      "id": "refusals",
+      "version": "1"
+    },
+    "inputs": {
+      "cutoff": {
+        "type": "time"
+      },
+      "invoice": {
+        "type": "text"
+      }
+    },
+    "kinds": {
+      "invoice": {
+        "fields": {
+          "amount": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          },
+          "dueAt": {
+            "type": "time"
+          },
+          "id": {
+            "type": "text"
+          },
+          "net": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          },
+          "order": {
+            "type": "text"
+          },
+          "paidAt": {
+            "optional": true,
+            "type": "time"
+          },
+          "tax": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          }
+        },
+        "key": [
+          "id"
+        ]
+      },
+      "purchaseOrder": {
+        "fields": {
+          "amount": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          },
+          "id": {
+            "type": "text"
+          }
+        },
+        "key": [
+          "id"
+        ]
+      }
+    },
+    "language": "work-contract-2",
+    "policy": {},
+    "requires": [
+      {
+        "id": "R",
+        "predicate": {
+          "exists": "i",
+          "in": "invoice",
+          "where": {
+            "cmp": "le",
+            "left": {
+              "sub": [
+                {
+                  "field": "dueAt",
+                  "var": "i"
+                },
+                {
+                  "lit": "86400",
+                  "of": {
+                    "type": "int"
+                  }
+                }
+              ]
+            },
+            "right": {
+              "field": "dueAt",
+              "var": "i"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "description": "time − int: a number cannot be subtracted from a time; compare time − time with an int instead.",
+  "environment": {
+    "complete": [
+      {
+        "asOf": "1767225600",
+        "kind": "invoice",
+        "source": "erp"
+      },
+      {
+        "asOf": "1767225600",
+        "kind": "purchaseOrder",
+        "source": "erp"
+      }
+    ],
+    "facts": [
+      {
+        "fields": {
+          "amount": "10050",
+          "dueAt": "1764633600",
+          "id": "INV-1",
+          "net": "8445",
+          "order": "PO-7",
+          "tax": "1605"
+        },
+        "id": "f01-invoice",
+        "kind": "invoice",
+        "source": "erp"
+      },
+      {
+        "fields": {
+          "amount": "10000",
+          "id": "PO-7"
+        },
+        "id": "f02-purchaseOrder",
+        "kind": "purchaseOrder",
+        "source": "erp"
+      }
+    ],
+    "inputs": {
+      "cutoff": "1767225600",
+      "invoice": "INV-1"
+    }
+  },
+  "expected": {
+    "refused": "CONTRACT_ILL_FORMED"
+  }
+}

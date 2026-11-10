@@ -177,7 +177,7 @@
       }
     ]
   },
-  "description": "Intermediate sums leave the range (9e18 + 9e18), the final one does not (9e18 + 9e18 − 9e18 = 9e18): arithmetic is exact and only the result is checked, so every order of addition gives this decision.",
+  "description": "Intermediate sums leave the range (9e18 + 9e18), the final one does not (9e18 + 9e18 − 9e18 = 9e18): inside a sum the total is exact and only the sum is checked, so every order of the listing gives this decision.",
   "environment": {
     "complete": [
       {

@@ -11459,6 +11459,23 @@ theorem v_cases_230_exact_before_the_range_json :
       WCL2.evaluate v_cases_230_exact_before_the_range_json.env v_cases_230_exact_before_the_range_json.requirements = .supported := by
   decide
 
+/-- `cases/231-open-sum-not-range-checked.json` -/
+def v_cases_231_open_sum_not_range_checked_json.env : Env where
+  inputs := fun n => if n = "cutoff" then some (.num (1767225600)) else if n = "invoice" then some (.text "INV-1") else none
+  params := fun _ => none
+  records := fun k => if k = "invoice" then [⟨[("amount", (.num (10050))), ("id", (.text "INV-1"))]⟩] else if k = "paymentMatch" then [⟨[("amount", (.num (9000000000000000000))), ("id", (.text "M-1")), ("invoice", (.text "INV-1")), ("status", (.text "cleared"))]⟩, ⟨[("amount", (.num (9000000000000000000))), ("id", (.text "M-2")), ("invoice", (.text "INV-1")), ("status", (.text "cleared"))]⟩] else []
+  closed := fun k => if k = "invoice" then true else false
+
+def v_cases_231_open_sum_not_range_checked_json.requirements : List WCL2.Pred := [
+  (.agg .count "m" "paymentMatch" (.and (.cmp .eq (.field "m" "invoice") (.input "invoice")) (.cmp .eq (.field "m" "status") (.lit .text (.text "posted")))) .le (.lit .int (.num (1)))),
+  (.ex "i" "invoice" (.and (.cmp .eq (.field "i" "id") (.input "invoice")) (.agg (.sum "amount") "m" "paymentMatch" (.cmp .eq (.field "m" "invoice") (.field "i" "id")) .le (.field "i" "amount"))))
+]
+
+theorem v_cases_231_open_sum_not_range_checked_json :
+    v_cases_231_open_sum_not_range_checked_json.requirements.map (fun r => r.eval v_cases_231_open_sum_not_range_checked_json.env []) = [.unknown, .unknown] ∧
+      WCL2.evaluate v_cases_231_open_sum_not_range_checked_json.env v_cases_231_open_sum_not_range_checked_json.requirements = .undetermined := by
+  decide
+
 /-- `cases/240-two-other-approvers.json` -/
 def v_cases_240_two_other_approvers_json.env : Env where
   inputs := fun n => if n = "cutoff" then some (.num (1767225600)) else if n = "run" then some (.text "RUN-3") else none

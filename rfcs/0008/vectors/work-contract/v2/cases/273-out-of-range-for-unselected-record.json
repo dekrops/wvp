@@ -1,0 +1,181 @@
+{
+  "contract": {
+    "evaluation": {
+      "cutoff": "cutoff",
+      "semantics": "kleene-1"
+    },
+    "evidence": {
+      "conflicts": "unknown",
+      "sources": {
+        "invoice": [
+          "erp"
+        ],
+        "paymentMatch": [
+          "erp"
+        ],
+        "refund": [
+          "erp"
+        ]
+      }
+    },
+    "identity": {
+      "id": "refusals",
+      "version": "1"
+    },
+    "inputs": {
+      "cutoff": {
+        "type": "time"
+      },
+      "invoice": {
+        "type": "text"
+      }
+    },
+    "kinds": {
+      "invoice": {
+        "fields": {
+          "amount": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          },
+          "id": {
+            "type": "text"
+          }
+        },
+        "key": [
+          "id"
+        ]
+      },
+      "paymentMatch": {
+        "fields": {
+          "amount": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          },
+          "id": {
+            "type": "text"
+          },
+          "invoice": {
+            "type": "text"
+          },
+          "status": {
+            "optional": true,
+            "type": "text"
+          }
+        },
+        "key": [
+          "id"
+        ]
+      },
+      "refund": {
+        "fields": {
+          "amount": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          },
+          "id": {
+            "type": "text"
+          },
+          "invoice": {
+            "type": "text"
+          }
+        },
+        "key": [
+          "id"
+        ]
+      }
+    },
+    "language": "work-contract-2",
+    "policy": {},
+    "requires": [
+      {
+        "id": "R",
+        "predicate": {
+          "exists": "i",
+          "in": "invoice",
+          "where": {
+            "and": [
+              {
+                "cmp": "eq",
+                "left": {
+                  "field": "id",
+                  "var": "i"
+                },
+                "right": {
+                  "input": "invoice"
+                }
+              },
+              {
+                "cmp": "le",
+                "left": {
+                  "add": [
+                    {
+                      "field": "amount",
+                      "var": "i"
+                    },
+                    {
+                      "field": "amount",
+                      "var": "i"
+                    }
+                  ]
+                },
+                "right": {
+                  "lit": "9000000000000000000",
+                  "of": {
+                    "currency": "EUR",
+                    "scale": 2,
+                    "type": "money"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "description": "INV-2's body is FALSE at its first conjunct, but its second term is out of range: every binding is evaluated, so the evaluation refuses.",
+  "environment": {
+    "complete": [
+      {
+        "asOf": "1767225600",
+        "kind": "invoice",
+        "source": "erp"
+      },
+      {
+        "asOf": "1767225600",
+        "kind": "paymentMatch",
+        "source": "erp"
+      }
+    ],
+    "facts": [
+      {
+        "fields": {
+          "amount": "10050",
+          "id": "INV-1"
+        },
+        "id": "f01-invoice",
+        "kind": "invoice",
+        "source": "erp"
+      },
+      {
+        "fields": {
+          "amount": "9000000000000000000",
+          "id": "INV-2"
+        },
+        "id": "f02-invoice",
+        "kind": "invoice",
+        "source": "erp"
+      }
+    ],
+    "inputs": {
+      "cutoff": "1767225600",
+      "invoice": "INV-1"
+    }
+  },
+  "expected": {
+    "refused": "ARITHMETIC_RANGE"
+  }
+}

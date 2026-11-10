@@ -23,7 +23,7 @@ Work Contract Language 1 can say who approved what, and when. It cannot compute 
 | The order confirmation's quantity is within 10 %       | arithmetic                     |
 | Paid within the payment term (n days of the due date)  | arithmetic on times            |
 
-The workaround in Language 1 is to have the source compute the value (a recorded `variance` field). That moves the judgement into the system being checked: the contract then verifies that the source said the variance was small, not that it was. Two of the three controls cannot be expressed even that way, because a count or a sum is a statement about a set of records, not about one.
+The workaround in Language 1 is to have the source compute the value (a recorded `variance` field). That moves the judgement into the system being checked: the contract then verifies that the source said the variance was small, not that it was. The sum and the count cannot be expressed even that way, because a count or a sum is a statement about a set of records, not about one.
 
 N-of-M approval can be written in Language 1 for a fixed N by nesting N quantifiers with pairwise inequalities. That works for N = 2 and stops scaling at the nesting limit of 3.
 
@@ -36,9 +36,11 @@ A new language, identifier `work-contract-2`, evaluation semantics `kleene-1` un
 | Form (proposed wire form)            | Value                                 | Static rule                                                             |
 | ------------------------------------ | ------------------------------------- | ----------------------------------------------------------------------- |
 | `{"add": [term, term]}`              | the sum                               | both operands of one numeric type; the result has that type             |
-| `{"sub": [term, term]}`              | the difference                        | one numeric type, except `time − time`, which is an `int` of seconds    |
-| `{"scale": "<number>", "of": term}`  | the term times a whole number (a number string, as every value) | the result has the term's type                                          |
-| `{"abs": term}`                      | the absolute value                    | a numeric type                                                          |
+| `{"sub": [term, term]}`              | the difference                        | both operands of one numeric type, with that type; or both `time`, giving an `int` of seconds |
+| `{"scale": "<number>", "of": term}`  | the term times a whole number (a number string, as every value) | the term has a numeric type; the result has that type                   |
+| `{"abs": term}`                      | the absolute value                    | the term has a numeric type; the result has that type                   |
+
+The **numeric types** are `int`, `decimal` (of one scale) and `money` (of one currency and scale). `time` is not one: it takes part in arithmetic only as `time − time`. A time cannot be added, scaled, given an absolute value, or have a number subtracted from it; "paid within 30 days of the due date" is `paidAt − dueAt ≤ 30 × 86 400`.
 
 A term whose operand has no value (an absent optional field, an input not supplied) has no value, as in Language 1, and a comparison with it is `unknown`. "Within 1 %" is `100 × |a − b| ≤ b`, with no fraction anywhere.
 
@@ -50,15 +52,17 @@ A term whose operand has no value (an absent optional field, an input not suppli
 { "aggregate": "sum", "field": "amount", "of": "m", "in": "paymentMatch", "where": <predicate>, "cmp": "le", "than": <term> }
 ```
 
-`count` is the number of records of the kind for which the body is `TRUE`; with `distinct`, it is the number of distinct values the named field takes over those records (how many approvers, not how many approvals); `sum` is the sum of a numeric field over those records, with the field's type. The comparison is with `than`, under Language 1's comparison rules.
+`count` is the number of records of the kind for which the body is `TRUE`; with `distinct`, it is the number of distinct values the named field takes over those records (how many approvers, not how many approvals), two values being the same when Language 1's `eq` holds between them; `sum` is the sum of a numeric field over those records, with the field's type. The comparison is with `than`, under Language 1's comparison rules.
 
 An aggregate **has a value only when the kind is closed** (a completeness statement, as Language 1 section 6 defines it) **and the body is `TRUE` or `FALSE` for every record of it**. Otherwise the predicate is `unknown`. Over a listing nobody declared complete, a count is a lower bound and a sum is not a sum; this version uses neither (see the open questions).
 
-**Static rules**, in addition to Language 1 section 5: an aggregate's variable is bound in its body only, as a quantifier's is; its nesting counts toward the quantifier depth limit of 3; `sum` names a non-optional field of a numeric type of the kind; `distinct` appears on `count` only, and names a non-optional field of the kind, of any type; the operand types of arithmetic and of `than` follow the table above. Every node counts toward the 512-node limit.
+**Static rules**, in addition to Language 1 section 5: an aggregate's variable is bound in its body only, as a quantifier's is; its nesting counts toward the quantifier depth limit of 3; `sum` names a non-optional field of a numeric type of the kind; `distinct` appears on `count` only, and names a non-optional field of the kind, of any type; the operand types of arithmetic and of `than` follow the table above. Each `add`, `sub`, `scale` and `abs` counts as a node, with the predicates, toward the limit of 512 nodes (static rule 9) and toward _s_ in the work bound (section 7, step 4), and Language 1's read depth of 64 levels counts them too. A Language 1 contract has none, so its count is unchanged.
 
 **One record per key.** Language 1 already settles it ([section 7, step 5](../protocols/work-contract/v1/SPEC.md#7-evaluation)): accepted facts of one kind with equal key fields describe one object, are one record if their fields are identical, and are a conflict if they differ. So the environment evaluation sees lists each record of a kind once, and an aggregate counts records, not listings. Language 2 keeps that step unchanged and states it as what aggregates rely on. A plain `count` therefore counts what the kind's key identifies: approvals, for an `approval` keyed by its own identifier. A contract that counts people uses `distinct` over the field that names them (`"distinct": "approver"`), and the kind keeps the key its source gives it. Keying the kind by the person instead (by run and approver) also counts each person once, but a person who approves again at another time then reports two different facts with one key: a conflict, which leaves the count `unknown` under `conflicts: unknown`.
 
-**Exact arithmetic, range on the result.** Terms and aggregates are evaluated exactly, without intermediate limits, so the order of addition never changes a result. Only the final value of a term or an aggregate must lie strictly between −2⁶³ and 2⁶³; one that does not makes the evaluation refuse with `ARITHMETIC_RANGE`. (Exact here is cheap: the at most 10 000 facts of an environment, each below 2⁶³ in magnitude, sum to well within 128 bits.) A refusal, not `unknown`: `unknown` says the evidence was not enough, which would be false.
+**Range.** Every value arithmetic computes must lie strictly between −2⁶³ and 2⁶³, as every value on the wire does: the value of each `add`, `sub`, `scale` and `abs` node, and the value of each aggregate. One that does not makes the evaluation refuse with `ARITHMETIC_RANGE`. Inside a `sum` the running total is exact and only the sum is checked, because the order of a kind's records is the listing's, not the contract's, and a check on partial totals could depend on it. A term's order is written in the contract, so each of its nodes is checked. With every operand in range, nothing an implementation computes needs more than 128 bits: a product of two values below 2⁶³ is below 2¹²⁶, and a sum of at most 10 000 of them is below 2⁷⁷. A refusal, not `unknown`: `unknown` says the evidence was not enough, which would be false.
+
+**What is evaluated.** Language 1 has no refusal during evaluation, so an implementation may skip what cannot change a value. `ARITHMETIC_RANGE` is found during evaluation, so whether a term is evaluated changes the outcome. Language 2 fixes it: every term of every requirement is evaluated, under every binding of every quantifier and aggregate, whatever the value of the predicates around it. That includes the second disjunct of `or(TRUE, …)`, and a record whose body is already `FALSE` at its first conjunct. A term without a value (an absent operand) computes nothing and is not checked. An aggregate without a value (an open kind, or a body `unknown` for some record) computes no count or sum, so nothing of it is checked; its body's terms are still evaluated for every record. An implementation may evaluate lazily if it refuses exactly when this full evaluation would.
 
 ## Outcomes that change
 
@@ -81,16 +85,18 @@ The proposed vectors are in [`0008/vectors`](0008/vectors/work-contract/v2/READM
 - arithmetic: within and outside a tolerance, `time − time`, an absent operand (`unknown`), `scale` by a negative factor, `abs` of a negative amount;
 - aggregates: `count` and `sum` over a closed kind with zero, one and several matching records; over an open kind (`unknown`); with one body `unknown` (`unknown`); a record of another kind or not matching the body (not counted);
 - the worked examples of the Lean model (tolerance, overpayment by one cent, open listing, four eyes), and the same approver under two approval identifiers, counted twice by `count` and once by `count` with `distinct`, with a re-approval counted once without a conflict;
-- refusals: operands of two currencies or scales, `time + time`, `sum` of a text or optional field, an aggregate variable used outside its body, depth over 3 with aggregates, the arithmetic range, `distinct` over an optional or undeclared field, and `distinct` on `sum`.
+- refusals: operands of two currencies or scales, `time + time`, `sum` of a text or optional field, an aggregate variable used outside its body, depth over 3 with aggregates, the arithmetic range on a sum and on an intermediate term, a term out of range under `or(TRUE, …)` and for a record the body does not select, `scale`, `abs` and subtraction of a number on a time, arithmetic nodes over the node limit, `distinct` over an optional or undeclared field, and `distinct` on `sum`;
+- a `sum` over an open kind whose values would leave the range: `unknown`, not a refusal, because it computes nothing.
 
 ## Security considerations
 
-This RFC changes what a verified result may be relied on for, so it needs security review ([RFC 0001](0001-standards-process.md), section 9.1).
+This RFC changes what a verified result may be relied on for, so it needs security review ([RFC 0001](0001-standards-process.md), section 9.1). Reviewer other than the author: Srishti (GitHub `SrishtiCode`), in this RFC's pull request.
 
 - **Completeness carries more weight.** An aggregate's value rests on a completeness statement, as a false `exists` or a true `forall` does in Language 1. A source that declares a listing complete when it is not can make a sum too small or a count too low. This is the same trust Language 1 already places in completeness statements, now used by more requirements. Who may make one for which kind remains the relying party's registry, never the package (invariant 7).
 - **No new source of truth.** Arithmetic computes from accepted values only. It removes a reason to trust a source's own computed fields.
 - **Work.** An aggregate visits the records of one kind once per binding of the enclosing variables, as a quantifier does; the work bound (Language 1 section 7, step 4) covers it unchanged. Arithmetic is bounded by the term's size.
-- **Range.** Values on the wire lie strictly between −2⁶³ and 2⁶³. A sum of many large amounts can leave that range; the evaluation then refuses (`ARITHMETIC_RANGE`) rather than wrap or saturate, and since only final values are checked, every implementation refuses the same inputs. `ARITHMETIC_RANGE` is found during evaluation, so it comes after every refusal of Language 1's table (section 8), whose order is unchanged. The model uses unbounded integers, so it says nothing about the refusal itself.
+- **Range.** Values on the wire lie strictly between −2⁶³ and 2⁶³. A sum of many large amounts, or a term over large values, can leave that range; the evaluation then refuses (`ARITHMETIC_RANGE`) rather than wrap or saturate. Every term node and every aggregate value is checked, partial totals inside a `sum` are not, and every term is evaluated (section "What changes"), so every implementation refuses the same inputs. `ARITHMETIC_RANGE` is found during evaluation, so it comes after every refusal of Language 1's table (section 8), whose order is unchanged. The model uses unbounded integers, so it says nothing about the refusal itself.
+- **A refusal from more evidence.** `definite_decision_is_stable` is about evaluation. `ARITHMETIC_RANGE` is outside it, as `WORK_LIMIT` is in Language 1 (its section 13): a source accepted for a kind can admit a fact whose amount puts some term out of range, and the evaluation then refuses where it decided before. Such a source can force a refusal, never a different decision.
 - **Counting listings instead of records.** If a source could list the same approval twice, it could pass a count with one person. Language 1's step 5 makes equal-key facts one record (or a conflict), so that cannot reach evaluation. The model shows both the danger and why it is excluded (`duplicate_approval_counts_twice`, `duplicate_listing_is_not_distinct`).
 - **Counting records instead of people.** A plain `count` over a kind keyed by something other than what the contract means to count still counts records: one person approving under two identifiers passes a four-eyes `count` (vector 244). Language 2 has no warnings, and the typing cannot tell which field a contract means to count, so this is not a refusal. A contract that counts people uses `distinct` (vector 247), and reviewers of a contract check that its counts do.
 - **One person under two identifiers.** `distinct` compares values. If a source names one person by two values (`lea` and `l.mueller`), they are two approvers. Mapping identities is the source's or the relying party's registry's concern, outside the language.
@@ -116,7 +122,7 @@ This RFC changes what a verified result may be relied on for, so it needs securi
 
 **The hypothesis to read first.** Stability is proved along `Settled`: Language 1's `Extends`, between two environments that each list a record once (`Distinct`). Nothing more is assumed: that a closed kind is then listed as a reordering of what it was is proved (`closed_listing_is_reordered`), and that counts, distinct counts and sums do not depend on the order is proved (`value_perm`). `Distinct` is what Language 1's step 5 already produces: one record per key.
 
-**Not covered by any proof:** the typing rules of arithmetic (units, currencies, `time − time`), the numeric range, the wire form, the work bound, and every implementation. The Scala, JavaScript and Rust implementations are tied to this model by the shared vectors, as they are for Language 1.
+**Not covered by any proof:** the typing rules of arithmetic (units, currencies, `time − time`), the numeric range and which terms are evaluated for it, the node count, the wire form, the work bound, and every implementation. The Scala, JavaScript and Rust implementations are tied to this model by the shared vectors, as they are for Language 1.
 
 ## Alternatives
 
@@ -129,7 +135,7 @@ This RFC changes what a verified result may be relied on for, so it needs securi
 
 Decided in review (Srishti, in this RFC's pull request), and moved into the sections above:
 
-- *Range:* a refusal, `ARITHMETIC_RANGE`, checked on final values only, with exact arithmetic before it, so the order of addition cannot change the outcome.
+- *Range:* a refusal, `ARITHMETIC_RANGE`, not `unknown`. Inside a `sum` the total is exact and only the sum is checked, so the listing's order cannot change the outcome. Each term node is checked, since the contract fixes a term's order, and 128 bits then suffice. Every term is evaluated, so a short-circuit cannot change whether an evaluation refuses.
 - *Settled listings:* proved, not assumed, from one record per key (`Distinct`).
 - *Durations:* `time − time` in seconds is enough; "within 30 days" is `30 × 86 400`.
 - *The package version:* a new one, with RFC 0003 or on its own; not a revision of v0.2.
@@ -142,7 +148,7 @@ Still open:
 
 ## Decision
 
-Not yet decided.
+Not yet decided. There is one maintainer ([`governance/MAINTAINERS.md`](../governance/MAINTAINERS.md)), so the decision will rest on the review period alone and say so ([RFC 0001](0001-standards-process.md), section 12.3), and it will say whether there was review from outside the steward (section 7, rule 4).
 
 ## Implementation
 

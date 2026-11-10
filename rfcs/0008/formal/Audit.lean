@@ -627,6 +627,7 @@ import WCL2
 #print axioms WCL2.Vectors.v_cases_228_only_other_invoices_json
 #print axioms WCL2.Vectors.v_cases_229_untrusted_match_ignored_json
 #print axioms WCL2.Vectors.v_cases_230_exact_before_the_range_json
+#print axioms WCL2.Vectors.v_cases_231_open_sum_not_range_checked_json
 #print axioms WCL2.Vectors.v_cases_240_two_other_approvers_json
 #print axioms WCL2.Vectors.v_cases_241_creator_not_counted_json
 #print axioms WCL2.Vectors.v_cases_242_no_approvals_json

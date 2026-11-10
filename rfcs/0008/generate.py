@@ -542,9 +542,11 @@ def build_sums():
         [match("M-1", 10050, status="posted")], ["TRUE", "TRUE"], "SUPPORTED",
         extra=[("paymentMatch", {"amount": "99999", "id": "M-9", "invoice": "INV-1", "status": "posted"}, "spreadsheet")], ignored=["f03-paymentMatch"])
     big = 9000000000000000000
-    run("230-exact-before-the-range", "Intermediate sums leave the range (9e18 + 9e18), the final one does not (9e18 + 9e18 − 9e18 = 9e18): arithmetic is exact and only the result is checked, so every order of addition gives this decision.",
+    run("230-exact-before-the-range", "Intermediate sums leave the range (9e18 + 9e18), the final one does not (9e18 + 9e18 − 9e18 = 9e18): inside a sum the total is exact and only the sum is checked, so every order of the listing gives this decision.",
         [match("M-1", big, status="cleared"), match("M-2", big, status="cleared"), match("M-3", -big, status="cleared")], ["TRUE", "TRUE"], "SUPPORTED",
         invoice_record=("invoice", {"amount": str(big), "id": "INV-1"}))
+    run("231-open-sum-not-range-checked", "The matches would sum out of range (9e18 + 9e18), but no source declared them complete: the sum has no value, so nothing is summed or checked, and the requirement is UNKNOWN, not a refusal.",
+        [match("M-1", big, status="cleared"), match("M-2", big, status="cleared")], ["UNKNOWN", "UNKNOWN"], "UNDETERMINED", complete={"invoice"})
 
 
 APPROVAL_FIELDS = {"approver": text(), "id": text(), "run": text()}
@@ -646,6 +648,31 @@ def build_refusals():
     refusal("267-sum-out-of-range", "9e18 + 9e18 is not below 2^63: the evaluation refuses rather than wrap, saturate or call it UNKNOWN.",
             with_requirement(dict(agg, field="amount")), overflow_env, "ARITHMETIC_RANGE")
     count = {"aggregate": "count", "cmp": "ge", "in": "paymentMatch", "of": "m", "than": lit_int(1), "where": cmp("eq", field("m", "invoice"), {"input": "invoice"})}
+    # The range is checked on every term node, and every term is evaluated (no short-circuit).
+    big = "9000000000000000000"
+    big_env = environment({"invoice": "INV-1"}, facts(("invoice", {"amount": big, "id": "INV-1"})), {"invoice", "paymentMatch"})
+    twice = {"add": [inv_amount, inv_amount]}
+    refusal("271-intermediate-term-out-of-range", "(9e18 + 9e18) − 9e18: the inner add is out of range. A term's order is fixed by the contract, so every node is checked, not only the outermost.",
+            with_requirement(about_invoice(cmp("le", {"sub": [twice, inv_amount]}, inv_amount))), big_env, "ARITHMETIC_RANGE")
+    refusal("272-out-of-range-under-or-true", "The first disjunct is TRUE, the second's term is out of range: every term is evaluated, so the evaluation refuses whatever the connective's value.",
+            with_requirement(about_invoice({"or": [cmp("eq", field("i", "id"), {"input": "invoice"}), cmp("le", twice, inv_amount)]})), big_env, "ARITHMETIC_RANGE")
+    unselected_env = environment({"invoice": "INV-1"}, facts(("invoice", {"amount": "10050", "id": "INV-1"}), ("invoice", {"amount": big, "id": "INV-2"})), {"invoice", "paymentMatch"})
+    refusal("273-out-of-range-for-unselected-record", "INV-2's body is FALSE at its first conjunct, but its second term is out of range: every binding is evaluated, so the evaluation refuses.",
+            with_requirement(about_invoice({"and": [cmp("eq", field("i", "id"), {"input": "invoice"}), cmp("le", twice, {"lit": big, "of": eur()})]})), unselected_env, "ARITHMETIC_RANGE")
+    time_env = environment({"invoice": "INV-1"}, facts(invoice(10050, 8445, 1605), order(10000)), {"invoice", "purchaseOrder"})
+    due = field("i", "dueAt")
+
+    def with_time(pred):
+        return contract("refusals", {"invoice": text()}, INVOICE_KINDS, [{"id": "R", "predicate": about_invoice(pred)}])
+
+    refusal("274-scale-of-time", "scale of a time: time is not a numeric type, only time − time is arithmetic on times.", with_time(cmp("le", {"scale": "2", "of": due}, due)), time_env, "CONTRACT_ILL_FORMED")
+    refusal("275-abs-of-time", "abs of a time.", with_time(cmp("le", {"abs": due}, due)), time_env, "CONTRACT_ILL_FORMED")
+    refusal("276-time-minus-int", "time − int: a number cannot be subtracted from a time; compare time − time with an int instead.", with_time(cmp("le", {"sub": [due, lit_int(86400)]}, due)), time_env, "CONTRACT_ILL_FORMED")
+    tree = inv_amount
+    for _ in range(9):
+        tree = {"add": [tree, tree]}
+    refusal("277-arithmetic-nodes-count", "511 add nodes, 9 levels deep, under one exists and one comparison: 513 nodes, over the limit of 512 only because arithmetic nodes count toward it.",
+            with_requirement(about_invoice(cmp("le", tree, inv_amount))), base_env, "CONTRACT_ILL_FORMED")
     refusal("268-distinct-of-optional", "count distinct over an optional field.",
             with_requirement(dict(count, distinct="fee"), kinds=dict(PAYMENT_KINDS, paymentMatch={"fields": dict(PAYMENT_KINDS["paymentMatch"]["fields"], fee=dict(eur(), optional=True)), "key": ["id"]})),
             base_env, "CONTRACT_ILL_FORMED")
@@ -701,7 +728,7 @@ def readme():
         "- `cases/` and `differential/` with the names of Language 1's: every published Language 1 case,",
         "  restated (`language` is `work-contract-2`), with its Language 1 expectation. Case 27 names",
         "  `work-contract-1` instead, the language this one does not define.",
-        "- `cases/2*`: new. Arithmetic (`20x`, `21x`), sums (`22x`, `230`), counts (`24x`, with `distinct` from `247`) and refusals (`26x`, `27x`).",
+        "- `cases/2*`: new. Arithmetic (`20x`, `21x`), sums (`22x`, `230`), counts (`24x`, with `distinct` from `247`) and refusals (`26x`, `27x`); `231` is an open sum, not range-checked.",
         "",
         f"**Checked against the model.** {len(CHECKED)} cases have a result. For each, `formal/WCL2/Vectors.lean`",
         "states that the Lean model of RFC 0008 gives exactly its requirement values and decision, proved by",

@@ -7,13 +7,13 @@ acceptance they become `test-vectors/work-contract/v2`.
 - `cases/` and `differential/` with the names of Language 1's: every published Language 1 case,
   restated (`language` is `work-contract-2`), with its Language 1 expectation. Case 27 names
   `work-contract-1` instead, the language this one does not define.
-- `cases/2*`: new. Arithmetic (`20x`, `21x`), sums (`22x`, `230`), counts (`24x`, with `distinct` from `247`) and refusals (`26x`, `27x`).
+- `cases/2*`: new. Arithmetic (`20x`, `21x`), sums (`22x`, `230`), counts (`24x`, with `distinct` from `247`) and refusals (`26x`, `27x`); `231` is an open sum, not range-checked.
 
-**Checked against the model.** 602 cases have a result. For each, `formal/WCL2/Vectors.lean`
+**Checked against the model.** 603 cases have a result. For each, `formal/WCL2/Vectors.lean`
 states that the Lean model of RFC 0008 gives exactly its requirement values and decision, proved by
 `decide` and audited by `formal/check.sh`.
 
-**Not checked against the model.** 84 cases are refusals. The model has no static rules,
+**Not checked against the model.** 91 cases are refusals. The model has no static rules,
 conformance, work bound or arithmetic range, so these rest on the specification and, for the new ones,
 on the RFC's text:
 
@@ -100,6 +100,13 @@ on the RFC's text:
 | `cases/265-aggregate-variable-outside.json` | `CONTRACT_ILL_FORMED` | The aggregate's variable is bound in its body only; its bound cannot read it. |
 | `cases/266-aggregate-too-deep.json` | `CONTRACT_ILL_FORMED` | An aggregate under three quantifiers: its nesting counts toward the depth limit of 3. |
 | `cases/267-sum-out-of-range.json` | `ARITHMETIC_RANGE` | 9e18 + 9e18 is not below 2^63: the evaluation refuses rather than wrap, saturate or call it UNKNOWN. |
+| `cases/271-intermediate-term-out-of-range.json` | `ARITHMETIC_RANGE` | (9e18 + 9e18) − 9e18: the inner add is out of range. A term's order is fixed by the contract, so every node is checked, not only the outermost. |
+| `cases/272-out-of-range-under-or-true.json` | `ARITHMETIC_RANGE` | The first disjunct is TRUE, the second's term is out of range: every term is evaluated, so the evaluation refuses whatever the connective's value. |
+| `cases/273-out-of-range-for-unselected-record.json` | `ARITHMETIC_RANGE` | INV-2's body is FALSE at its first conjunct, but its second term is out of range: every binding is evaluated, so the evaluation refuses. |
+| `cases/274-scale-of-time.json` | `CONTRACT_ILL_FORMED` | scale of a time: time is not a numeric type, only time − time is arithmetic on times. |
+| `cases/275-abs-of-time.json` | `CONTRACT_ILL_FORMED` | abs of a time. |
+| `cases/276-time-minus-int.json` | `CONTRACT_ILL_FORMED` | time − int: a number cannot be subtracted from a time; compare time − time with an int instead. |
+| `cases/277-arithmetic-nodes-count.json` | `CONTRACT_ILL_FORMED` | 511 add nodes, 9 levels deep, under one exists and one comparison: 513 nodes, over the limit of 512 only because arithmetic nodes count toward it. |
 | `cases/268-distinct-of-optional.json` | `CONTRACT_ILL_FORMED` | count distinct over an optional field. |
 | `cases/269-distinct-undeclared-field.json` | `CONTRACT_ILL_FORMED` | count distinct over a field the kind does not declare. |
 | `cases/270-distinct-on-sum.json` | `CONTRACT_ILL_FORMED` | distinct belongs to count only; a sum of distinct values is not defined. |
