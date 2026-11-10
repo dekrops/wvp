@@ -201,6 +201,38 @@ theorem definite_perm {a b : Judged} (h : a.Perm b) : definite a = definite b :=
   simp only [List.all_eq_true]
   exact ⟨fun all x member => all x (h.mem_iff.mpr member), fun all x member => all x (h.mem_iff.mp member)⟩
 
+theorem mem_uniq {α : Type} [DecidableEq α] (a : α) (xs : List α) : a ∈ uniq xs ↔ a ∈ xs := by
+  induction xs with
+  | nil => simp [uniq]
+  | cons x rest ih =>
+    by_cases h : x ∈ rest
+    · simp only [uniq, h, if_true, ih, List.mem_cons]
+      constructor
+      · exact Or.inr
+      · rintro (rfl | m)
+        · exact h
+        · exact m
+    · simp only [uniq, h, if_false, List.mem_cons, ih]
+
+theorem nodup_uniq {α : Type} [DecidableEq α] (xs : List α) : (uniq xs).Nodup := by
+  induction xs with
+  | nil => exact List.nodup_nil
+  | cons x rest ih =>
+    by_cases h : x ∈ rest
+    · simp only [uniq, h, if_true]
+      exact ih
+    · simp only [uniq, h, if_false]
+      exact List.nodup_cons.mpr ⟨fun m => h ((mem_uniq x rest).mp m), ih⟩
+
+/-- Values listed in another order have the same distinct values: each list holds every value
+    once, and the same ones. -/
+theorem uniq_perm {α : Type} [DecidableEq α] {xs ys : List α} (h : xs.Perm ys) :
+    (uniq xs).Perm (uniq ys) := by
+  apply List.perm_iff_count.mpr
+  intro a
+  rw [List.Nodup.count (nodup_uniq xs), List.Nodup.count (nodup_uniq ys)]
+  simp only [mem_uniq, h.mem_iff]
+
 /-- An aggregate does not depend on the order its records are listed in. -/
 theorem value_perm (fn : Aggregate) (closed : Bool) {a b : Judged} (h : a.Perm b) :
     fn.value closed a = fn.value closed b := by
@@ -209,6 +241,7 @@ theorem value_perm (fn : Aggregate) (closed : Bool) {a b : Judged} (h : a.Perm b
   rw [definite_perm h]
   cases fn with
   | count => simp only [selectedPerm.length_eq]
+  | countDistinct field => simp only [(uniq_perm (selectedPerm.map _)).length_eq]
   | sum field => simp only [sumOf_perm (selectedPerm.map _)]
 
 /-- Bodies settled over a listing stay as they were over a reordering of it. -/

@@ -150,7 +150,12 @@ def lean_pred(pred, contract, kinds_of):
         return lean_pred(p, contract, kinds_of)
 
     if "aggregate" in pred:
-        fn = ".count" if pred["aggregate"] == "count" else f"(.sum {lean_string(pred['field'])})"
+        if pred["aggregate"] == "sum":
+            fn = f"(.sum {lean_string(pred['field'])})"
+        elif "distinct" in pred:
+            fn = f"(.countDistinct {lean_string(pred['distinct'])})"
+        else:
+            fn = ".count"
         body = sub(pred["where"])
         bound = lean_term(pred["than"], contract, kinds_of)
         return f"(.agg {fn} {lean_string(pred['of'])} {lean_string(pred['in'])} {body} .{pred['cmp']} {bound})"
@@ -546,7 +551,7 @@ APPROVAL_FIELDS = {"approver": text(), "id": text(), "run": text()}
 RUN_KIND = {"fields": {"createdBy": text(), "id": text()}, "key": ["id"]}
 
 
-def four_eyes(key):
+def four_eyes(key, distinct=None):
     kinds = {"approval": {"fields": dict(APPROVAL_FIELDS, at=time()), "key": key}, "paymentRun": RUN_KIND}
     pred = {
         "exists": "r",
@@ -565,6 +570,8 @@ def four_eyes(key):
             ]
         },
     }
+    if distinct:
+        pred["where"]["and"][1]["distinct"] = distinct
     return contract("four-eyes", {"run": text()}, kinds, [{"id": "FOUR_EYES", "predicate": pred}])
 
 
@@ -588,13 +595,20 @@ def build_counts():
     run("242-no-approvals", "No approvals, listing complete: the count is 0.", by_id, [], "FALSE", "CONTRADICTED")
     run("243-open-approvals", "Three approvals seen, but no source declared the listing complete: the count is UNKNOWN. A lower bound over an open kind is left to a separate RFC.", by_id,
         [approval("AP-1", "lea"), approval("AP-2", "max"), approval("AP-3", "ola")], "UNKNOWN", "UNDETERMINED", complete=("paymentRun",))
-    run("244-same-approver-two-identifiers", "Where the key decides: approval is keyed by its own identifier, so Lea approving twice is two records and one person passes four eyes. Keying by the approver, or a distinct count, prevents it.", by_id,
+    run("244-same-approver-two-identifiers", "Where the key decides: approval is keyed by its own identifier, so Lea approving twice is two records and one person passes four eyes. Keying by the approver (245) or a distinct count (247) prevents it.", by_id,
         [approval("AP-1", "lea"), approval("AP-2", "lea")], "TRUE", "SUPPORTED")
     run("245-same-approver-keyed-by-person", "Keyed by run and approver: Lea's two identical reports are one record (section 7, step 5), so the count is 1.", by_person,
         [approval("AP-1", "lea"), approval("AP-1", "lea")], "FALSE", "CONTRADICTED")
     conflict = [{"facts": ["f01-approval", "f02-approval"], "kind": "approval"}]
     run("246-same-approver-conflicting", "Keyed by run and approver, Lea's two reports differ in time: a conflict, settled as unknown, opens the kind, so the count is UNKNOWN.", by_person,
         [approval("AP-1", "lea", "1766000000"), approval("AP-1", "lea", "1766000100"), approval("AP-2", "max")], "UNKNOWN", "UNDETERMINED", conflicts=conflict)
+    distinct = four_eyes(["id"], distinct="approver")
+    run("247-distinct-same-approver-two-identifiers", "244 with distinct approver: Lea's two approvals are one approver, so four eyes is not met.", distinct,
+        [approval("AP-1", "lea"), approval("AP-2", "lea")], "FALSE", "CONTRADICTED")
+    run("248-distinct-reapproval", "246 keyed by identifier, with distinct approver: Lea approves again later under a new identifier, Max once. No conflict, two approvers.", distinct,
+        [approval("AP-1", "lea", "1766000000"), approval("AP-2", "max"), approval("AP-3", "lea", "1766000100")], "TRUE", "SUPPORTED")
+    run("249-distinct-open-approvals", "243 with distinct approver: three approvers seen, listing open, so the count is UNKNOWN.", distinct,
+        [approval("AP-1", "lea"), approval("AP-2", "max"), approval("AP-3", "ola")], "UNKNOWN", "UNDETERMINED", complete=("paymentRun",))
 
 
 def refusal(name, description, contract_value, env, code):
@@ -631,6 +645,12 @@ def build_refusals():
     overflow_env = environment({"invoice": "INV-1"}, facts(("invoice", {"amount": "10050", "id": "INV-1"}), match("M-1", big), match("M-2", big)), {"invoice", "paymentMatch"})
     refusal("267-sum-out-of-range", "9e18 + 9e18 is not below 2^63: the evaluation refuses rather than wrap, saturate or call it UNKNOWN.",
             with_requirement(dict(agg, field="amount")), overflow_env, "ARITHMETIC_RANGE")
+    count = {"aggregate": "count", "cmp": "ge", "in": "paymentMatch", "of": "m", "than": lit_int(1), "where": cmp("eq", field("m", "invoice"), {"input": "invoice"})}
+    refusal("268-distinct-of-optional", "count distinct over an optional field.",
+            with_requirement(dict(count, distinct="fee"), kinds=dict(PAYMENT_KINDS, paymentMatch={"fields": dict(PAYMENT_KINDS["paymentMatch"]["fields"], fee=dict(eur(), optional=True)), "key": ["id"]})),
+            base_env, "CONTRACT_ILL_FORMED")
+    refusal("269-distinct-undeclared-field", "count distinct over a field the kind does not declare.", with_requirement(dict(count, distinct="payer")), base_env, "CONTRACT_ILL_FORMED")
+    refusal("270-distinct-on-sum", "distinct belongs to count only; a sum of distinct values is not defined.", with_requirement(dict(agg, field="amount", distinct="amount")), base_env, "CONTRACT_ILL_FORMED")
 
 
 # --- Output ---------------------------------------------------------------------------------------
@@ -681,7 +701,7 @@ def readme():
         "- `cases/` and `differential/` with the names of Language 1's: every published Language 1 case,",
         "  restated (`language` is `work-contract-2`), with its Language 1 expectation. Case 27 names",
         "  `work-contract-1` instead, the language this one does not define.",
-        "- `cases/2*`: new. Arithmetic (`20x`, `21x`), sums (`22x`, `230`), counts (`24x`) and refusals (`26x`).",
+        "- `cases/2*`: new. Arithmetic (`20x`, `21x`), sums (`22x`, `230`), counts (`24x`, with `distinct` from `247`) and refusals (`26x`, `27x`).",
         "",
         f"**Checked against the model.** {len(CHECKED)} cases have a result. For each, `formal/WCL2/Vectors.lean`",
         "states that the Lean model of RFC 0008 gives exactly its requirement values and decision, proved by",

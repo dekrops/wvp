@@ -13,7 +13,8 @@ It reuses Language 1's values, records, environments, scopes, comparisons and tr
   no division and no rounding. Whether two operands have one unit is the typing's concern, as
   it is for comparison in Language 1.
 * A requirement may compare an aggregate of a kind's records with a term: how many records
-  satisfy a body (`count`), or the sum of a field over them (`sum`). An aggregate has a value
+  satisfy a body (`count`), how many distinct values a field takes over them (`count` with
+  `distinct`), or the sum of a field over them (`sum`). An aggregate has a value
   only when the kind is closed and the body is definite for every record; otherwise the
   comparison is `unknown`. A count over a listing nobody declared complete is not a count.
 -/
@@ -35,6 +36,9 @@ inductive Term where
 
 inductive Aggregate where
   | count
+  /-- The number of distinct values of `field` among the selected records: how many approvers,
+      not how many approvals. The typing requires a non-optional field, so every record has one. -/
+  | countDistinct (field : String)
   | sum (field : String)
   deriving DecidableEq, Repr
 
@@ -76,6 +80,11 @@ def sumOf : List (Option Int) → Option Int
   | none :: _ => none
   | some a :: rest => (sumOf rest).map (a + ·)
 
+/-- A list with each value once: the last occurrence of each is kept. -/
+def uniq {α : Type} [DecidableEq α] : List α → List α
+  | [] => []
+  | x :: rest => if x ∈ rest then uniq rest else x :: uniq rest
+
 /-- Each record of a kind with the value of the body for it. -/
 abbrev Judged := List (Record × Truth)
 
@@ -92,6 +101,7 @@ def Aggregate.value (fn : Aggregate) (closed : Bool) (judged : Judged) : Option 
   if closed = true ∧ definite judged = true then
     match fn with
     | .count => some (selected judged).length
+    | .countDistinct field => some (uniq ((selected judged).map fun record => record.get field)).length
     | .sum field => sumOf ((selected judged).map fun record => number (record.get field))
   else none
 

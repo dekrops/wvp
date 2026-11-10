@@ -9,7 +9,7 @@
 | Affects    | New: `work-contract-2`. `work-contract-1` is unchanged. A WVP package version to carry it.  |
 | Supersedes | Nothing                                                                                     |
 
-Work Contract Language 1 can say who approved what, and when. It cannot compute with an amount or count records, so the controls that matter most in a system of record (an invoice within tolerance of its order, nothing paid twice, two approvers who are not the creator) cannot be stated. This RFC proposes `work-contract-2`: Language 1 with exact integer arithmetic on terms and with `count` and `sum` over the records of a kind. An aggregate has a value only over a kind a source declared complete, so missing evidence still never becomes a pass. A Lean model of the new evaluation is in [`0008/formal`](0008/formal), with checked proofs that it extends Language 1 exactly and keeps Language 1's stability under added evidence.
+Work Contract Language 1 can say who approved what, and when. It cannot compute with an amount or count records, so the controls that matter most in a system of record (an invoice within tolerance of its order, nothing paid twice, two approvers who are not the creator) cannot be stated. This RFC proposes `work-contract-2`: Language 1 with exact integer arithmetic on terms and with `count`, `count` of distinct values and `sum` over the records of a kind. An aggregate has a value only over a kind a source declared complete, so missing evidence still never becomes a pass. A Lean model of the new evaluation is in [`0008/formal`](0008/formal), with checked proofs that it extends Language 1 exactly and keeps Language 1's stability under added evidence.
 
 ## Motivation
 
@@ -46,16 +46,17 @@ A term whose operand has no value (an absent optional field, an input not suppli
 
 ```json
 { "aggregate": "count", "of": "a", "in": "approval", "where": <predicate>, "cmp": "ge", "than": <term> }
+{ "aggregate": "count", "distinct": "approver", "of": "a", "in": "approval", "where": <predicate>, "cmp": "ge", "than": <term> }
 { "aggregate": "sum", "field": "amount", "of": "m", "in": "paymentMatch", "where": <predicate>, "cmp": "le", "than": <term> }
 ```
 
-`count` is the number of records of the kind for which the body is `TRUE`; `sum` is the sum of a numeric field over those records, with the field's type. The comparison is with `than`, under Language 1's comparison rules.
+`count` is the number of records of the kind for which the body is `TRUE`; with `distinct`, it is the number of distinct values the named field takes over those records (how many approvers, not how many approvals); `sum` is the sum of a numeric field over those records, with the field's type. The comparison is with `than`, under Language 1's comparison rules.
 
 An aggregate **has a value only when the kind is closed** (a completeness statement, as Language 1 section 6 defines it) **and the body is `TRUE` or `FALSE` for every record of it**. Otherwise the predicate is `unknown`. Over a listing nobody declared complete, a count is a lower bound and a sum is not a sum; this version uses neither (see the open questions).
 
-**Static rules**, in addition to Language 1 section 5: an aggregate's variable is bound in its body only, as a quantifier's is; its nesting counts toward the quantifier depth limit of 3; `sum` names a non-optional field of a numeric type of the kind; the operand types of arithmetic and of `than` follow the table above. Every node counts toward the 512-node limit.
+**Static rules**, in addition to Language 1 section 5: an aggregate's variable is bound in its body only, as a quantifier's is; its nesting counts toward the quantifier depth limit of 3; `sum` names a non-optional field of a numeric type of the kind; `distinct` appears on `count` only, and names a non-optional field of the kind, of any type; the operand types of arithmetic and of `than` follow the table above. Every node counts toward the 512-node limit.
 
-**One record per key.** Language 1 already settles it ([section 7, step 5](../protocols/work-contract/v1/SPEC.md#7-evaluation)): accepted facts of one kind with equal key fields describe one object, are one record if their fields are identical, and are a conflict if they differ. So the environment evaluation sees lists each record of a kind once, and an aggregate counts records, not listings. Language 2 keeps that step unchanged and states it as what aggregates rely on. A contract that counts people must therefore key the kind by the person (an `approval` keyed by run and approver): a second approval by the same person is then the same record, or a conflict, never a second approval.
+**One record per key.** Language 1 already settles it ([section 7, step 5](../protocols/work-contract/v1/SPEC.md#7-evaluation)): accepted facts of one kind with equal key fields describe one object, are one record if their fields are identical, and are a conflict if they differ. So the environment evaluation sees lists each record of a kind once, and an aggregate counts records, not listings. Language 2 keeps that step unchanged and states it as what aggregates rely on. A plain `count` therefore counts what the kind's key identifies: approvals, for an `approval` keyed by its own identifier. A contract that counts people uses `distinct` over the field that names them (`"distinct": "approver"`), and the kind keeps the key its source gives it. Keying the kind by the person instead (by run and approver) also counts each person once, but a person who approves again at another time then reports two different facts with one key: a conflict, which leaves the count `unknown` under `conflicts: unknown`.
 
 **Exact arithmetic, range on the result.** Terms and aggregates are evaluated exactly, without intermediate limits, so the order of addition never changes a result. Only the final value of a term or an aggregate must lie strictly between −2⁶³ and 2⁶³; one that does not makes the evaluation refuse with `ARITHMETIC_RANGE`. (Exact here is cheap: the at most 10 000 facts of an environment, each below 2⁶³ in magnitude, sum to well within 128 bits.) A refusal, not `unknown`: `unknown` says the evidence was not enough, which would be false.
 
@@ -79,8 +80,8 @@ The proposed vectors are in [`0008/vectors`](0008/vectors/work-contract/v2/READM
 - every Language 1 case, restated in Language 2's form, with its Language 1 expectation;
 - arithmetic: within and outside a tolerance, `time − time`, an absent operand (`unknown`), `scale` by a negative factor, `abs` of a negative amount;
 - aggregates: `count` and `sum` over a closed kind with zero, one and several matching records; over an open kind (`unknown`); with one body `unknown` (`unknown`); a record of another kind or not matching the body (not counted);
-- the worked examples of the Lean model (tolerance, overpayment by one cent, open listing, four eyes), and the same approver under two approval identifiers, counted twice, to mark where keying (or a distinct count) decides;
-- refusals: operands of two currencies or scales, `time + time`, `sum` of a text or optional field, an aggregate variable used outside its body, depth over 3 with aggregates, the arithmetic range (once decided, below).
+- the worked examples of the Lean model (tolerance, overpayment by one cent, open listing, four eyes), and the same approver under two approval identifiers, counted twice by `count` and once by `count` with `distinct`, with a re-approval counted once without a conflict;
+- refusals: operands of two currencies or scales, `time + time`, `sum` of a text or optional field, an aggregate variable used outside its body, depth over 3 with aggregates, the arithmetic range, `distinct` over an optional or undeclared field, and `distinct` on `sum`.
 
 ## Security considerations
 
@@ -90,11 +91,13 @@ This RFC changes what a verified result may be relied on for, so it needs securi
 - **No new source of truth.** Arithmetic computes from accepted values only. It removes a reason to trust a source's own computed fields.
 - **Work.** An aggregate visits the records of one kind once per binding of the enclosing variables, as a quantifier does; the work bound (Language 1 section 7, step 4) covers it unchanged. Arithmetic is bounded by the term's size.
 - **Range.** Values on the wire lie strictly between −2⁶³ and 2⁶³. A sum of many large amounts can leave that range; the evaluation then refuses (`ARITHMETIC_RANGE`) rather than wrap or saturate, and since only final values are checked, every implementation refuses the same inputs. `ARITHMETIC_RANGE` is found during evaluation, so it comes after every refusal of Language 1's table (section 8), whose order is unchanged. The model uses unbounded integers, so it says nothing about the refusal itself.
-- **Counting listings instead of records.** If a source could list the same approval twice, it could pass a count with one person. Language 1's step 5 makes equal-key facts one record (or a conflict), so that cannot reach evaluation; a contract must still key a counted kind by what it means to count. The model shows both the danger and why it is excluded (`duplicate_approval_counts_twice`, `duplicate_listing_is_not_distinct`).
+- **Counting listings instead of records.** If a source could list the same approval twice, it could pass a count with one person. Language 1's step 5 makes equal-key facts one record (or a conflict), so that cannot reach evaluation. The model shows both the danger and why it is excluded (`duplicate_approval_counts_twice`, `duplicate_listing_is_not_distinct`).
+- **Counting records instead of people.** A plain `count` over a kind keyed by something other than what the contract means to count still counts records: one person approving under two identifiers passes a four-eyes `count` (vector 244). Language 2 has no warnings, and the typing cannot tell which field a contract means to count, so this is not a refusal. A contract that counts people uses `distinct` (vector 247), and reviewers of a contract check that its counts do.
+- **One person under two identifiers.** `distinct` compares values. If a source names one person by two values (`lea` and `l.mueller`), they are two approvers. Mapping identities is the source's or the relying party's registry's concern, outside the language.
 
 ## Formal semantics
 
-`0008/formal` is a Lake package that depends on `formal/lean` and reuses Language 1's values, records, environments and truth values. `./check.sh` builds it and audits every theorem's axioms under the rules of `formal/lean/check.sh`: no `sorry`, `admit`, custom axiom or `native_decide`, and only `propext`, `Classical.choice` and `Quot.sound`. 27 theorems:
+`0008/formal` is a Lake package that depends on `formal/lean` and reuses Language 1's values, records, environments and truth values. `./check.sh` builds it and audits every theorem's axioms under the rules of `formal/lean/check.sh`: no `sorry`, `admit`, custom axiom or `native_decide`, and only `propext`, `Classical.choice` and `Quot.sound`. 32 theorems:
 
 | Theorem | Statement |
 | --- | --- |
@@ -103,14 +106,15 @@ This RFC changes what a verified result may be relied on for, so it needs securi
 | `aggregate_open_kind_is_unknown` | Over a kind no source declared complete, every aggregate comparison is `unknown`, however many records were seen. |
 | `exists_true_has_witness`, `exists_false_requires_closed`, `forall_true_requires_closed`, `forall_false_has_counterexample` | As in Language 1, for Language 2's quantifiers. |
 | `closed_listing_is_reordered` | Along `Extends`, between environments that list each record once, a closed kind is listed later as a reordering of what it was. |
-| `sumOf_perm`, `definite_perm`, `value_perm` | A count or a sum does not depend on the order its records are listed in. |
+| `sumOf_perm`, `definite_perm`, `mem_uniq`, `nodup_uniq`, `uniq_perm`, `value_perm` | A count, a distinct count or a sum does not depend on the order its records are listed in. |
 | `term_eval_extends`, `settled_bodies_kept` | Terms, arithmetic included, do not depend on records; bodies settled over a listing stay so over a reordering of it. |
 | `eval_monotone`, `definite_decision_is_stable` | Along a settled extension of the environment, a `TRUE` requirement stays `TRUE`, a `FALSE` one stays `FALSE`, and a supported or contradicted decision stays so, aggregates included. |
 | `within_tolerance_and_paid_once`, `overpaid_is_contradicted`, `open_listing_is_undetermined`, `two_other_approvers_suffice`, `creator_approval_not_counted` | The worked examples, decided by the model. |
 | `same_approver_under_two_ids_is_counted_twice`, `two_ids_of_one_approver_are_distinct` | Where the key decides: an approval keyed by its own identifier is two records for one approver who approves twice. Both are listed once, so the environment is `Distinct`, and the count is 2. One record per key protects a count only when the kind is keyed by what it counts. |
+| `same_approver_under_two_ids_is_one_distinct_approver`, `reapproval_counts_one_approver` | The same approvals counted with `distinct "approver"`: Lea under two identifiers is one approver, so four eyes is contradicted; Lea approving again under a new identifier, with Max, is two approvers, with no conflict. |
 | `duplicate_approval_counts_twice`, `duplicate_listing_is_not_distinct` | The model counts listings: one approval listed twice passes four eyes. Such an environment lists a record twice, so it is not `Distinct`: Language 1's step 5 never produces one. |
 
-**The hypothesis to read first.** Stability is proved along `Settled`: Language 1's `Extends`, between two environments that each list a record once (`Distinct`). Nothing more is assumed: that a closed kind is then listed as a reordering of what it was is proved (`closed_listing_is_reordered`), and that counts and sums do not depend on the order is proved (`value_perm`). `Distinct` is what Language 1's step 5 already produces: one record per key.
+**The hypothesis to read first.** Stability is proved along `Settled`: Language 1's `Extends`, between two environments that each list a record once (`Distinct`). Nothing more is assumed: that a closed kind is then listed as a reordering of what it was is proved (`closed_listing_is_reordered`), and that counts, distinct counts and sums do not depend on the order is proved (`value_perm`). `Distinct` is what Language 1's step 5 already produces: one record per key.
 
 **Not covered by any proof:** the typing rules of arithmetic (units, currencies, `time − time`), the numeric range, the wire form, the work bound, and every implementation. The Scala, JavaScript and Rust implementations are tied to this model by the shared vectors, as they are for Language 1.
 
@@ -129,12 +133,12 @@ Decided in review (Srishti, in this RFC's pull request), and moved into the sect
 - *Settled listings:* proved, not assumed, from one record per key (`Distinct`).
 - *Durations:* `time − time` in seconds is enough; "within 30 days" is `30 × 86 400`.
 - *The package version:* a new one, with RFC 0003 or on its own; not a revision of v0.2.
-- *Counting the same record twice:* excluded by one record per key, which Language 1's step 5 already gives; contracts that count people key the kind by the person.
+- *Counting the same record twice:* excluded by one record per key, which Language 1's step 5 already gives.
+- *Counting the same person twice* (raised by Srishti in review, `same_approver_under_two_ids_is_counted_twice`): `count` with `distinct` over the field that names them. A static rule that a counted kind's key must cover what is counted was the alternative; it was not chosen, because `count` names no field to check the key against, and keying by the person turns a re-approval into a conflict (vector 246).
 
 Still open:
 
 1. **Lower-bound counts** over open kinds (`count ≥ n` is monotone without a completeness statement). Wanted for approvals, but as a separate RFC, so that `count` always means one thing.
-2. **`count distinct`** over a field, for kinds whose key is not the thing to count. One record per key covers a kind keyed by what is counted. A kind keyed by something else, such as an approval keyed by its own identifier, counts one approver twice (`same_approver_under_two_ids_is_counted_twice`; raised by Srishti in review). Whether Language 2 needs a distinct count, or a static rule that a counted kind's key covers what the contract compares, is open.
 
 ## Decision
 
