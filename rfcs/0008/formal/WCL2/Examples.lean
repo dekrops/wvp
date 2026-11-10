@@ -116,8 +116,8 @@ theorem duplicate_listing_is_not_distinct :
 /-- Where the key decides (raised in review): an approval keyed by its own identifier, not by the
     approver. Lea approving twice is then two different records, the environment lists each once
     (`Distinct`), and the count is 2: one person passes four eyes. Listing each record once does not
-    protect a count whose kind is keyed by something other than what it counts; keying the kind by
-    the approver, or a count of distinct approvers, does. -/
+    protect a count whose kind is keyed by something other than what it counts; a count of distinct
+    approvers does (`same_approver_under_two_ids_is_one_distinct_approver`). -/
 def approvalWithId (id who : String) : Record :=
   ⟨[("id", text id), ("run", text "RUN-3"), ("approver", text who)]⟩
 
@@ -134,5 +134,29 @@ theorem two_ids_of_one_approver_are_distinct :
   · split
     · decide
     · simp
+
+/-! Four eyes, counted by person: the same requirement over `count` with `distinct "approver"`.
+The approval keeps its own identifier as its key, as an approval workflow records it. -/
+
+def fourEyesDistinct : Pred :=
+  .ex "r" "paymentRun" <|
+    .and (eq (field "r" "id") (.input "run")) <|
+      .agg (.countDistinct "approver") "a" "approval"
+        (.and (eq (field "a" "run") (field "r" "id"))
+          (.cmp .ne (field "a" "approver") (field "r" "createdBy")))
+        .ge (.lit .int (.num 2))
+
+/-- Lea approving under two identifiers is one approver: four eyes is not met. -/
+theorem same_approver_under_two_ids_is_one_distinct_approver :
+    evaluate (runEnvironment [approvalWithId "AP-1" "lea", approvalWithId "AP-2" "lea"])
+      [fourEyesDistinct] = .contradicted := by
+  decide
+
+/-- Lea approves again under a new identifier, and Max approves once: two approvers. Keyed by
+    the approver instead, Lea's two approvals would conflict and leave the count unknown. -/
+theorem reapproval_counts_one_approver :
+    evaluate (runEnvironment [approvalWithId "AP-1" "lea", approvalWithId "AP-2" "max",
+      approvalWithId "AP-3" "lea"]) [fourEyesDistinct] = .supported := by
+  decide
 
 end WCL2.Examples

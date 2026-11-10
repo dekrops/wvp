@@ -11571,4 +11571,52 @@ theorem v_cases_246_same_approver_conflicting_json :
       WCL2.evaluate v_cases_246_same_approver_conflicting_json.env v_cases_246_same_approver_conflicting_json.requirements = .undetermined := by
   decide
 
+/-- `cases/247-distinct-same-approver-two-identifiers.json` -/
+def v_cases_247_distinct_same_approver_two_identifiers_json.env : Env where
+  inputs := fun n => if n = "cutoff" then some (.num (1767225600)) else if n = "run" then some (.text "RUN-3") else none
+  params := fun _ => none
+  records := fun k => if k = "approval" then [⟨[("approver", (.text "lea")), ("at", (.num (1766000000))), ("id", (.text "AP-1")), ("run", (.text "RUN-3"))]⟩, ⟨[("approver", (.text "lea")), ("at", (.num (1766000000))), ("id", (.text "AP-2")), ("run", (.text "RUN-3"))]⟩] else if k = "paymentRun" then [⟨[("createdBy", (.text "kim")), ("id", (.text "RUN-3"))]⟩] else []
+  closed := fun k => if k = "approval" then true else if k = "paymentRun" then true else false
+
+def v_cases_247_distinct_same_approver_two_identifiers_json.requirements : List WCL2.Pred := [
+  (.ex "r" "paymentRun" (.and (.cmp .eq (.field "r" "id") (.input "run")) (.agg (.countDistinct "approver") "a" "approval" (.and (.cmp .eq (.field "a" "run") (.field "r" "id")) (.cmp .ne (.field "a" "approver") (.field "r" "createdBy"))) .ge (.lit .int (.num (2))))))
+]
+
+theorem v_cases_247_distinct_same_approver_two_identifiers_json :
+    v_cases_247_distinct_same_approver_two_identifiers_json.requirements.map (fun r => r.eval v_cases_247_distinct_same_approver_two_identifiers_json.env []) = [.false] ∧
+      WCL2.evaluate v_cases_247_distinct_same_approver_two_identifiers_json.env v_cases_247_distinct_same_approver_two_identifiers_json.requirements = .contradicted := by
+  decide
+
+/-- `cases/248-distinct-reapproval.json` -/
+def v_cases_248_distinct_reapproval_json.env : Env where
+  inputs := fun n => if n = "cutoff" then some (.num (1767225600)) else if n = "run" then some (.text "RUN-3") else none
+  params := fun _ => none
+  records := fun k => if k = "approval" then [⟨[("approver", (.text "lea")), ("at", (.num (1766000000))), ("id", (.text "AP-1")), ("run", (.text "RUN-3"))]⟩, ⟨[("approver", (.text "max")), ("at", (.num (1766000000))), ("id", (.text "AP-2")), ("run", (.text "RUN-3"))]⟩, ⟨[("approver", (.text "lea")), ("at", (.num (1766000100))), ("id", (.text "AP-3")), ("run", (.text "RUN-3"))]⟩] else if k = "paymentRun" then [⟨[("createdBy", (.text "kim")), ("id", (.text "RUN-3"))]⟩] else []
+  closed := fun k => if k = "approval" then true else if k = "paymentRun" then true else false
+
+def v_cases_248_distinct_reapproval_json.requirements : List WCL2.Pred := [
+  (.ex "r" "paymentRun" (.and (.cmp .eq (.field "r" "id") (.input "run")) (.agg (.countDistinct "approver") "a" "approval" (.and (.cmp .eq (.field "a" "run") (.field "r" "id")) (.cmp .ne (.field "a" "approver") (.field "r" "createdBy"))) .ge (.lit .int (.num (2))))))
+]
+
+theorem v_cases_248_distinct_reapproval_json :
+    v_cases_248_distinct_reapproval_json.requirements.map (fun r => r.eval v_cases_248_distinct_reapproval_json.env []) = [.true] ∧
+      WCL2.evaluate v_cases_248_distinct_reapproval_json.env v_cases_248_distinct_reapproval_json.requirements = .supported := by
+  decide
+
+/-- `cases/249-distinct-open-approvals.json` -/
+def v_cases_249_distinct_open_approvals_json.env : Env where
+  inputs := fun n => if n = "cutoff" then some (.num (1767225600)) else if n = "run" then some (.text "RUN-3") else none
+  params := fun _ => none
+  records := fun k => if k = "approval" then [⟨[("approver", (.text "lea")), ("at", (.num (1766000000))), ("id", (.text "AP-1")), ("run", (.text "RUN-3"))]⟩, ⟨[("approver", (.text "max")), ("at", (.num (1766000000))), ("id", (.text "AP-2")), ("run", (.text "RUN-3"))]⟩, ⟨[("approver", (.text "ola")), ("at", (.num (1766000000))), ("id", (.text "AP-3")), ("run", (.text "RUN-3"))]⟩] else if k = "paymentRun" then [⟨[("createdBy", (.text "kim")), ("id", (.text "RUN-3"))]⟩] else []
+  closed := fun k => if k = "paymentRun" then true else false
+
+def v_cases_249_distinct_open_approvals_json.requirements : List WCL2.Pred := [
+  (.ex "r" "paymentRun" (.and (.cmp .eq (.field "r" "id") (.input "run")) (.agg (.countDistinct "approver") "a" "approval" (.and (.cmp .eq (.field "a" "run") (.field "r" "id")) (.cmp .ne (.field "a" "approver") (.field "r" "createdBy"))) .ge (.lit .int (.num (2))))))
+]
+
+theorem v_cases_249_distinct_open_approvals_json :
+    v_cases_249_distinct_open_approvals_json.requirements.map (fun r => r.eval v_cases_249_distinct_open_approvals_json.env []) = [.unknown] ∧
+      WCL2.evaluate v_cases_249_distinct_open_approvals_json.env v_cases_249_distinct_open_approvals_json.requirements = .undetermined := by
+  decide
+
 end WCL2.Vectors

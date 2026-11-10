@@ -125,7 +125,7 @@
       }
     ]
   },
-  "description": "Where the key decides: approval is keyed by its own identifier, so Lea approving twice is two records and one person passes four eyes. Keying by the approver, or a distinct count, prevents it.",
+  "description": "Where the key decides: approval is keyed by its own identifier, so Lea approving twice is two records and one person passes four eyes. Keying by the approver (245) or a distinct count (247) prevents it.",
   "environment": {
     "complete": [
       {

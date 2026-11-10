@@ -7,13 +7,13 @@ acceptance they become `test-vectors/work-contract/v2`.
 - `cases/` and `differential/` with the names of Language 1's: every published Language 1 case,
   restated (`language` is `work-contract-2`), with its Language 1 expectation. Case 27 names
   `work-contract-1` instead, the language this one does not define.
-- `cases/2*`: new. Arithmetic (`20x`, `21x`), sums (`22x`, `230`), counts (`24x`) and refusals (`26x`).
+- `cases/2*`: new. Arithmetic (`20x`, `21x`), sums (`22x`, `230`), counts (`24x`, with `distinct` from `247`) and refusals (`26x`, `27x`).
 
-**Checked against the model.** 599 cases have a result. For each, `formal/WCL2/Vectors.lean`
+**Checked against the model.** 602 cases have a result. For each, `formal/WCL2/Vectors.lean`
 states that the Lean model of RFC 0008 gives exactly its requirement values and decision, proved by
 `decide` and audited by `formal/check.sh`.
 
-**Not checked against the model.** 81 cases are refusals. The model has no static rules,
+**Not checked against the model.** 84 cases are refusals. The model has no static rules,
 conformance, work bound or arithmetic range, so these rest on the specification and, for the new ones,
 on the RFC's text:
 
@@ -100,3 +100,6 @@ on the RFC's text:
 | `cases/265-aggregate-variable-outside.json` | `CONTRACT_ILL_FORMED` | The aggregate's variable is bound in its body only; its bound cannot read it. |
 | `cases/266-aggregate-too-deep.json` | `CONTRACT_ILL_FORMED` | An aggregate under three quantifiers: its nesting counts toward the depth limit of 3. |
 | `cases/267-sum-out-of-range.json` | `ARITHMETIC_RANGE` | 9e18 + 9e18 is not below 2^63: the evaluation refuses rather than wrap, saturate or call it UNKNOWN. |
+| `cases/268-distinct-of-optional.json` | `CONTRACT_ILL_FORMED` | count distinct over an optional field. |
+| `cases/269-distinct-undeclared-field.json` | `CONTRACT_ILL_FORMED` | count distinct over a field the kind does not declare. |
+| `cases/270-distinct-on-sum.json` | `CONTRACT_ILL_FORMED` | distinct belongs to count only; a sum of distinct values is not defined. |
