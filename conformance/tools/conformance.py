@@ -3,7 +3,6 @@
 that asks public implementations to reproduce it.
 
     conformance.py structure   [--root DIR]
-    conformance.py provenance  [--root DIR]
     conformance.py unchanged   --old DIR [--new DIR]
     conformance.py inventory   [--root DIR]
     conformance.py run         --implementation NAME --source DIR --out FILE [--root DIR]
@@ -27,9 +26,6 @@ import sys
 import tempfile
 
 MAP = "conformance/corpus.json"
-# Paths written in this repository by pull request. The export never writes them, and
-# PROVENANCE.md does not list them (governance/publication.md).
-WRITTEN_HERE = ("rfcs/", "governance/", "conformance/", ".github/", "CONTRIBUTING.md")
 CODE = re.compile(r"^[A-Z][A-Z0-9_]*$")
 
 
@@ -255,30 +251,6 @@ def check_lists(part, path, value, problems):
             digest = hashlib.sha256(str(case.get("canonicalUtf8", "")).encode("utf-8")).hexdigest()
             if digest != case.get("sha256"):
                 problems.add(identity, f"`sha256` is not the SHA-256 of `canonicalUtf8` ({digest})")
-
-
-# --- provenance -------------------------------------------------------------------------------
-
-
-def provenance(args):
-    """Every exported file is the file PROVENANCE.md says the export wrote."""
-    root = pathlib.Path(args.root)
-    problems = Problems()
-    listed = dict(re.findall(r"^\| `([^`]+)` \| `([0-9a-f]{64})` \|", (root / "PROVENANCE.md").read_text(encoding="utf-8"), re.M))
-    if not listed:
-        problems.add("PROVENANCE.md", "lists no file")
-    tracked = subprocess.run(["git", "ls-files", "-z"], cwd=root, check=True, capture_output=True).stdout.decode().split("\0")
-    exported = [p for p in tracked if p and p != "PROVENANCE.md" and not p.startswith(WRITTEN_HERE)]
-    for path in exported:
-        if path not in listed:
-            problems.add(path, "is not listed in PROVENANCE.md, and is not on a path written in this repository")
-    for path, digest in listed.items():
-        file = root / path
-        if not file.is_file():
-            problems.add(path, "is listed in PROVENANCE.md and missing")
-        elif hashlib.sha256(file.read_bytes()).hexdigest() != digest:
-            problems.add(path, "differs from the export recorded in PROVENANCE.md. Specifications, vectors and examples change by export (governance/publication.md)")
-    problems.finish(f"provenance: {len(listed)} exported files match PROVENANCE.md.")
 
 
 # --- unchanged --------------------------------------------------------------------------------
@@ -543,7 +515,7 @@ def report(args):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     commands = parser.add_subparsers(dest="command", required=True)
-    for name, function in (("structure", structure), ("provenance", provenance), ("unchanged", unchanged), ("inventory", None), ("run", run), ("report", report), ("try", try_proposal)):
+    for name, function in (("structure", structure), ("unchanged", unchanged), ("inventory", None), ("run", run), ("report", report), ("try", try_proposal)):
         command = commands.add_parser(name)
         command.add_argument("--root", default=".", help="a checkout of this repository")
         command.set_defaults(function=function)

@@ -1,17 +1,18 @@
 # What this repository checks in public
 
-Informative. The [`Conformance`](../.github/workflows/conformance.yml) workflow runs on every pull request and on `main`. It uses only what is public: this repository, [`verified-cli`](https://github.com/dekrops/verified-cli) at a pinned commit, and the Lean toolchain. It does not use the implementation that generates the expectations, which is not public.
+Informative. The [`Conformance`](../.github/workflows/conformance.yml) workflow runs on every pull request and on `main`. It uses only what is public: this repository, [`verified-cli`](https://github.com/dekrops/verified-cli) at a pinned commit, and the Lean toolchain. It does not use the implementation that generated the expectations, which is not public.
 
 ## The checks
 
 | Job            | What it establishes                                                                                                                                                                                                                              | What it does not                                                                                                                                          |
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Structure**  | Every file of the corpus is well-formed JSON without duplicate members, belongs to a part named in [`corpus.json`](corpus.json), and states an expectation. A stated SHA-256 of canonical text is the SHA-256 of that text                       | That an expectation is right. The format of the vector files is not specified ([open questions](../governance/open-questions.md), C4); the map is tooling |
-| **Provenance** | Every exported file is byte for byte the file `PROVENANCE.md` records, and every file outside the paths written here is recorded                                                                                                                 | That the export was faithful to its source, which is not public. A pull request that edits a specification or a vector fails here, as the process intends |
 | **Unchanged**  | Between the earlier revision and this one, no published file of the corpus was removed, no file holding one case changed by a byte, and a file holding many cases only gained cases ([RFC 0001](../rfcs/0001-standards-process.md), invariant 1) | Anything about prose. It compares with one earlier revision, so it relies on having run on every change before it                                         |
 | **Rust**       | `verified-cli`, written from the published text and sharing no code with the generator, reproduces each part it implements, and ran exactly as many cases as this revision holds                                                                 | Correctness on inputs the corpus does not contain. The count is the one the implementation prints                                                         |
 | **Lean**       | The definitions build, every theorem's axioms are audited, and the reference evaluator reproduces every case of Work Contract Language 1                                                                                                         | Independence of authorship: the evaluator and the generator have one author. The evaluator around the proved core is tested, not proved                   |
 | **Report**     | A table of every part: how many cases it holds, and what each implementation reported for it                                                                                                                                                     | —                                                                                                                                                         |
+
+Until the export stopped on 2026-11-17, a **Provenance** check also compared every exported file with the export recorded in `PROVENANCE.md`, so that a pull request editing a specification or a vector failed. It was retired with the export: those files are now written here, and the **Unchanged** check is what keeps a published expectation from changing.
 
 The Lean job has distinct stages, each of which fails on its own: the definitions compile; every theorem's axioms are audited; the kernel replays the compiled declarations (`lean4checker`, built from the commit of its tag for the pinned toolchain); the reference evaluator reproduces the corpus. A separate job tests properties on generated cases and has `verified-cli` reproduce them. [The assurance map](../governance/assurance-map.md) says which of these is a proof and which is a test.
 
@@ -39,7 +40,6 @@ So agreement between an implementation and vectors it generated is nowhere the e
 
 ```sh
 python3 conformance/tools/conformance.py structure
-python3 conformance/tools/conformance.py provenance
 python3 conformance/tools/conformance.py unchanged --old <a checkout of an earlier revision>
 
 git clone https://github.com/dekrops/verified-cli && git -C verified-cli checkout <the commit in corpus.json>

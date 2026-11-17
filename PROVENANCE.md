@@ -1,5 +1,7 @@
 # Provenance
 
+**The export has stopped.** Since 2026-11-17, every file in this repository is written here by pull request, and nothing is exported to it ([README](README.md#provenance-and-maintenance)). What follows is kept unchanged as the record of the last export: the files it wrote, and their SHA-256 when it wrote them. A file changed here since then no longer matches its line, and this repository's history shows the change.
+
 Exported from `dekrops/verified` at commit `31b826e5e99f4ade5b5c82f30a32aef87f025d01` by `tooling/export-protocol.mjs`.
 
 Every file is a byte-for-byte copy of the file at the same path, except where marked edited, and except `README.md` and the license files at the root, which are copied from `publishing/wvp/`. The only edit is that a Markdown link to a file that is not published is replaced by its text, and `test-vectors/README.md` omits the sections on vectors that are not published.

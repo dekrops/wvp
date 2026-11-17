@@ -1,6 +1,8 @@
 # Publication
 
-Informative. How this repository is written today, why, and what has to be true before the specifications are written here.
+Informative. How this repository was written until 2026-11-17, why, and the path that was planned to writing the specifications here.
+
+**Superseded on 2026-11-17.** The steward stopped the export. Every path is now written here, by pull request, under RFC 0001 ([README](../README.md#provenance-and-maintenance)), and `PROVENANCE.md` is kept as the record of the last export. The export was retired all at once, not one specification at a time as milestone C below planned. When it stopped, milestones A and B were not complete, no maintainer came from outside the steward, and no RFC had changed RFC 0001, section 11. The rest of this document describes the arrangement as it was.
 
 ## Today: two authorities, split by path
 

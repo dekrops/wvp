@@ -29,8 +29,9 @@ Do not open a public issue. Report it privately to the maintainers ([`governance
 
 ## Where a pull request can land
 
-- `rfcs/`, `governance/`, `conformance/` and this file are written here. Pull requests to them are reviewed and merged here.
-- Specifications (`protocols/`, `docs/spec/`), vectors and examples (`test-vectors/`), `README.md` and `PROVENANCE.md` are exported from the steward's source repository. A pull request that edits them is not merged as it is, because the next export would overwrite it. It is taken as a proposal and carried out at the source, with credit. [Publication](governance/publication.md) explains why, and what would change it.
+Here, for every path. Since 2026-11-17 nothing is exported to this repository: specifications (`protocols/`, `docs/spec/`), vectors and examples (`test-vectors/`), the Lean definitions (`formal/`), `rfcs/`, `governance/`, `conformance/`, `README.md` and this file are all written here, and pull requests to them are reviewed and merged here.
+
+What a pull request may change is still decided by RFC 0001, section 4: an editorial change is a pull request reviewed by a maintainer, a clarification needs an issue and public review first, and a normative change needs an accepted RFC, which the pull request that carries it out names. No pull request may change a published expectation (section 6). `PROVENANCE.md` is the record of the last export and is not edited.
 
 ## Licenses
 

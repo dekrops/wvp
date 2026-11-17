@@ -43,7 +43,7 @@ A report that is no longer true is corrected or removed by its author, or by a m
 
 ## What this repository checks itself
 
-Every pull request and `main` are checked in public: the structure of the corpus, that it is what the export wrote, that no published expectation changed, and that the public implementations reproduce it, part by part. [What this repository checks in public](ci.md) says what each check establishes and what it does not, and how to run it. That run is evidence beside an implementer's report, not a replacement for one.
+Every pull request and `main` are checked in public: the structure of the corpus, that no published expectation changed, and that the public implementations reproduce it, part by part. [What this repository checks in public](ci.md) says what each check establishes and what it does not, and how to run it. That run is evidence beside an implementer's report, not a replacement for one.
 
 A vector for a new rule can be built and checked with public tooling: [proposing vectors](proposing-vectors.md).
 
