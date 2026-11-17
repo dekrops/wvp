@@ -17,11 +17,13 @@ Where RFC 0008 has a value, the interval is that value, so nothing it decides ch
 
 ## Motivation
 
+**Origin.** The idea is Zin Nam's. His F007 comment on RFC 0008 ([dekrops/wvp#47](https://github.com/dekrops/wvp/pull/47#issuecomment-6910878602), section 2, 2026-11-16) proposed a polarity-aware variant: a `sum` of non-negative amounts over an open kind is a lower bound, and it may settle a requirement only where a lower bound suffices. He also pre-registered measuring its cost: shadowplay S021, part B, over F007's 9,768 honest observations. This RFC states that idea as a semantics, with both bounds, as an interval, and with `count` and `distinct`. It proves its core properties, and reports one exploratory measurement below. S021 remains the pre-registered measurement.
+
 The F007 study (shadowplay, `studies/F007-invoice-to-payment-landscape`) has a machine-checked verdict on payments, `Landscape.evaluate`. It is proved sound (`T5_env`) and asymmetric in what it needs:
 - `pass` (paid within the approval) needs the settlements complete, not the reversals, because a missing reversal can only make the payment look larger;
 - `fail` needs the reversals and approvals complete, not the settlements, because settlements already seen can only grow.
 
-That verdict was written as one WCL2 requirement: `or(net ≤ 0, exists a: net ≤ a.gross)`, with `net` the `sum` of settlements up to the cutoff whose reversal wasn't seen. Both evaluators were run on the same environments: verified-cli's WCL2 implementation (dekrops/verified-cli#61) and F007's Lean `evaluate`. That's a system result, one run, 2026-11-17. The contracts, environments and scripts will be published with the F007 study in shadowplay.
+In an exploratory run (not pre-registered, on a sweep of my own, not S021's population), that verdict was written as one WCL2 requirement: `or(net ≤ 0, exists a: net ≤ a.gross)`, with `net` the `sum` of settlements up to the cutoff whose reversal wasn't seen. Both evaluators were run on the same environments: verified-cli's WCL2 implementation (dekrops/verified-cli#61) and F007's Lean `evaluate`. That's a system result, one run, 2026-11-17. The contracts, environments and scripts will be published with the F007 study in shadowplay.
 
 | Observations | Agree | F007 decides, WCL2 `UNDETERMINED` | Opposite verdicts |
 | --- | --- | --- | --- |
@@ -147,6 +149,7 @@ These are needed before this RFC asks for Review. The model's `Refines` keeps re
 ## Alternatives
 
 - **Write the asymmetry into each contract.** For `pass`, ignore reversals: `sum(all settlements) ≤ bound`. It recovers some `pass` cases, but not those where a seen reversal matters, and no `fail` case: the sum over an open kind has no value. Each contract would also have to get it right.
+- **Polarity only, as first proposed on #47:** a lower bound, used where its position in the comparison makes a lower bound sufficient. The interval gives the same verdicts where a lower bound suffices, and also covers upper bounds from closed kinds with unknown bodies, and `count`, without a separate polarity analysis of the predicate.
 - **Lower-bound `count` only** (RFC 0008, open question 1). It solves four eyes, but not sums, and makes `count` mean two things depending on the comparison. Here `count` keeps one meaning (a number), and the comparison decides what it can.
 - **Fold this into RFC 0008 before it's accepted.** Language 2 would then have one semantics from the start. But RFC 0008 is in Review, and this is a change of substance (RFC 0001, section 5, rule 2): its review period would restart, and its arithmetic, which F007 and the product need now, would wait. See Open questions.
 - **Unknown-as-zero for missing records.** It's unsound: that is exactly F007's planted weakness C-W6 (the verifier reads absence as "none").
