@@ -1,0 +1,19 @@
+name = "applies"
+version = "0.1.0"
+defaultTargets = ["Applies"]
+
+[leanOptions]
+warningAsError = true
+
+# Work Contract Language 1 (formal/lean) and Language 2 as RFC 0008 proposes it (rfcs/0008/formal).
+# The model is generic in the predicate language; Language 2 is the instance it is checked on.
+[[require]]
+name = "verified"
+path = "../../../formal/lean"
+
+[[require]]
+name = "wcl2"
+path = "../../0008/formal"
+
+[[lean_lib]]
+name = "Applies"
