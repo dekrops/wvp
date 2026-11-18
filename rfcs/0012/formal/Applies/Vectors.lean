@@ -145,4 +145,70 @@ theorem v_cases_407_condition_not_recorded_json :
       evaluate (fun p => WCL2.Pred.eval v_cases_407_condition_not_recorded_json.env p []) v_cases_407_condition_not_recorded_json.requirements = .undetermined := by
   decide
 
+/-- `cases/408-other-invoice-fails.json` -/
+def v_cases_408_other_invoice_fails_json.env : Env where
+  inputs := fun n => if n = "cutoff" then some (.num (1767225600)) else if n = "invoice" then some (.text "INV-1") else none
+  params := fun _ => none
+  records := fun k => if k = "invoice" then [⟨[("gross", (.num (119000))), ("id", (.text "INV-1")), ("net", (.num (100000))), ("reverseCharge", (.bool false)), ("tax", (.num (19000)))]⟩, ⟨[("gross", (.num (107001))), ("id", (.text "INV-2")), ("net", (.num (100000))), ("reverseCharge", (.bool false)), ("tax", (.num (7000)))]⟩] else []
+  closed := fun k => if k = "invoice" then true else false
+
+def v_cases_408_other_invoice_fails_json.requirements : List (Requirement WCL2.Pred) := [
+  ⟨none, (.ex "i" "invoice" (.and (.cmp .eq (.field "i" "id") (.input "invoice")) (.cmp .eq (.add (.field "i" "net") (.field "i" "tax")) (.field "i" "gross"))))⟩,
+  ⟨some (.ex "i" "invoice" (.and (.cmp .eq (.field "i" "id") (.input "invoice")) (.cmp .eq (.field "i" "reverseCharge") (.lit .bool (.bool false))))), (.ex "i" "invoice" (.and (.cmp .eq (.field "i" "id") (.input "invoice")) (.cmp .eq (.scale (100) (.field "i" "tax")) (.scale (19) (.field "i" "net")))))⟩
+]
+
+theorem v_cases_408_other_invoice_fails_json :
+    v_cases_408_other_invoice_fails_json.requirements.map (result (fun p => WCL2.Pred.eval v_cases_408_other_invoice_fails_json.env p [])) = [.true, .true] ∧
+      evaluate (fun p => WCL2.Pred.eval v_cases_408_other_invoice_fails_json.env p []) v_cases_408_other_invoice_fails_json.requirements = .supported := by
+  decide
+
+/-- `cases/409-this-invoice-fails.json` -/
+def v_cases_409_this_invoice_fails_json.env : Env where
+  inputs := fun n => if n = "cutoff" then some (.num (1767225600)) else if n = "invoice" then some (.text "INV-1") else none
+  params := fun _ => none
+  records := fun k => if k = "invoice" then [⟨[("gross", (.num (107001))), ("id", (.text "INV-1")), ("net", (.num (100000))), ("reverseCharge", (.bool false)), ("tax", (.num (7000)))]⟩, ⟨[("gross", (.num (119000))), ("id", (.text "INV-2")), ("net", (.num (100000))), ("reverseCharge", (.bool false)), ("tax", (.num (19000)))]⟩] else []
+  closed := fun k => if k = "invoice" then true else false
+
+def v_cases_409_this_invoice_fails_json.requirements : List (Requirement WCL2.Pred) := [
+  ⟨none, (.ex "i" "invoice" (.and (.cmp .eq (.field "i" "id") (.input "invoice")) (.cmp .eq (.add (.field "i" "net") (.field "i" "tax")) (.field "i" "gross"))))⟩,
+  ⟨some (.ex "i" "invoice" (.and (.cmp .eq (.field "i" "id") (.input "invoice")) (.cmp .eq (.field "i" "reverseCharge") (.lit .bool (.bool false))))), (.ex "i" "invoice" (.and (.cmp .eq (.field "i" "id") (.input "invoice")) (.cmp .eq (.scale (100) (.field "i" "tax")) (.scale (19) (.field "i" "net")))))⟩
+]
+
+theorem v_cases_409_this_invoice_fails_json :
+    v_cases_409_this_invoice_fails_json.requirements.map (result (fun p => WCL2.Pred.eval v_cases_409_this_invoice_fails_json.env p [])) = [.false, .false] ∧
+      evaluate (fun p => WCL2.Pred.eval v_cases_409_this_invoice_fails_json.env p []) v_cases_409_this_invoice_fails_json.requirements = .contradicted := by
+  decide
+
+/-- `cases/410-other-invoice-applies.json` -/
+def v_cases_410_other_invoice_applies_json.env : Env where
+  inputs := fun n => if n = "cutoff" then some (.num (1767225600)) else if n = "invoice" then some (.text "INV-1") else none
+  params := fun _ => none
+  records := fun k => if k = "invoice" then [⟨[("gross", (.num (100000))), ("id", (.text "INV-1")), ("net", (.num (100000))), ("reverseCharge", (.bool true)), ("tax", (.num (0)))]⟩, ⟨[("gross", (.num (119000))), ("id", (.text "INV-2")), ("net", (.num (100000))), ("reverseCharge", (.bool false)), ("tax", (.num (19000)))]⟩] else []
+  closed := fun k => if k = "invoice" then true else false
+
+def v_cases_410_other_invoice_applies_json.requirements : List (Requirement WCL2.Pred) := [
+  ⟨some (.ex "i" "invoice" (.and (.cmp .eq (.field "i" "id") (.input "invoice")) (.cmp .eq (.field "i" "reverseCharge") (.lit .bool (.bool false))))), (.ex "i" "invoice" (.and (.cmp .eq (.field "i" "id") (.input "invoice")) (.cmp .eq (.scale (100) (.field "i" "tax")) (.scale (19) (.field "i" "net")))))⟩
+]
+
+theorem v_cases_410_other_invoice_applies_json :
+    v_cases_410_other_invoice_applies_json.requirements.map (result (fun p => WCL2.Pred.eval v_cases_410_other_invoice_applies_json.env p [])) = [.notApplicable] ∧
+      evaluate (fun p => WCL2.Pred.eval v_cases_410_other_invoice_applies_json.env p []) v_cases_410_other_invoice_applies_json.requirements = .notApplicable := by
+  decide
+
+/-- `cases/411-other-invoice-does-not-apply.json` -/
+def v_cases_411_other_invoice_does_not_apply_json.env : Env where
+  inputs := fun n => if n = "cutoff" then some (.num (1767225600)) else if n = "invoice" then some (.text "INV-1") else none
+  params := fun _ => none
+  records := fun k => if k = "invoice" then [⟨[("gross", (.num (119000))), ("id", (.text "INV-1")), ("net", (.num (100000))), ("reverseCharge", (.bool false)), ("tax", (.num (19000)))]⟩, ⟨[("gross", (.num (100000))), ("id", (.text "INV-2")), ("net", (.num (100000))), ("reverseCharge", (.bool true)), ("tax", (.num (0)))]⟩] else []
+  closed := fun k => if k = "invoice" then true else false
+
+def v_cases_411_other_invoice_does_not_apply_json.requirements : List (Requirement WCL2.Pred) := [
+  ⟨some (.ex "i" "invoice" (.and (.cmp .eq (.field "i" "id") (.input "invoice")) (.cmp .eq (.field "i" "reverseCharge") (.lit .bool (.bool false))))), (.ex "i" "invoice" (.and (.cmp .eq (.field "i" "id") (.input "invoice")) (.cmp .eq (.scale (100) (.field "i" "tax")) (.scale (19) (.field "i" "net")))))⟩
+]
+
+theorem v_cases_411_other_invoice_does_not_apply_json :
+    v_cases_411_other_invoice_does_not_apply_json.requirements.map (result (fun p => WCL2.Pred.eval v_cases_411_other_invoice_does_not_apply_json.env p [])) = [.true] ∧
+      evaluate (fun p => WCL2.Pred.eval v_cases_411_other_invoice_does_not_apply_json.env p []) v_cases_411_other_invoice_does_not_apply_json.requirements = .supported := by
+  decide
+
 end Applies.Vectors

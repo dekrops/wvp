@@ -26,4 +26,8 @@ import Applies
 #print axioms Applies.Vectors.v_cases_405_invoice_not_seen_json
 #print axioms Applies.Vectors.v_cases_406_failure_where_it_does_not_apply_json
 #print axioms Applies.Vectors.v_cases_407_condition_not_recorded_json
+#print axioms Applies.Vectors.v_cases_408_other_invoice_fails_json
+#print axioms Applies.Vectors.v_cases_409_this_invoice_fails_json
+#print axioms Applies.Vectors.v_cases_410_other_invoice_applies_json
+#print axioms Applies.Vectors.v_cases_411_other_invoice_does_not_apply_json
 -- End of generated vector theorems.

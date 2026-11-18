@@ -156,8 +156,8 @@ def only_tax():
     return contract("invoice-tax-only", [{"appliesWhen": NOT_REVERSE_CHARGE, "id": "TAX_AT_19", "predicate": TAX_AT_19}])
 
 
-def invoice(net, tax, gross, reverse_charge=None):
-    fields = {"gross": str(gross), "id": "INV-1", "net": str(net), "tax": str(tax)}
+def invoice(net, tax, gross, reverse_charge=None, invoice_id="INV-1"):
+    fields = {"gross": str(gross), "id": invoice_id, "net": str(net), "tax": str(tax)}
     if reverse_charge is not None:
         fields["reverseCharge"] = reverse_charge
     return ("invoice", fields)
@@ -189,6 +189,19 @@ def build_cases():
          both, env(invoice(100000, 1000, 101000, True)), ["TRUE", "NOT_APPLICABLE"], "SUPPORTED")
     case("407-condition-not-recorded", "reverseCharge not recorded: the condition is unknown, so the requirement is, though its predicate holds.",
          alone, env(invoice(100000, 19000, 119000)), ["UNKNOWN"], "UNDETERMINED")
+    # A second invoice in the environment: each requirement must check the invoice asked about,
+    # and only that one (shadowplay S023; dekrops/wvp#47).
+    ok, bad = invoice(100000, 19000, 119000, False), invoice(100000, 7000, 107001, False, "INV-2")
+    case("408-other-invoice-fails", "This invoice is right; another, with a wrong tax and gross, is in the environment.",
+         both, env(ok, bad), ["TRUE", "TRUE"], "SUPPORTED")
+    case("409-this-invoice-fails", "This invoice has a wrong tax and gross; another, right one is in the environment.",
+         both, env(invoice(100000, 7000, 107001, False), invoice(100000, 19000, 119000, False, "INV-2")),
+         ["FALSE", "FALSE"], "CONTRADICTED")
+    case("410-other-invoice-applies", "This invoice is under reverse charge; another, domestic one is in the environment.",
+         alone, env(invoice(100000, 0, 100000, True), invoice(100000, 19000, 119000, False, "INV-2")),
+         ["NOT_APPLICABLE"], "NOT_APPLICABLE")
+    case("411-other-invoice-does-not-apply", "This invoice is domestic and right; another is under reverse charge.",
+         alone, env(ok, invoice(100000, 0, 100000, True, "INV-2")), ["TRUE"], "SUPPORTED")
 
 
 def build_refusals():

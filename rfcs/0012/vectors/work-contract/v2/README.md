@@ -7,7 +7,7 @@ RFC 0008's vectors, which this RFC leaves unchanged.
 - `cases/40x`: requirements with `appliesWhen`, and the decisions they give.
 - `cases/42x`: refusals.
 
-**Checked against the model.** 8 cases have a result. For each, `formal/Applies/Vectors.lean`
+**Checked against the model.** 12 cases have a result. For each, `formal/Applies/Vectors.lean`
 states that the Lean model of RFC 0012 gives exactly its requirement values and decision, proved by
 `decide` and audited by `formal/check.sh`.
 

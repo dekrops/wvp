@@ -74,13 +74,14 @@ Without step 3 and the `NOT_APPLICABLE` value, this is Language 1's rule (sectio
 
 ## Vectors
 
-`0012/generate.py` writes them to `0012/vectors/work-contract/v2`, built on RFC 0008's generator. For each of the 8 with a result, `formal/Applies/Vectors.lean` proves by `decide` that the model gives exactly the expected requirement values and decision. The 3 refusals rest on this RFC's text.
+`0012/generate.py` writes them to `0012/vectors/work-contract/v2`, built on RFC 0008's generator. For each of the 12 with a result, `formal/Applies/Vectors.lean` proves by `decide` that the model gives exactly the expected requirement values and decision. The 3 refusals rest on this RFC's text.
 
 - **A domestic invoice** (`400`, `401`): the tax check applies and holds (`SUPPORTED`), applies and fails (`CONTRADICTED`).
 - **Reverse charge** (`402`, `403`): the tax check doesn't apply and the gross check holds (`SUPPORTED`, the tax check `NOT_APPLICABLE`); the same without `appliesWhen` (`CONTRADICTED`).
 - **Nothing applies** (`404`): the contract's only requirement doesn't apply (`NOT_APPLICABLE`).
 - **The condition unknown** (`405`, `407`): the invoice not yet seen, in a listing not declared complete; and `reverseCharge` not recorded, though the tax is right (`UNDETERMINED` both).
 - **A failure where the rule doesn't apply** (`406`): reverse charge with a tax shown, which the tax check would reject (`SUPPORTED`, the tax check `NOT_APPLICABLE`).
+- **A second invoice** (`408`–`411`): the invoice asked about right and another wrong (`SUPPORTED`), the reverse (`CONTRADICTED`), and the same for the condition: this invoice under reverse charge and another domestic (`NOT_APPLICABLE`), and the reverse (`SUPPORTED`). These check that both `appliesWhen` and `predicate` read the invoice asked about, and only it (shadowplay S023).
 - **Refusals** (`420`–`422`): `appliesWhen` that isn't a predicate (`CONTRACT_MALFORMED`); `appliesWhen` reading a variable it doesn't bind (`CONTRACT_ILL_FORMED`); a term out of range in a requirement that doesn't apply (`ARITHMETIC_RANGE`).
 
 ## Security considerations
@@ -96,7 +97,7 @@ This changes what a verified result may be relied on for, so it needs security r
 
 ## Formal semantics
 
-`0012/formal` is a model in Lean 4.24 with no Mathlib. It's generic in the predicate language: `eval` is any evaluation of a predicate to a `Truth`. The stability theorem needs only that `eval` is stable along more evidence, which RFC 0008 (`eval_monotone`), RFC 0011 and RFC 0009 (`kleene-2`) each prove. So it holds with any of them. Language 2 is the instance the examples use. `check.sh` audits 23 theorems, 8 of them the vectors: no `sorry`, only `propext`, `Classical.choice` and `Quot.sound`.
+`0012/formal` is a model in Lean 4.24 with no Mathlib. It's generic in the predicate language: `eval` is any evaluation of a predicate to a `Truth`. The stability theorem needs only that `eval` is stable along more evidence, which RFC 0008 (`eval_monotone`), RFC 0011 and RFC 0009 (`kleene-2`) each prove. So it holds with any of them. Language 2 is the instance the examples use. `check.sh` audits 27 theorems, 12 of them the vectors: no `sorry`, only `propext`, `Classical.choice` and `Quot.sound`.
 
 | Theorem                         | Statement                                                                                                                                          |
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
