@@ -1,0 +1,215 @@
+{
+  "contract": {
+    "evaluation": {
+      "cutoff": "cutoff",
+      "semantics": "kleene-1"
+    },
+    "evidence": {
+      "conflicts": "unknown",
+      "sources": {
+        "invoice": [
+          "erp"
+        ]
+      }
+    },
+    "identity": {
+      "id": "invoice-tax",
+      "version": "1"
+    },
+    "inputs": {
+      "cutoff": {
+        "type": "time"
+      },
+      "invoice": {
+        "type": "text"
+      }
+    },
+    "kinds": {
+      "invoice": {
+        "fields": {
+          "gross": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          },
+          "id": {
+            "type": "text"
+          },
+          "net": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          },
+          "reverseCharge": {
+            "optional": true,
+            "type": "bool"
+          },
+          "tax": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          }
+        },
+        "key": [
+          "id"
+        ]
+      }
+    },
+    "language": "work-contract-2",
+    "policy": {},
+    "requires": [
+      {
+        "id": "GROSS_ADDS_UP",
+        "predicate": {
+          "exists": "i",
+          "in": "invoice",
+          "where": {
+            "and": [
+              {
+                "cmp": "eq",
+                "left": {
+                  "field": "id",
+                  "var": "i"
+                },
+                "right": {
+                  "input": "invoice"
+                }
+              },
+              {
+                "cmp": "eq",
+                "left": {
+                  "add": [
+                    {
+                      "field": "net",
+                      "var": "i"
+                    },
+                    {
+                      "field": "tax",
+                      "var": "i"
+                    }
+                  ]
+                },
+                "right": {
+                  "field": "gross",
+                  "var": "i"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "appliesWhen": {
+          "exists": "i",
+          "in": "invoice",
+          "where": {
+            "and": [
+              {
+                "cmp": "eq",
+                "left": {
+                  "field": "id",
+                  "var": "i"
+                },
+                "right": {
+                  "input": "invoice"
+                }
+              },
+              {
+                "cmp": "eq",
+                "left": {
+                  "field": "reverseCharge",
+                  "var": "i"
+                },
+                "right": {
+                  "lit": false,
+                  "of": {
+                    "type": "bool"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "id": "TAX_AT_19",
+        "predicate": {
+          "exists": "i",
+          "in": "invoice",
+          "where": {
+            "and": [
+              {
+                "cmp": "eq",
+                "left": {
+                  "field": "id",
+                  "var": "i"
+                },
+                "right": {
+                  "input": "invoice"
+                }
+              },
+              {
+                "cmp": "eq",
+                "left": {
+                  "of": {
+                    "field": "tax",
+                    "var": "i"
+                  },
+                  "scale": "100"
+                },
+                "right": {
+                  "of": {
+                    "field": "net",
+                    "var": "i"
+                  },
+                  "scale": "19"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "description": "A domestic invoice taxed at 7 %: the tax check applies and fails.",
+  "environment": {
+    "complete": [
+      {
+        "asOf": "1767225600",
+        "kind": "invoice",
+        "source": "erp"
+      }
+    ],
+    "facts": [
+      {
+        "fields": {
+          "gross": "107000",
+          "id": "INV-1",
+          "net": "100000",
+          "reverseCharge": false,
+          "tax": "7000"
+        },
+        "id": "f01-invoice",
+        "kind": "invoice",
+        "source": "erp"
+      }
+    ],
+    "inputs": {
+      "cutoff": "1767225600",
+      "invoice": "INV-1"
+    }
+  },
+  "expected": {
+    "conflicts": [],
+    "decision": "CONTRADICTED",
+    "ignored": [],
+    "requirements": [
+      {
+        "id": "GROSS_ADDS_UP",
+        "value": "TRUE"
+      },
+      {
+        "id": "TAX_AT_19",
+        "value": "FALSE"
+      }
+    ]
+  }
+}
