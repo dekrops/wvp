@@ -1,0 +1,184 @@
+{
+  "contract": {
+    "evaluation": {
+      "cutoff": "cutoff",
+      "semantics": "kleene-1"
+    },
+    "evidence": {
+      "conflicts": "unknown",
+      "sources": {
+        "invoice": [
+          "erp"
+        ],
+        "rateGroup": [
+          "erp"
+        ]
+      }
+    },
+    "identity": {
+      "id": "refusals",
+      "version": "1"
+    },
+    "inputs": {
+      "cutoff": {
+        "type": "time"
+      },
+      "invoice": {
+        "type": "text"
+      }
+    },
+    "kinds": {
+      "invoice": {
+        "fields": {
+          "gross": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          },
+          "id": {
+            "type": "text"
+          }
+        },
+        "key": [
+          "id"
+        ]
+      },
+      "rateGroup": {
+        "fields": {
+          "id": {
+            "type": "text"
+          },
+          "invoice": {
+            "type": "text"
+          },
+          "net": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          },
+          "rateBps": {
+            "type": "int"
+          },
+          "tax": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          }
+        },
+        "key": [
+          "id"
+        ]
+      }
+    },
+    "language": "work-contract-2",
+    "policy": {},
+    "requires": [
+      {
+        "id": "R",
+        "predicate": {
+          "exists": "i",
+          "in": "invoice",
+          "where": {
+            "cmp": "eq",
+            "left": {
+              "add": [
+                {
+                  "aggregate": "sum",
+                  "cmp": "le",
+                  "field": "net",
+                  "in": "rateGroup",
+                  "of": "g",
+                  "than": {
+                    "lit": "0",
+                    "of": {
+                      "currency": "EUR",
+                      "scale": 2,
+                      "type": "money"
+                    }
+                  },
+                  "where": {
+                    "cmp": "eq",
+                    "left": {
+                      "field": "invoice",
+                      "var": "g"
+                    },
+                    "right": {
+                      "field": "id",
+                      "var": "i"
+                    }
+                  }
+                },
+                {
+                  "aggregate": "sum",
+                  "field": "tax",
+                  "in": "rateGroup",
+                  "of": "g",
+                  "where": {
+                    "cmp": "eq",
+                    "left": {
+                      "field": "invoice",
+                      "var": "g"
+                    },
+                    "right": {
+                      "field": "id",
+                      "var": "i"
+                    }
+                  }
+                }
+              ]
+            },
+            "right": {
+              "field": "gross",
+              "var": "i"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "description": "An aggregate with cmp and than is a predicate, not a term: it cannot be added.",
+  "environment": {
+    "complete": [
+      {
+        "asOf": "1767225600",
+        "kind": "invoice",
+        "source": "erp"
+      },
+      {
+        "asOf": "1767225600",
+        "kind": "rateGroup",
+        "source": "erp"
+      }
+    ],
+    "facts": [
+      {
+        "fields": {
+          "gross": "30696",
+          "id": "INV-1"
+        },
+        "id": "f01-invoice",
+        "kind": "invoice",
+        "source": "erp"
+      },
+      {
+        "fields": {
+          "id": "G-1",
+          "invoice": "INV-1",
+          "net": "16803",
+          "rateBps": "1900",
+          "tax": "3193"
+        },
+        "id": "f02-rateGroup",
+        "kind": "rateGroup",
+        "source": "erp"
+      }
+    ],
+    "inputs": {
+      "cutoff": "1767225600",
+      "invoice": "INV-1"
+    }
+  },
+  "expected": {
+    "refused": "CONTRACT_MALFORMED"
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "contract": {
+    "evaluation": {
+      "cutoff": "cutoff",
+      "semantics": "kleene-1"
+    },
+    "evidence": {
+      "conflicts": "unknown",
+      "sources": {
+        "invoice": [
+          "erp"
+        ],
+        "rateGroup": [
+          "erp"
+        ]
+      }
+    },
+    "identity": {
+      "id": "refusals",
+      "version": "1"
+    },
+    "inputs": {
+      "cutoff": {
+        "type": "time"
+      },
+      "invoice": {
+        "type": "text"
+      }
+    },
+    "kinds": {
+      "invoice": {
+        "fields": {
+          "gross": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          },
+          "id": {
+            "type": "text"
+          }
+        },
+        "key": [
+          "id"
+        ]
+      },
+      "rateGroup": {
+        "fields": {
+          "id": {
+            "type": "text"
+          },
+          "invoice": {
+            "type": "text"
+          },
+          "net": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          },
+          "rateBps": {
+            "type": "int"
+          },
+          "tax": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          }
+        },
+        "key": [
+          "id"
+        ]
+      }
+    },
+    "language": "work-contract-2",
+    "policy": {},
+    "requires": [
+      {
+        "id": "R",
+        "predicate": {
+          "forall": "g",
+          "holds": {
+            "cmp": "le",
+            "left": {
+              "mul": [
+                {
+                  "field": "net",
+                  "var": "g"
+                },
+                {
+                  "field": "tax",
+                  "var": "g"
+                }
+              ]
+            },
+            "right": {
+              "field": "net",
+              "var": "g"
+            }
+          },
+          "in": "rateGroup"
+        }
+      }
+    ]
+  },
+  "description": "mul of two money operands: the product has no unit the language has.",
+  "environment": {
+    "complete": [
+      {
+        "asOf": "1767225600",
+        "kind": "invoice",
+        "source": "erp"
+      },
+      {
+        "asOf": "1767225600",
+        "kind": "rateGroup",
+        "source": "erp"
+      }
+    ],
+    "facts": [
+      {
+        "fields": {
+          "gross": "30696",
+          "id": "INV-1"
+        },
+        "id": "f01-invoice",
+        "kind": "invoice",
+        "source": "erp"
+      },
+      {
+        "fields": {
+          "id": "G-1",
+          "invoice": "INV-1",
+          "net": "16803",
+          "rateBps": "1900",
+          "tax": "3193"
+        },
+        "id": "f02-rateGroup",
+        "kind": "rateGroup",
+        "source": "erp"
+      }
+    ],
+    "inputs": {
+      "cutoff": "1767225600",
+      "invoice": "INV-1"
+    }
+  },
+  "expected": {
+    "refused": "CONTRACT_ILL_FORMED"
+  }
+}

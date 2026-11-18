@@ -1,0 +1,169 @@
+{
+  "contract": {
+    "evaluation": {
+      "cutoff": "cutoff",
+      "semantics": "kleene-1"
+    },
+    "evidence": {
+      "conflicts": "unknown",
+      "sources": {
+        "invoiceLine": [
+          "erp"
+        ],
+        "receipt": [
+          "erp"
+        ]
+      }
+    },
+    "identity": {
+      "id": "cumulative-three-way-match",
+      "version": "1"
+    },
+    "inputs": {
+      "cutoff": {
+        "type": "time"
+      },
+      "order": {
+        "type": "text"
+      }
+    },
+    "kinds": {
+      "invoiceLine": {
+        "fields": {
+          "id": {
+            "type": "text"
+          },
+          "order": {
+            "type": "text"
+          },
+          "qty": {
+            "type": "int"
+          }
+        },
+        "key": [
+          "id"
+        ]
+      },
+      "receipt": {
+        "fields": {
+          "id": {
+            "type": "text"
+          },
+          "order": {
+            "type": "text"
+          },
+          "qty": {
+            "type": "int"
+          }
+        },
+        "key": [
+          "id"
+        ]
+      }
+    },
+    "language": "work-contract-2",
+    "policy": {},
+    "requires": [
+      {
+        "id": "INVOICED_WITHIN_RECEIVED",
+        "predicate": {
+          "cmp": "le",
+          "left": {
+            "aggregate": "sum",
+            "field": "qty",
+            "in": "invoiceLine",
+            "of": "l",
+            "where": {
+              "cmp": "eq",
+              "left": {
+                "field": "order",
+                "var": "l"
+              },
+              "right": {
+                "input": "order"
+              }
+            }
+          },
+          "right": {
+            "aggregate": "sum",
+            "field": "qty",
+            "in": "receipt",
+            "of": "r",
+            "where": {
+              "cmp": "eq",
+              "left": {
+                "field": "order",
+                "var": "r"
+              },
+              "right": {
+                "input": "order"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "description": "A receipt of another order does not cover this order's invoices.",
+  "environment": {
+    "complete": [
+      {
+        "asOf": "1767225600",
+        "kind": "invoiceLine",
+        "source": "erp"
+      },
+      {
+        "asOf": "1767225600",
+        "kind": "receipt",
+        "source": "erp"
+      }
+    ],
+    "facts": [
+      {
+        "fields": {
+          "id": "L-1",
+          "order": "PO-7",
+          "qty": "5"
+        },
+        "id": "f01-invoiceLine",
+        "kind": "invoiceLine",
+        "source": "erp"
+      },
+      {
+        "fields": {
+          "id": "R-1",
+          "order": "PO-7",
+          "qty": "4"
+        },
+        "id": "f02-receipt",
+        "kind": "receipt",
+        "source": "erp"
+      },
+      {
+        "fields": {
+          "id": "R-2",
+          "order": "PO-8",
+          "qty": "99"
+        },
+        "id": "f03-receipt",
+        "kind": "receipt",
+        "source": "erp"
+      }
+    ],
+    "inputs": {
+      "cutoff": "1767225600",
+      "order": "PO-7"
+    }
+  },
+  "expected": {
+    "conflicts": [],
+    "decision": "CONTRADICTED",
+    "ignored": [],
+    "requirements": [
+      {
+        "id": "INVOICED_WITHIN_RECEIVED",
+        "value": "FALSE"
+      }
+    ]
+  }
+}
