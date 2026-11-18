@@ -19,7 +19,7 @@ A conforming implementation reproduces the expected outcome of every vector: the
 
 Independent implementations that reproduce these vectors:
 
-- **Scala**, the reference implementation, which also generates the vectors (not public);
+- **Scala**, the reference implementation, which generated the vectors published up to 2026-11-17 (not public);
 - **JavaScript**, written separately from the Scala (not public);
 - **Lean 4**, in [`formal/lean`](formal/lean/README.md): the definition of evaluation that Work Contract Language 1 defers to, with its proofs and a reference evaluator, and models of the v0.1 evaluator, evidence admission, statement chains and the claim registry's states;
 - **Rust**, [`verified-cli`](https://github.com/dekrops/verified-cli), written from these specifications. Of claim registration it checks registrations, log segments, audits and units; it does not yet check heads.
@@ -42,12 +42,9 @@ WVP is stewarded by Krops GmbH. It is not a standard of any standards body, and 
 
 ## Provenance and maintenance
 
-This repository has two kinds of content, and each has one place where it is written:
+This repository is the source of the protocol. Everything in it is written here, by pull request: specifications, vectors and examples, the Lean definitions, RFCs, governance documents, conformance reports, the contribution guide and this README. How a change is proposed, reviewed and decided has not changed: [RFC 0001](rfcs/0001-standards-process.md), whose invariants still hold. A published expectation is never edited, and a change of outcome is a new version.
 
-- **Specifications, vectors and examples**, with this README and the license files, are exported from the platform repository where the reference implementation generates the vectors, by a script that copies them byte for byte and removes links to files that are not published. [`PROVENANCE.md`](PROVENANCE.md) names the source commit and the SHA-256 of every exported file. A pull request here that edits one of them is not merged as it is: the change is made at the source, by an accepted RFC where the process requires one, and arrives with the next export.
-- **RFCs, governance documents, conformance reports and the contribution guide** (`rfcs/`, `governance/`, `conformance/`, `CONTRIBUTING.md`) are written here, by pull request. The export never writes, replaces or removes them.
-
-[`governance/publication.md`](governance/publication.md) describes this arrangement, why it is the first step and not the last, and what has to be true before the specifications themselves are written here.
+Until 2026-11-17, the specifications, vectors, examples, Lean definitions and this README were exported here from the steward's platform repository, where the reference implementation generated the vectors. That export has stopped, and nothing is exported here any more. [`PROVENANCE.md`](PROVENANCE.md) is kept as the record of the last export: its source commit and the SHA-256 of every file it wrote. Changes made since are in this repository's history. [`governance/publication.md`](governance/publication.md) describes the arrangement as it was.
 
 ## License
 

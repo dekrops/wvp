@@ -22,7 +22,7 @@ concurrency:
 
 jobs:
   corpus:
-    name: The corpus is well-formed, as exported, and no expectation changed
+    name: The corpus is well-formed and no expectation changed
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     env:
@@ -33,7 +33,6 @@ jobs:
         with:
           persist-credentials: false
       - run: python3 conformance/tools/conformance.py structure
-      - run: python3 conformance/tools/conformance.py provenance
       # Vectors proposed by an RFC are not part of the corpus. They are checked to be exactly what
       # their generator writes, so that a proposal can be reproduced by anyone.
       - name: Proposed vectors are as generated
