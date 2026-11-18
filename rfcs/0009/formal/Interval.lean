@@ -46,10 +46,20 @@ def hiSum : Judged → Int
   | [] => 0
   | (b, v) :: j => hiSum j + (match b with | .t => v | .u => max v 0 | .f => 0)
 
-/-- The lower bound: finite over a closed kind, or over an open kind whose summed field is
-declared non-negative (a record not yet seen can only add); `none` is −∞. -/
-def lo (closed nonneg : Bool) (j : Judged) : Option Int :=
-  if closed = true ∨ nonneg = true then some (loSum j) else none
+/-- The summed field's declared `minimum`, if any: every conforming record's value is at least
+it. `nonNegative` is `minimum = 0`. -/
+abbrev Minimum := Option Int
+
+/-- A minimum gives an open kind a lower bound only if it is at least 0: then a record not yet seen
+can only add. With a negative minimum (or none), unseen records can lower the sum without limit. -/
+def boundsOpen : Minimum → Bool
+  | some m => decide (0 ≤ m)
+  | none => false
+
+/-- The lower bound: finite over a closed kind, or over an open kind whose summed field declares
+a minimum of at least 0; `none` is −∞. -/
+def lo (closed : Bool) (m : Minimum) (j : Judged) : Option Int :=
+  if closed = true ∨ boundsOpen m = true then some (loSum j) else none
 
 /-- The upper bound: finite only over a closed kind; `none` is +∞. -/
 def hi (closed : Bool) (j : Judged) : Option Int :=
@@ -75,11 +85,11 @@ inductive Pointwise : Judged → Judged → Prop
       refineT b b' → Pointwise j j' → Pointwise ((b, v) :: j) ((b', v) :: j')
 
 /-- `j'` (closed `c'`) is `j` (closed `c`) with more evidence: its records refined, followed by
-records added, which only an open kind may gain; a closed kind stays closed. A field declared
-non-negative is so in every conforming record. -/
-structure Refines (nonneg : Bool) (c : Bool) (j : Judged) (c' : Bool) (j' : Judged) : Prop where
+records added, which only an open kind may gain; a closed kind stays closed. Every conforming
+record is at least the field's declared minimum. -/
+structure Refines (m : Minimum) (c : Bool) (j : Judged) (c' : Bool) (j' : Judged) : Prop where
   split : ∃ a e, j' = a ++ e ∧ Pointwise j a ∧ (c = true → e = [] ∧ c' = true)
-  conform : nonneg = true → ∀ p ∈ j', 0 ≤ p.2
+  conform : ∀ k, m = some k → ∀ p ∈ j', k ≤ p.2
 
 /-- `x` is at most `y`, as lower bounds (`none` is −∞). -/
 def LoLe : Option Int → Option Int → Prop
@@ -133,8 +143,8 @@ theorem definite_sums {j : Judged} (h : Definite j) : loSum j = exact j ∧ hiSu
 /-! ## The four properties -/
 
 /-- Where RFC 0008 gives a value, the interval is that single value. -/
-theorem agrees_when_settled (nonneg : Bool) (j : Judged) (n : Int)
-    (h : value0008 true j = some n) : lo true nonneg j = some n ∧ hi true j = some n := by
+theorem agrees_when_settled (m : Minimum) (j : Judged) (n : Int)
+    (h : value0008 true j = some n) : lo true m j = some n ∧ hi true j = some n := by
   have hd : Definite j := by
     intro p hp hu
     simp only [value0008] at h
@@ -148,17 +158,23 @@ theorem agrees_when_settled (nonneg : Bool) (j : Judged) (n : Int)
   simp [lo, hi, this.1, this.2, hn]
 
 /-- More evidence never lowers the lower bound. -/
-theorem lo_narrows {n c c' : Bool} {j j' : Judged} (r : Refines n c j c' j') :
-    LoLe (lo c n j) (lo c' n j') := by
+theorem lo_narrows {m : Minimum} {c c' : Bool} {j j' : Judged} (r : Refines m c j c' j') :
+    LoLe (lo c m j) (lo c' m j') := by
   obtain ⟨a, e, rfl, hp, hc⟩ := r.split
-  by_cases h : c = true ∨ n = true
+  by_cases h : c = true ∨ boundsOpen m = true
   · have hla := pointwise_lo hp
     have hle : 0 ≤ loSum e := by
       by_cases hcl : c = true
       · simp [(hc hcl).1, loSum]
-      · have hn : n = true := by simp_all
-        exact loSum_nonneg e (fun p hp' => r.conform hn p (by simp [hp']))
-    have h' : c' = true ∨ n = true := by
+      · have hb : boundsOpen m = true := by simp_all
+        cases hm : m with
+        | none => simp [hm, boundsOpen] at hb
+        | some k =>
+          have hk : 0 ≤ k := by simpa [hm, boundsOpen] using hb
+          exact loSum_nonneg e (fun p hp' => by
+            have := r.conform k hm p (by simp [hp'])
+            omega)
+    have h' : c' = true ∨ boundsOpen m = true := by
       rcases h with h | h
       · exact Or.inl (hc h).2
       · exact Or.inr h
@@ -167,7 +183,7 @@ theorem lo_narrows {n c c' : Bool} {j j' : Judged} (r : Refines n c j c' j') :
   · simp [lo, if_neg h, LoLe]
 
 /-- More evidence never raises the upper bound. -/
-theorem hi_narrows {n c c' : Bool} {j j' : Judged} (r : Refines n c j c' j') :
+theorem hi_narrows {m : Minimum} {c c' : Bool} {j j' : Judged} (r : Refines m c j c' j') :
     HiLe (hi c' j') (hi c j) := by
   obtain ⟨a, e, rfl, hp, hc⟩ := r.split
   by_cases h : c = true
@@ -178,8 +194,8 @@ theorem hi_narrows {n c c' : Bool} {j j' : Judged} (r : Refines n c j c' j') :
   · simp [hi, h, HiLe]
 
 /-- The value of any settled extension lies within the interval. -/
-theorem contains_settled {n c : Bool} {j j' : Judged} (r : Refines n c j true j')
-    (hd : Definite j') : LoLe (lo c n j) (some (exact j')) ∧ HiLe (some (exact j')) (hi c j) := by
+theorem contains_settled {m : Minimum} {c : Bool} {j j' : Judged} (r : Refines m c j true j')
+    (hd : Definite j') : LoLe (lo c m j) (some (exact j')) ∧ HiLe (some (exact j')) (hi c j) := by
   have hs := definite_sums hd
   have hl := lo_narrows r
   have hh := hi_narrows r
@@ -232,7 +248,7 @@ theorem loSum_le_hiSum (j : Judged) : loSum j ≤ hiSum j := by
   | cons p j ih => obtain ⟨b, v⟩ := p; cases b <;> simp only [loSum, hiSum] <;> omega
 
 /-- The bounds of any aggregate make a nonempty interval. -/
-theorem bounds_nonempty (c n : Bool) (j : Judged) : Nonempty (lo c n j) (hi c j) := by
+theorem bounds_nonempty (c : Bool) (m : Minimum) (j : Judged) : Nonempty (lo c m j) (hi c j) := by
   intro a b ha hb
   simp only [lo, hi] at ha hb
   split at ha <;> split at hb <;> simp_all
@@ -322,17 +338,23 @@ theorem cmp_agrees (op : Op) (x n : Int) :
 /-- Settlements closed: €300 (unknown whether reversed: reversals open) and €100 (reversal
 seen). RFC 0008 has no value; the interval is [0, 300], so `≤ 300` is `TRUE`. -/
 example : value0008 true [(.u, 30000), (.f, 10000)] = none := by decide
-example : cmpI .le (lo true true [(.u, 30000), (.f, 10000)]) (hi true [(.u, 30000), (.f, 10000)]) 30000
+example : cmpI .le (lo true none [(.u, 30000), (.f, 10000)]) (hi true [(.u, 30000), (.f, 10000)]) 30000
     = .t := by decide
 
-/-- Settlements open: €250 and €100 seen, none reversed (reversals closed). The amount is
-non-negative, so the interval is [350, +∞) and `≤ 300` is `FALSE`. -/
+/-- Settlements open: €250 and €100 seen, none reversed (reversals closed). The amount declares
+`minimum` 0 (`nonNegative`), so the interval is [350, +∞) and `≤ 300` is `FALSE`. -/
 example : value0008 false [(.t, 25000), (.t, 10000)] = none := by decide
-example : cmpI .le (lo false true [(.t, 25000), (.t, 10000)]) (hi false [(.t, 25000), (.t, 10000)]) 30000
+example : cmpI .le (lo false (some 0) [(.t, 25000), (.t, 10000)]) (hi false [(.t, 25000), (.t, 10000)]) 30000
     = .f := by decide
 
-/-- Without the non-negative declaration an open kind says nothing. -/
-example : cmpI .le (lo false false [(.t, 25000), (.t, 10000)]) (hi false [(.t, 25000), (.t, 10000)]) 30000
+/-- A positive minimum (say one cent) bounds an open kind the same way. -/
+example : cmpI .le (lo false (some 1) [(.t, 25000), (.t, 10000)]) (hi false [(.t, 25000), (.t, 10000)]) 30000
+    = .f := by decide
+
+/-- Without a minimum, or with a negative one, an open kind says nothing. -/
+example : cmpI .le (lo false none [(.t, 25000), (.t, 10000)]) (hi false [(.t, 25000), (.t, 10000)]) 30000
+    = .u := by decide
+example : cmpI .le (lo false (some (-100)) [(.t, 25000), (.t, 10000)]) (hi false [(.t, 25000), (.t, 10000)]) 30000
     = .u := by decide
 
 end RFC0009
