@@ -74,9 +74,9 @@ Zin noted on RFC 0008 that "aggregates are predicates, not terms, so Σ(net + ta
 
 ## Vectors
 
-`0011/generate.py` writes them to `0011/vectors/work-contract/v2`, built on RFC 0008's generator. For each of the 36 with a result, `formal/WCL2T/Vectors.lean` proves by `decide` that the model gives exactly the expected requirement values and decision. The 5 refusals rest on this RFC's text.
+`0011/generate.py` writes them to `0011/vectors/work-contract/v2`, built on RFC 0008's generator. For each of the 38 with a result, `formal/WCL2T/Vectors.lean` proves by `decide` that the model gives exactly the expected requirement values and decision. The 5 refusals rest on this RFC's text.
 
-- **The amounts add up, and the tax at each group's rate** (`300`–`308`): two groups at 19 % and 7 % (`SUPPORTED`); the gross a cent off (`CONTRADICTED`); rate groups not closed (`UNDETERMINED`); a group of another invoice, not counted; 10 %, a rate no contract lists (`SUPPORTED`); 168.03 at 19 % (31.9257, rounded 31.93) with tax 31.95 (`CONTRADICTED`), 31.92 (`SUPPORTED`, within a cent) and 31.91 (`CONTRADICTED`); no rate groups, so the gross must be 0.
+- **The amounts add up, and the tax at each group's rate** (`300`–`309b`): two groups at 19 % and 7 % (`SUPPORTED`); the gross a cent off (`CONTRADICTED`); rate groups not closed (`UNDETERMINED`); a group of another invoice, not counted; 10 %, a rate no contract lists (`SUPPORTED`); 168.03 at 19 % (31.9257, rounded 31.93) with tax 31.95 (`CONTRADICTED`), 31.92 (`SUPPORTED`, within a cent) and 31.91 (`CONTRADICTED`); no rate groups, so the gross must be 0; and a second invoice in the environment, this one adding up and the other not (`SUPPORTED`), and the reverse (`CONTRADICTED`).
 - **The cumulative three-way match** (`310`–`314`): within (`SUPPORTED`), one unit beyond (`CONTRADICTED`), receipts not closed (`UNDETERMINED`), at the bound (`SUPPORTED`), and a receipt of another order, not counted.
 - **Refusals** (`320`–`324`): `mul` of two money operands (`CONTRACT_ILL_FORMED`); a product out of range (`ARITHMETIC_RANGE`); an aggregate term whose sum is out of range (`ARITHMETIC_RANGE`); an aggregate term at depth 4 (`CONTRACT_ILL_FORMED`); an aggregate with `cmp` and `than` used as a term (`CONTRACT_MALFORMED`).
 - **The term form** (`term-form/`): RFC 0008's 22 aggregate vectors with a result, each aggregate predicate rewritten as a comparison with an aggregate term. Every one keeps RFC 0008's expectation.
@@ -92,7 +92,7 @@ This changes what a verified result may be relied on for, so it needs security r
 
 ## Formal semantics
 
-`0011/formal` extends RFC 0008's model (`rfcs/0008/formal`) with mutual `Term` and `Pred`, in Lean 4.24 with no Mathlib. `check.sh` audits 74 theorems, 36 of them the vectors: no `sorry`, only `propext`, `Classical.choice` and `Quot.sound`.
+`0011/formal` extends RFC 0008's model (`rfcs/0008/formal`) with mutual `Term` and `Pred`, in Lean 4.24 with no Mathlib. `check.sh` audits 76 theorems, 38 of them the vectors: no `sorry`, only `propext`, `Classical.choice` and `Quot.sound`.
 
 | Theorem                                        | Statement                                                                                                                                                |
 | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |

@@ -50,6 +50,8 @@ import WCL2T
 #print axioms WCL2T.Vectors.v_cases_306_tax_a_cent_low_json
 #print axioms WCL2T.Vectors.v_cases_307_tax_two_cents_low_json
 #print axioms WCL2T.Vectors.v_cases_308_no_rate_groups_json
+#print axioms WCL2T.Vectors.v_cases_309_other_invoice_wrong_json
+#print axioms WCL2T.Vectors.v_cases_309b_this_invoice_wrong_json
 #print axioms WCL2T.Vectors.v_cases_310_invoiced_within_received_json
 #print axioms WCL2T.Vectors.v_cases_311_invoiced_one_beyond_json
 #print axioms WCL2T.Vectors.v_cases_312_receipts_open_json

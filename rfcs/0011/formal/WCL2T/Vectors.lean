@@ -165,6 +165,40 @@ theorem v_cases_308_no_rate_groups_json :
       WCL2T.evaluate v_cases_308_no_rate_groups_json.env v_cases_308_no_rate_groups_json.requirements = .contradicted := by
   decide
 
+/-- `cases/309-other-invoice-wrong.json` -/
+def v_cases_309_other_invoice_wrong_json.env : Env where
+  inputs := fun n => if n = "cutoff" then some (.num (1767225600)) else if n = "invoice" then some (.text "INV-1") else none
+  params := fun _ => none
+  records := fun k => if k = "invoice" then [⟨[("gross", (.num (30696))), ("id", (.text "INV-1"))]⟩, ⟨[("gross", (.num (50000))), ("id", (.text "INV-2"))]⟩] else if k = "rateGroup" then [⟨[("id", (.text "G-1")), ("invoice", (.text "INV-1")), ("net", (.num (16803))), ("rateBps", (.num (1900))), ("tax", (.num (3193)))]⟩, ⟨[("id", (.text "G-2")), ("invoice", (.text "INV-1")), ("net", (.num (10000))), ("rateBps", (.num (700))), ("tax", (.num (700)))]⟩, ⟨[("id", (.text "G-3")), ("invoice", (.text "INV-2")), ("net", (.num (10000))), ("rateBps", (.num (1900))), ("tax", (.num (1)))]⟩] else []
+  closed := fun k => if k = "invoice" then true else if k = "rateGroup" then true else false
+
+def v_cases_309_other_invoice_wrong_json.requirements : List WCL2T.Pred := [
+  (.ex "i" "invoice" (.and (.cmp .eq (.field "i" "id") (.input "invoice")) (.cmp .eq (.add (.agg (.sum "net") "g" "rateGroup" (.cmp .eq (.field "g" "invoice") (.field "i" "id"))) (.agg (.sum "tax") "g" "rateGroup" (.cmp .eq (.field "g" "invoice") (.field "i" "id")))) (.field "i" "gross")))),
+  (.all "g" "rateGroup" (.or (.not (.cmp .eq (.field "g" "invoice") (.input "invoice"))) (.and (.cmp .le (.scale (10000) (.sub (.field "g" "tax") (.lit (.money "EUR" 2) (.num (1))))) (.add (.mul (.field "g" "rateBps") (.field "g" "net")) (.lit (.money "EUR" 2) (.num (5000))))) (.cmp .lt (.add (.mul (.field "g" "rateBps") (.field "g" "net")) (.lit (.money "EUR" 2) (.num (5000)))) (.scale (10000) (.add (.field "g" "tax") (.lit (.money "EUR" 2) (.num (2)))))))))
+]
+
+theorem v_cases_309_other_invoice_wrong_json :
+    v_cases_309_other_invoice_wrong_json.requirements.map (fun r => r.eval v_cases_309_other_invoice_wrong_json.env []) = [.true, .true] ∧
+      WCL2T.evaluate v_cases_309_other_invoice_wrong_json.env v_cases_309_other_invoice_wrong_json.requirements = .supported := by
+  decide
+
+/-- `cases/309b-this-invoice-wrong.json` -/
+def v_cases_309b_this_invoice_wrong_json.env : Env where
+  inputs := fun n => if n = "cutoff" then some (.num (1767225600)) else if n = "invoice" then some (.text "INV-1") else none
+  params := fun _ => none
+  records := fun k => if k = "invoice" then [⟨[("gross", (.num (30697))), ("id", (.text "INV-1"))]⟩, ⟨[("gross", (.num (11900))), ("id", (.text "INV-2"))]⟩] else if k = "rateGroup" then [⟨[("id", (.text "G-1")), ("invoice", (.text "INV-1")), ("net", (.num (16803))), ("rateBps", (.num (1900))), ("tax", (.num (3193)))]⟩, ⟨[("id", (.text "G-2")), ("invoice", (.text "INV-1")), ("net", (.num (10000))), ("rateBps", (.num (700))), ("tax", (.num (700)))]⟩, ⟨[("id", (.text "G-3")), ("invoice", (.text "INV-2")), ("net", (.num (10000))), ("rateBps", (.num (1900))), ("tax", (.num (1900)))]⟩] else []
+  closed := fun k => if k = "invoice" then true else if k = "rateGroup" then true else false
+
+def v_cases_309b_this_invoice_wrong_json.requirements : List WCL2T.Pred := [
+  (.ex "i" "invoice" (.and (.cmp .eq (.field "i" "id") (.input "invoice")) (.cmp .eq (.add (.agg (.sum "net") "g" "rateGroup" (.cmp .eq (.field "g" "invoice") (.field "i" "id"))) (.agg (.sum "tax") "g" "rateGroup" (.cmp .eq (.field "g" "invoice") (.field "i" "id")))) (.field "i" "gross")))),
+  (.all "g" "rateGroup" (.or (.not (.cmp .eq (.field "g" "invoice") (.input "invoice"))) (.and (.cmp .le (.scale (10000) (.sub (.field "g" "tax") (.lit (.money "EUR" 2) (.num (1))))) (.add (.mul (.field "g" "rateBps") (.field "g" "net")) (.lit (.money "EUR" 2) (.num (5000))))) (.cmp .lt (.add (.mul (.field "g" "rateBps") (.field "g" "net")) (.lit (.money "EUR" 2) (.num (5000)))) (.scale (10000) (.add (.field "g" "tax") (.lit (.money "EUR" 2) (.num (2)))))))))
+]
+
+theorem v_cases_309b_this_invoice_wrong_json :
+    v_cases_309b_this_invoice_wrong_json.requirements.map (fun r => r.eval v_cases_309b_this_invoice_wrong_json.env []) = [.false, .true] ∧
+      WCL2T.evaluate v_cases_309b_this_invoice_wrong_json.env v_cases_309b_this_invoice_wrong_json.requirements = .contradicted := by
+  decide
+
 /-- `cases/310-invoiced-within-received.json` -/
 def v_cases_310_invoiced_within_received_json.env : Env where
   inputs := fun n => if n = "cutoff" then some (.num (1767225600)) else if n = "order" then some (.text "PO-7") else none

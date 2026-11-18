@@ -281,6 +281,15 @@ def build_rate_groups():
          [gross(19994), group("G-1", 1900, 16803, 3191)], ["TRUE", "FALSE"], "CONTRADICTED")
     case("308-no-rate-groups", "No rate groups, in a complete listing: both sums are 0, so the gross must be 0.",
          [gross(100)], ["FALSE", "TRUE"], "CONTRADICTED")
+    # A second invoice in the environment: the sums must be of the invoice asked about, and only
+    # that one (shadowplay S023; dekrops/wvp#47).
+    this_groups = [group("G-1", 1900, 16803, 3193), group("G-2", 700, 10000, 700)]
+    case("309-other-invoice-wrong", "This invoice adds up; another invoice, whose gross and tax are wrong, is in the environment.",
+         [gross(30696), *this_groups, gross(50000, "INV-2"), group("G-3", 1900, 10000, 1, "INV-2")],
+         ["TRUE", "TRUE"], "SUPPORTED")
+    case("309b-this-invoice-wrong", "This invoice's gross is a cent off; another invoice, which adds up, is in the environment.",
+         [gross(30697), *this_groups, gross(11900, "INV-2"), group("G-3", 1900, 10000, 1900, "INV-2")],
+         ["FALSE", "TRUE"], "CONTRADICTED")
 
 
 # The cumulative three-way match.

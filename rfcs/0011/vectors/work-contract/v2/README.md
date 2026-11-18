@@ -10,7 +10,7 @@ RFC 0008's vectors, which this RFC leaves unchanged.
 - `term-form/`: 22 of RFC 0008's aggregate vectors, each aggregate predicate written as a
   comparison with an aggregate term, with RFC 0008's expectation unchanged.
 
-**Checked against the model.** 36 cases have a result. For each, `formal/WCL2T/Vectors.lean`
+**Checked against the model.** 38 cases have a result. For each, `formal/WCL2T/Vectors.lean`
 states that the Lean model of RFC 0011 gives exactly its requirement values and decision, proved by
 `decide` and audited by `formal/check.sh`.
 
