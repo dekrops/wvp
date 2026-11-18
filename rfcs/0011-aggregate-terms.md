@@ -93,24 +93,23 @@ This changes what a verified result may be relied on for, so it needs security r
 
 ## Formal semantics
 
-`0011/formal` extends RFC 0008's model (`rfcs/0008/formal`) with mutual `Term` and `Pred`, in Lean 4.24 with no Mathlib. `check.sh` audits 19 theorems: no `sorry`, only `propext`, `Classical.choice` and `Quot.sound`.
+`0011/formal` extends RFC 0008's model (`rfcs/0008/formal`) with mutual `Term` and `Pred`, in Lean 4.24 with no Mathlib. `check.sh` audits 38 theorems: no `sorry`, only `propext`, `Classical.choice` and `Quot.sound`.
 
-| Theorem                                       | Statement                                                                                                                  |
-| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `extends_language_2`                          | Every RFC 0008 requirement has the same value here, in every environment and scope                                         |
-| `same_decision_as_language_2`                 | An RFC 0008 contract has the same decision                                                                                 |
-| `agg_is_cmp`                                  | RFC 0008's aggregate predicate is exactly a comparison with the aggregate term                                             |
-| `agg_value_requires_closed`                   | An aggregate term with a value was taken over a closed kind, every body settled                                            |
-| `agg_open_kind_has_no_value`                  | Over a kind no source declared complete, an aggregate term has no value                                                    |
-| `cmp_unknown_of_none`, `add_none`, `mul_none` | A comparison or arithmetic reading a term with no value is unknown or has none                                             |
-| examples                                      | The three controls of the Motivation, decided: each `SUPPORTED`, `CONTRADICTED` and `UNDETERMINED` case above, by `decide` |
+| Theorem                                        | Statement                                                                                                                                                |
+| ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `extends_language_2`                           | Every RFC 0008 requirement has the same value here, in every environment and scope                                                                       |
+| `same_decision_as_language_2`                  | An RFC 0008 contract has the same decision                                                                                                               |
+| `agg_is_cmp`                                   | RFC 0008's aggregate predicate is exactly a comparison with the aggregate term                                                                           |
+| `agg_value_requires_closed`                    | An aggregate term with a value was taken over a closed kind, every body settled                                                                          |
+| `agg_open_kind_has_no_value`                   | Over a kind no source declared complete, an aggregate term has no value                                                                                  |
+| `cmp_unknown_of_none`, `add_none`, `mul_none`  | A comparison or arithmetic reading a term with no value is unknown or has none                                                                           |
+| `term_kept`                                    | A term with a value keeps it along a settled extension: an aggregate term can gain a value later, never lose or change one                               |
+| `eval_monotone`, `definite_decision_is_stable` | RFC 0008's stability, for the extended language: a `TRUE` or `FALSE` requirement, and a `SUPPORTED` or `CONTRADICTED` decision, stays so along `Settled` |
+| examples                                       | The three controls of the Motivation, decided: each `SUPPORTED`, `CONTRADICTED` and `UNDETERMINED` case above, by `decide`                               |
 
-**Not proved:**
+Stability is proved as RFC 0008 proves it, with one change. RFC 0008's terms don't depend on the evidence, but an aggregate term does, so the statement for terms is one-sided: a term with a value keeps it (`term_kept`). It's proved together with `eval_monotone`, over the mutual `Term` and `Pred`, from RFC 0008's `value_perm` and `settled_bodies_kept`.
 
-- **Stability:** RFC 0008's `eval_monotone` and `definite_decision_is_stable` restated for the extended language, along `Settled`. Its argument should carry over, since an aggregate term's value is RFC 0008's `Aggregate.value` (proved order-independent by `value_perm`), but it isn't done.
-- **The typing and range,** as in RFC 0008.
-
-The stability theorems are needed before this RFC asks for Review.
+**Not proved:** the typing and the range, as in RFC 0008.
 
 ## Alternatives
 

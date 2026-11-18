@@ -16,7 +16,7 @@ for source in sorted(pathlib.Path("WCL2T").rglob('*.lean')):
     if re.search(r'\b(sorry|admit|axiom|native_decide)\b', re.sub(r'--[^\n]*', '', text)):
         raise SystemExit(f'Forbidden proof escape hatch in {source}')
     namespace = re.search(r'^namespace\s+(\S+)', text, re.M)
-    theorems += [f'{namespace.group(1)}.{name}' for name in re.findall(r'^theorem\s+(\w+)', text, re.M)]
+    theorems += [f'{namespace.group(1)}.{name}' for name in re.findall(r'^\s*theorem\s+(\w+)', text, re.M)]
 if not theorems:
     raise SystemExit('No theorems found')
 allowed = {'propext', 'Classical.choice', 'Quot.sound'}
