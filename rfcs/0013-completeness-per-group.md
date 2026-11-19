@@ -26,7 +26,7 @@ An adapter that maps ERP exports to records, written for a pilot, never guesses.
 
 Each bad row belongs to one invoice, one order or one supplier, and the adapter can read which: only the amount or the currency was wrong. But a completeness statement can't say "complete except for that invoice", so one row takes a whole kind out, and every check that reads the kind with it. In a real month with thousands of invoices, one bad row would leave a whole control undecided.
 
-With this RFC, the same month has **at most 4 results undecided**: exactly the checks of the invoices the bad rows belong to. This was measured by simulating the change with today's verified-cli, one invoice at a time (outside this repository). No result becomes a pass or a failure it wasn't with the clean exports.
+With this RFC, the same month has **at most 4 results undecided**: exactly the checks of the invoices the bad rows belong to. This was measured with verified-cli's draft implementation, on the adapter's exports with group statements and the same contract with `per` on all 21 of its quantifiers and aggregates (outside this repository). The contract with `per` decides the clean month exactly as without it. No result becomes a pass or a failure it wasn't with the clean exports.
 
 ## What changes
 
@@ -60,6 +60,8 @@ Without `per`, a quantifier is as today. A `where` may still test the same field
 
 **3. Evaluation,** in Language 1's section 7, step 7: `exists` and `forall` read "_K_ is not closed" as "the listing is not closed", where the listing is the kind, or with `per`, the group. An aggregate has a value only when its listing is closed and every body is settled (RFC 0008).
 
+**What is evaluated,** as RFC 0008, over the listing: the group's term always, and the body for every record of the group. A record outside the group is not bound, so its body isn't evaluated and can't refuse `ARITHMETIC_RANGE`.
+
 ## Outcomes that change
 
 - **Contracts without `per`: none,** whatever statements an environment carries (`same_decision_without_per`). A statement with `per` never closes a kind.
@@ -70,11 +72,11 @@ Without `per`, a quantifier is as today. A `where` may still test the same field
 - **A new form, in the contract and in the environment.** A contract with `per` is a new language version (RFC 0001, invariant 2), or part of Language 2 if folded into RFC 0008 before it's accepted. A verifier that doesn't implement it refuses the contract as another version (invariant 3).
 - **Environments:** a statement with `per` is new. A verifier that doesn't know it must refuse the environment rather than read it as a statement for the whole kind, which would claim more than the source did. `complete` is ordered by (`kind`, `source`, `per`), a statement without `per` first.
 - **Admission and adapters:** a source or adapter states a group complete only when it holds every record of it. An adapter would state "except" the groups its rejected rows fall in, and no group at all when a rejected row's group field can't be read.
-- **verified-cli:** `per` is one more filter on a quantifier's listing, and the closed check gains one lookup.
+- **verified-cli:** `per` is one more filter on a quantifier's listing, and the closed check gains one lookup. A draft implementation is behind a `draft-wvp-0013` feature, off by default. Without it, an environment with a group statement is refused as `ENVIRONMENT_MALFORMED`, as this section asks.
 
 ## Vectors
 
-To be generated with an implementation, from the examples in `0013/formal/WCL2G/Examples.lean`, each proved by `decide`:
+To be generated as JSON, from the examples in `0013/formal/WCL2G/Examples.lean`, each proved by `decide`. verified-cli's draft implementation passes a test for each, and for each refusal below:
 
 - **Decided with `per`** (`paid_within_approval_decided`): the invoice's payments are complete as a group; they add up within the approval (`SUPPORTED`).
 - **Today's form** (`paid_within_approval_today`): the same environment, without `per` (`UNDETERMINED`).
@@ -83,7 +85,8 @@ To be generated with an implementation, from the examples in `0013/formal/WCL2G/
 - **Missing evidence found** (`missing_approval_found`, `missing_approval_today`): no approval in a complete group (`FALSE`), where today's form is `UNKNOWN`.
 - **"Every invoice except"** (`except_decides_others`): decides the other invoices, including one with no payments at all.
 - **Exactness** (`group_is_exact`, `group_is_per_kind`, `no_key_is_unknown`): a group names one value, of one kind; with no key, nothing is closed.
-- **Refusals,** to be written: `per` on an optional or undeclared field; `per` whose term reads the quantifier's own variable; a statement with both `only` and `except`, or neither.
+- **More evidence** (`a_record_outside_a_closed_group_changes_nothing` in verified-cli): a payment added to another invoice's group leaves the decision as it was.
+- **Refusals:** `per` on an optional or undeclared field, with a term of another type, or whose term reads the quantifier's own variable (`CONTRACT_ILL_FORMED`); `per` with a member other than `field` and `is` (`CONTRACT_MALFORMED`); a statement with both `only` and `except`, or out of order (`ENVIRONMENT_MALFORMED`); a statement whose `per` names an undeclared or optional field, or lists a value of another type (`ENVIRONMENT_NONCONFORMING`).
 
 ## Security considerations
 
@@ -109,7 +112,7 @@ This changes what a verified result may be relied on for, so it needs security r
 | `definite_decision_is_stable`                                         | A `SUPPORTED` or `CONTRADICTED` decision stays so                                                                                     |
 | examples                                                              | 11 examples by `decide`, listed under Vectors                                                                                         |
 
-**Not proved:** the typing (that `per` names a required field, and its term can't read the quantifier's variable) and the wire form, as in RFC 0008. The measurement under Motivation is a simulation, not a proof.
+**Not proved:** the typing (that `per` names a required field, and its term can't read the quantifier's variable) and the wire form, as in RFC 0008. The measurement under Motivation is a run on one sample month, not a proof.
 
 ## Alternatives
 
@@ -129,4 +132,4 @@ Not yet decided.
 
 ## Implementation
 
-Not yet implemented. The model is in `0013/formal`.
+A draft in verified-cli, behind the `draft-wvp-0013` feature, off by default. The model is in `0013/formal`.
