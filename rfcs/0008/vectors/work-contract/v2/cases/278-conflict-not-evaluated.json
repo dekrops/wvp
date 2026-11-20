@@ -1,0 +1,142 @@
+{
+  "contract": {
+    "evaluation": {
+      "cutoff": "cutoff",
+      "semantics": "kleene-1"
+    },
+    "evidence": {
+      "conflicts": "unknown",
+      "sources": {
+        "invoice": [
+          "erp"
+        ]
+      }
+    },
+    "identity": {
+      "id": "bindings",
+      "version": "1"
+    },
+    "inputs": {
+      "cutoff": {
+        "type": "time"
+      },
+      "invoice": {
+        "type": "text"
+      }
+    },
+    "kinds": {
+      "invoice": {
+        "fields": {
+          "amount": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          },
+          "id": {
+            "type": "text"
+          }
+        },
+        "key": [
+          "id"
+        ]
+      }
+    },
+    "language": "work-contract-2",
+    "policy": {},
+    "requires": [
+      {
+        "id": "R",
+        "predicate": {
+          "exists": "i",
+          "in": "invoice",
+          "where": {
+            "and": [
+              {
+                "cmp": "eq",
+                "left": {
+                  "field": "id",
+                  "var": "i"
+                },
+                "right": {
+                  "input": "invoice"
+                }
+              },
+              {
+                "cmp": "le",
+                "left": {
+                  "field": "amount",
+                  "var": "i"
+                },
+                "right": {
+                  "add": [
+                    {
+                      "field": "amount",
+                      "var": "i"
+                    },
+                    {
+                      "field": "amount",
+                      "var": "i"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "description": "Two facts about INV-1 disagree, under conflicts: unknown. Neither is used (step 5), so the out-of-range term on the second is never evaluated: UNKNOWN, not a refusal.",
+  "environment": {
+    "complete": [
+      {
+        "asOf": "1767225600",
+        "kind": "invoice",
+        "source": "erp"
+      }
+    ],
+    "facts": [
+      {
+        "fields": {
+          "amount": "10050",
+          "id": "INV-1"
+        },
+        "id": "f01-invoice",
+        "kind": "invoice",
+        "source": "erp"
+      },
+      {
+        "fields": {
+          "amount": "9000000000000000000",
+          "id": "INV-1"
+        },
+        "id": "f02-invoice",
+        "kind": "invoice",
+        "source": "erp"
+      }
+    ],
+    "inputs": {
+      "cutoff": "1767225600",
+      "invoice": "INV-1"
+    }
+  },
+  "expected": {
+    "conflicts": [
+      {
+        "facts": [
+          "f01-invoice",
+          "f02-invoice"
+        ],
+        "kind": "invoice"
+      }
+    ],
+    "decision": "UNDETERMINED",
+    "ignored": [],
+    "requirements": [
+      {
+        "id": "R",
+        "value": "UNKNOWN"
+      }
+    ]
+  }
+}

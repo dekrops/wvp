@@ -1,0 +1,144 @@
+{
+  "contract": {
+    "evaluation": {
+      "cutoff": "cutoff",
+      "semantics": "kleene-1"
+    },
+    "evidence": {
+      "conflicts": "source-order",
+      "sources": {
+        "invoice": [
+          "erp",
+          "legacy"
+        ]
+      }
+    },
+    "identity": {
+      "id": "bindings",
+      "version": "1"
+    },
+    "inputs": {
+      "cutoff": {
+        "type": "time"
+      },
+      "invoice": {
+        "type": "text"
+      }
+    },
+    "kinds": {
+      "invoice": {
+        "fields": {
+          "amount": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          },
+          "id": {
+            "type": "text"
+          }
+        },
+        "key": [
+          "id"
+        ]
+      }
+    },
+    "language": "work-contract-2",
+    "policy": {},
+    "requires": [
+      {
+        "id": "R",
+        "predicate": {
+          "exists": "i",
+          "in": "invoice",
+          "where": {
+            "and": [
+              {
+                "cmp": "eq",
+                "left": {
+                  "field": "id",
+                  "var": "i"
+                },
+                "right": {
+                  "input": "invoice"
+                }
+              },
+              {
+                "cmp": "le",
+                "left": {
+                  "field": "amount",
+                  "var": "i"
+                },
+                "right": {
+                  "add": [
+                    {
+                      "field": "amount",
+                      "var": "i"
+                    },
+                    {
+                      "field": "amount",
+                      "var": "i"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "description": "The same disagreement under source-order: the erp fact is used, the legacy one is not, so its out-of-range term is never evaluated, and the requirement is decided on the erp fact.",
+  "environment": {
+    "complete": [
+      {
+        "asOf": "1767225600",
+        "kind": "invoice",
+        "source": "erp"
+      }
+    ],
+    "facts": [
+      {
+        "fields": {
+          "amount": "10050",
+          "id": "INV-1"
+        },
+        "id": "f01-invoice",
+        "kind": "invoice",
+        "source": "erp"
+      },
+      {
+        "fields": {
+          "amount": "9000000000000000000",
+          "id": "INV-1"
+        },
+        "id": "f02-invoice",
+        "kind": "invoice",
+        "source": "legacy"
+      }
+    ],
+    "inputs": {
+      "cutoff": "1767225600",
+      "invoice": "INV-1"
+    }
+  },
+  "expected": {
+    "conflicts": [
+      {
+        "facts": [
+          "f01-invoice",
+          "f02-invoice"
+        ],
+        "kind": "invoice",
+        "resolvedTo": "f01-invoice"
+      }
+    ],
+    "decision": "SUPPORTED",
+    "ignored": [],
+    "requirements": [
+      {
+        "id": "R",
+        "value": "TRUE"
+      }
+    ]
+  }
+}

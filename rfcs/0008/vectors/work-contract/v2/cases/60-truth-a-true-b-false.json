@@ -1,0 +1,182 @@
+{
+  "contract": {
+    "evaluation": {
+      "semantics": "kleene-1"
+    },
+    "evidence": {
+      "conflicts": "unknown",
+      "sources": {
+        "flags": [
+          "source"
+        ]
+      }
+    },
+    "identity": {
+      "id": "truth-tables",
+      "version": "1"
+    },
+    "inputs": {},
+    "kinds": {
+      "flags": {
+        "fields": {
+          "a": {
+            "optional": true,
+            "type": "bool"
+          },
+          "b": {
+            "optional": true,
+            "type": "bool"
+          },
+          "id": {
+            "type": "text"
+          }
+        },
+        "key": [
+          "id"
+        ]
+      }
+    },
+    "language": "work-contract-2",
+    "policy": {},
+    "requires": [
+      {
+        "id": "AND",
+        "predicate": {
+          "exists": "f",
+          "in": "flags",
+          "where": {
+            "and": [
+              {
+                "cmp": "eq",
+                "left": {
+                  "field": "a",
+                  "var": "f"
+                },
+                "right": {
+                  "lit": true,
+                  "of": {
+                    "type": "bool"
+                  }
+                }
+              },
+              {
+                "cmp": "eq",
+                "left": {
+                  "field": "b",
+                  "var": "f"
+                },
+                "right": {
+                  "lit": true,
+                  "of": {
+                    "type": "bool"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "NOT",
+        "predicate": {
+          "exists": "f",
+          "in": "flags",
+          "where": {
+            "not": {
+              "cmp": "eq",
+              "left": {
+                "field": "a",
+                "var": "f"
+              },
+              "right": {
+                "lit": true,
+                "of": {
+                  "type": "bool"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "OR",
+        "predicate": {
+          "exists": "f",
+          "in": "flags",
+          "where": {
+            "or": [
+              {
+                "cmp": "eq",
+                "left": {
+                  "field": "a",
+                  "var": "f"
+                },
+                "right": {
+                  "lit": true,
+                  "of": {
+                    "type": "bool"
+                  }
+                }
+              },
+              {
+                "cmp": "eq",
+                "left": {
+                  "field": "b",
+                  "var": "f"
+                },
+                "right": {
+                  "lit": true,
+                  "of": {
+                    "type": "bool"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "description": "Truth tables: a is true, b is false.",
+  "environment": {
+    "complete": [
+      {
+        "asOf": "0",
+        "kind": "flags",
+        "source": "source"
+      }
+    ],
+    "facts": [
+      {
+        "fields": {
+          "a": true,
+          "b": false,
+          "id": "x"
+        },
+        "id": "f1",
+        "kind": "flags",
+        "source": "source"
+      }
+    ],
+    "inputs": {}
+  },
+  "expected": {
+    "conflicts": [],
+    "decision": "CONTRADICTED",
+    "ignored": [],
+    "requirements": [
+      {
+        "id": "AND",
+        "value": "FALSE"
+      },
+      {
+        "id": "NOT",
+        "value": "FALSE"
+      },
+      {
+        "id": "OR",
+        "value": "TRUE"
+      }
+    ]
+  }
+}

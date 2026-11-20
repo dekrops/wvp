@@ -10,6 +10,7 @@ How the protocol changes. [RFC 0001](0001-standards-process.md) is the process; 
 | [0004](0004-conformance-profiles.md)                | Conformance profiles                | Draft    |
 | [0005](0005-derived-assertions.md)                  | Derived assertions                  | Draft    |
 | [0006](0006-jcs-dsse-assessment.md) | Evaluate JCS and DSSE for future WVP formats | Draft |
+| [0008](0008-work-contract-language-2.md) | Work Contract Language 2: arithmetic and aggregates | Draft |
 
 To propose a change, copy [the template](0000-template.md) to `NNNN-short-title.md`, using the next free number, and open a pull request. A question or an ambiguity does not need an RFC: open an issue ([contributing](../CONTRIBUTING.md)).
 
