@@ -1,0 +1,23 @@
+name = "wcl2g"
+version = "0.1.0"
+defaultTargets = ["WCL2G"]
+
+[leanOptions]
+warningAsError = true
+
+# Language 1 (formal/lean), Language 2 (RFC 0008) and aggregates as terms (RFC 0011): this model
+# extends RFC 0011's, and is proved to mean the same on every contract that doesn't use `per`.
+[[require]]
+name = "verified"
+path = "../../../formal/lean"
+
+[[require]]
+name = "wcl2"
+path = "../../0008/formal"
+
+[[require]]
+name = "wcl2t"
+path = "../../0011/formal"
+
+[[lean_lib]]
+name = "WCL2G"
