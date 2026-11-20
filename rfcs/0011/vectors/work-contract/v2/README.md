@@ -7,10 +7,10 @@ RFC 0008's vectors, which this RFC leaves unchanged.
 - `cases/30x`: the amounts add up, and the tax at each rate group's own rate (`mul`).
 - `cases/31x`: the cumulative three-way match, a sum compared with a sum.
 - `cases/32x`: refusals.
-- `term-form/`: 22 of RFC 0008's aggregate vectors, each aggregate predicate written as a
+- `term-form/`: 30 of RFC 0008's aggregate vectors, each aggregate predicate written as a
   comparison with an aggregate term, with RFC 0008's expectation unchanged.
 
-**Checked against the model.** 38 cases have a result. For each, `formal/WCL2T/Vectors.lean`
+**Checked against the model.** 46 cases have a result. For each, `formal/WCL2T/Vectors.lean`
 states that the Lean model of RFC 0011 gives exactly its requirement values and decision, proved by
 `decide` and audited by `formal/check.sh`.
 

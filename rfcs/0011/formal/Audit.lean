@@ -79,4 +79,12 @@ import WCL2T
 #print axioms WCL2T.Vectors.v_term_form_247_distinct_same_approver_two_identifiers_json
 #print axioms WCL2T.Vectors.v_term_form_248_distinct_reapproval_json
 #print axioms WCL2T.Vectors.v_term_form_249_distinct_open_approvals_json
+#print axioms WCL2T.Vectors.v_term_form_282_equal_payments_own_identifiers_json
+#print axioms WCL2T.Vectors.v_term_form_283_equal_payments_keyed_by_content_json
+#print axioms WCL2T.Vectors.v_term_form_288_this_invoice_overpaid_json
+#print axioms WCL2T.Vectors.v_term_form_289_other_invoice_overpaid_json
+#print axioms WCL2T.Vectors.v_term_form_290_this_run_fails_json
+#print axioms WCL2T.Vectors.v_term_form_291_other_run_fails_json
+#print axioms WCL2T.Vectors.v_term_form_292_distinct_this_run_fails_json
+#print axioms WCL2T.Vectors.v_term_form_293_distinct_other_run_fails_json
 -- End of generated vector theorems.

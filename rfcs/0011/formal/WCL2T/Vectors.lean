@@ -643,4 +643,136 @@ theorem v_term_form_249_distinct_open_approvals_json :
       WCL2T.evaluate v_term_form_249_distinct_open_approvals_json.env v_term_form_249_distinct_open_approvals_json.requirements = .undetermined := by
   decide
 
+/-- `term-form/282-equal-payments-own-identifiers.json` -/
+def v_term_form_282_equal_payments_own_identifiers_json.env : Env where
+  inputs := fun n => if n = "cutoff" then some (.num (1767225600)) else if n = "invoice" then some (.text "INV-1") else none
+  params := fun _ => none
+  records := fun k => if k = "invoice" then [⟨[("amount", (.num (10050))), ("id", (.text "INV-1"))]⟩] else if k = "paymentMatch" then [⟨[("amount", (.num (6000))), ("id", (.text "M-1")), ("invoice", (.text "INV-1")), ("status", (.text "cleared"))]⟩, ⟨[("amount", (.num (6000))), ("id", (.text "M-2")), ("invoice", (.text "INV-1")), ("status", (.text "cleared"))]⟩] else []
+  closed := fun k => if k = "invoice" then true else if k = "paymentMatch" then true else false
+
+def v_term_form_282_equal_payments_own_identifiers_json.requirements : List WCL2T.Pred := [
+  (.cmp .le (.agg .count "m" "paymentMatch" (.and (.cmp .eq (.field "m" "invoice") (.input "invoice")) (.cmp .eq (.field "m" "status") (.lit .text (.text "posted"))))) (.lit .int (.num (1)))),
+  (.ex "i" "invoice" (.and (.cmp .eq (.field "i" "id") (.input "invoice")) (.cmp .le (.agg (.sum "amount") "m" "paymentMatch" (.cmp .eq (.field "m" "invoice") (.field "i" "id"))) (.field "i" "amount"))))
+]
+
+theorem v_term_form_282_equal_payments_own_identifiers_json :
+    v_term_form_282_equal_payments_own_identifiers_json.requirements.map (fun r => r.eval v_term_form_282_equal_payments_own_identifiers_json.env []) = [.true, .false] ∧
+      WCL2T.evaluate v_term_form_282_equal_payments_own_identifiers_json.env v_term_form_282_equal_payments_own_identifiers_json.requirements = .contradicted := by
+  decide
+
+/-- `term-form/283-equal-payments-keyed-by-content.json` -/
+def v_term_form_283_equal_payments_keyed_by_content_json.env : Env where
+  inputs := fun n => if n = "cutoff" then some (.num (1767225600)) else if n = "invoice" then some (.text "INV-1") else none
+  params := fun _ => none
+  records := fun k => if k = "invoice" then [⟨[("amount", (.num (10050))), ("id", (.text "INV-1"))]⟩] else if k = "paymentMatch" then [⟨[("amount", (.num (6000))), ("invoice", (.text "INV-1")), ("status", (.text "cleared"))]⟩] else []
+  closed := fun k => if k = "invoice" then true else if k = "paymentMatch" then true else false
+
+def v_term_form_283_equal_payments_keyed_by_content_json.requirements : List WCL2T.Pred := [
+  (.cmp .le (.agg .count "m" "paymentMatch" (.and (.cmp .eq (.field "m" "invoice") (.input "invoice")) (.cmp .eq (.field "m" "status") (.lit .text (.text "posted"))))) (.lit .int (.num (1)))),
+  (.ex "i" "invoice" (.and (.cmp .eq (.field "i" "id") (.input "invoice")) (.cmp .le (.agg (.sum "amount") "m" "paymentMatch" (.cmp .eq (.field "m" "invoice") (.field "i" "id"))) (.field "i" "amount"))))
+]
+
+theorem v_term_form_283_equal_payments_keyed_by_content_json :
+    v_term_form_283_equal_payments_keyed_by_content_json.requirements.map (fun r => r.eval v_term_form_283_equal_payments_keyed_by_content_json.env []) = [.true, .true] ∧
+      WCL2T.evaluate v_term_form_283_equal_payments_keyed_by_content_json.env v_term_form_283_equal_payments_keyed_by_content_json.requirements = .supported := by
+  decide
+
+/-- `term-form/288-this-invoice-overpaid.json` -/
+def v_term_form_288_this_invoice_overpaid_json.env : Env where
+  inputs := fun n => if n = "cutoff" then some (.num (1767225600)) else if n = "invoice" then some (.text "INV-1") else none
+  params := fun _ => none
+  records := fun k => if k = "invoice" then [⟨[("amount", (.num (10050))), ("id", (.text "INV-1"))]⟩, ⟨[("amount", (.num (10050))), ("id", (.text "INV-2"))]⟩] else if k = "paymentMatch" then [⟨[("amount", (.num (6000))), ("id", (.text "M-1")), ("invoice", (.text "INV-1")), ("status", (.text "cleared"))]⟩, ⟨[("amount", (.num (4051))), ("id", (.text "M-2")), ("invoice", (.text "INV-1")), ("status", (.text "cleared"))]⟩, ⟨[("amount", (.num (10050))), ("id", (.text "M-3")), ("invoice", (.text "INV-2")), ("status", (.text "cleared"))]⟩] else []
+  closed := fun k => if k = "invoice" then true else if k = "paymentMatch" then true else false
+
+def v_term_form_288_this_invoice_overpaid_json.requirements : List WCL2T.Pred := [
+  (.cmp .le (.agg .count "m" "paymentMatch" (.and (.cmp .eq (.field "m" "invoice") (.input "invoice")) (.cmp .eq (.field "m" "status") (.lit .text (.text "posted"))))) (.lit .int (.num (1)))),
+  (.ex "i" "invoice" (.and (.cmp .eq (.field "i" "id") (.input "invoice")) (.cmp .le (.agg (.sum "amount") "m" "paymentMatch" (.cmp .eq (.field "m" "invoice") (.field "i" "id"))) (.field "i" "amount"))))
+]
+
+theorem v_term_form_288_this_invoice_overpaid_json :
+    v_term_form_288_this_invoice_overpaid_json.requirements.map (fun r => r.eval v_term_form_288_this_invoice_overpaid_json.env []) = [.true, .false] ∧
+      WCL2T.evaluate v_term_form_288_this_invoice_overpaid_json.env v_term_form_288_this_invoice_overpaid_json.requirements = .contradicted := by
+  decide
+
+/-- `term-form/289-other-invoice-overpaid.json` -/
+def v_term_form_289_other_invoice_overpaid_json.env : Env where
+  inputs := fun n => if n = "cutoff" then some (.num (1767225600)) else if n = "invoice" then some (.text "INV-1") else none
+  params := fun _ => none
+  records := fun k => if k = "invoice" then [⟨[("amount", (.num (10050))), ("id", (.text "INV-1"))]⟩, ⟨[("amount", (.num (10050))), ("id", (.text "INV-2"))]⟩] else if k = "paymentMatch" then [⟨[("amount", (.num (6000))), ("id", (.text "M-1")), ("invoice", (.text "INV-1")), ("status", (.text "cleared"))]⟩, ⟨[("amount", (.num (4050))), ("id", (.text "M-2")), ("invoice", (.text "INV-1")), ("status", (.text "cleared"))]⟩, ⟨[("amount", (.num (6000))), ("id", (.text "M-3")), ("invoice", (.text "INV-2")), ("status", (.text "cleared"))]⟩, ⟨[("amount", (.num (4051))), ("id", (.text "M-4")), ("invoice", (.text "INV-2")), ("status", (.text "cleared"))]⟩] else []
+  closed := fun k => if k = "invoice" then true else if k = "paymentMatch" then true else false
+
+def v_term_form_289_other_invoice_overpaid_json.requirements : List WCL2T.Pred := [
+  (.cmp .le (.agg .count "m" "paymentMatch" (.and (.cmp .eq (.field "m" "invoice") (.input "invoice")) (.cmp .eq (.field "m" "status") (.lit .text (.text "posted"))))) (.lit .int (.num (1)))),
+  (.ex "i" "invoice" (.and (.cmp .eq (.field "i" "id") (.input "invoice")) (.cmp .le (.agg (.sum "amount") "m" "paymentMatch" (.cmp .eq (.field "m" "invoice") (.field "i" "id"))) (.field "i" "amount"))))
+]
+
+theorem v_term_form_289_other_invoice_overpaid_json :
+    v_term_form_289_other_invoice_overpaid_json.requirements.map (fun r => r.eval v_term_form_289_other_invoice_overpaid_json.env []) = [.true, .true] ∧
+      WCL2T.evaluate v_term_form_289_other_invoice_overpaid_json.env v_term_form_289_other_invoice_overpaid_json.requirements = .supported := by
+  decide
+
+/-- `term-form/290-this-run-fails.json` -/
+def v_term_form_290_this_run_fails_json.env : Env where
+  inputs := fun n => if n = "cutoff" then some (.num (1767225600)) else if n = "run" then some (.text "RUN-3") else none
+  params := fun _ => none
+  records := fun k => if k = "approval" then [⟨[("approver", (.text "kim")), ("at", (.num (1766000000))), ("id", (.text "AP-1")), ("run", (.text "RUN-3"))]⟩, ⟨[("approver", (.text "lea")), ("at", (.num (1766000000))), ("id", (.text "AP-2")), ("run", (.text "RUN-3"))]⟩, ⟨[("approver", (.text "lea")), ("at", (.num (1766000000))), ("id", (.text "AP-3")), ("run", (.text "RUN-4"))]⟩, ⟨[("approver", (.text "max")), ("at", (.num (1766000000))), ("id", (.text "AP-4")), ("run", (.text "RUN-4"))]⟩] else if k = "paymentRun" then [⟨[("createdBy", (.text "kim")), ("id", (.text "RUN-3"))]⟩, ⟨[("createdBy", (.text "kim")), ("id", (.text "RUN-4"))]⟩] else []
+  closed := fun k => if k = "approval" then true else if k = "paymentRun" then true else false
+
+def v_term_form_290_this_run_fails_json.requirements : List WCL2T.Pred := [
+  (.ex "r" "paymentRun" (.and (.cmp .eq (.field "r" "id") (.input "run")) (.cmp .ge (.agg .count "a" "approval" (.and (.cmp .eq (.field "a" "run") (.field "r" "id")) (.cmp .ne (.field "a" "approver") (.field "r" "createdBy")))) (.lit .int (.num (2))))))
+]
+
+theorem v_term_form_290_this_run_fails_json :
+    v_term_form_290_this_run_fails_json.requirements.map (fun r => r.eval v_term_form_290_this_run_fails_json.env []) = [.false] ∧
+      WCL2T.evaluate v_term_form_290_this_run_fails_json.env v_term_form_290_this_run_fails_json.requirements = .contradicted := by
+  decide
+
+/-- `term-form/291-other-run-fails.json` -/
+def v_term_form_291_other_run_fails_json.env : Env where
+  inputs := fun n => if n = "cutoff" then some (.num (1767225600)) else if n = "run" then some (.text "RUN-3") else none
+  params := fun _ => none
+  records := fun k => if k = "approval" then [⟨[("approver", (.text "lea")), ("at", (.num (1766000000))), ("id", (.text "AP-1")), ("run", (.text "RUN-3"))]⟩, ⟨[("approver", (.text "max")), ("at", (.num (1766000000))), ("id", (.text "AP-2")), ("run", (.text "RUN-3"))]⟩, ⟨[("approver", (.text "kim")), ("at", (.num (1766000000))), ("id", (.text "AP-3")), ("run", (.text "RUN-4"))]⟩, ⟨[("approver", (.text "lea")), ("at", (.num (1766000000))), ("id", (.text "AP-4")), ("run", (.text "RUN-4"))]⟩] else if k = "paymentRun" then [⟨[("createdBy", (.text "kim")), ("id", (.text "RUN-3"))]⟩, ⟨[("createdBy", (.text "kim")), ("id", (.text "RUN-4"))]⟩] else []
+  closed := fun k => if k = "approval" then true else if k = "paymentRun" then true else false
+
+def v_term_form_291_other_run_fails_json.requirements : List WCL2T.Pred := [
+  (.ex "r" "paymentRun" (.and (.cmp .eq (.field "r" "id") (.input "run")) (.cmp .ge (.agg .count "a" "approval" (.and (.cmp .eq (.field "a" "run") (.field "r" "id")) (.cmp .ne (.field "a" "approver") (.field "r" "createdBy")))) (.lit .int (.num (2))))))
+]
+
+theorem v_term_form_291_other_run_fails_json :
+    v_term_form_291_other_run_fails_json.requirements.map (fun r => r.eval v_term_form_291_other_run_fails_json.env []) = [.true] ∧
+      WCL2T.evaluate v_term_form_291_other_run_fails_json.env v_term_form_291_other_run_fails_json.requirements = .supported := by
+  decide
+
+/-- `term-form/292-distinct-this-run-fails.json` -/
+def v_term_form_292_distinct_this_run_fails_json.env : Env where
+  inputs := fun n => if n = "cutoff" then some (.num (1767225600)) else if n = "run" then some (.text "RUN-3") else none
+  params := fun _ => none
+  records := fun k => if k = "approval" then [⟨[("approver", (.text "lea")), ("at", (.num (1766000000))), ("id", (.text "AP-1")), ("run", (.text "RUN-3"))]⟩, ⟨[("approver", (.text "lea")), ("at", (.num (1766000000))), ("id", (.text "AP-2")), ("run", (.text "RUN-3"))]⟩, ⟨[("approver", (.text "lea")), ("at", (.num (1766000000))), ("id", (.text "AP-3")), ("run", (.text "RUN-4"))]⟩, ⟨[("approver", (.text "max")), ("at", (.num (1766000000))), ("id", (.text "AP-4")), ("run", (.text "RUN-4"))]⟩] else if k = "paymentRun" then [⟨[("createdBy", (.text "kim")), ("id", (.text "RUN-3"))]⟩, ⟨[("createdBy", (.text "kim")), ("id", (.text "RUN-4"))]⟩] else []
+  closed := fun k => if k = "approval" then true else if k = "paymentRun" then true else false
+
+def v_term_form_292_distinct_this_run_fails_json.requirements : List WCL2T.Pred := [
+  (.ex "r" "paymentRun" (.and (.cmp .eq (.field "r" "id") (.input "run")) (.cmp .ge (.agg (.countDistinct "approver") "a" "approval" (.and (.cmp .eq (.field "a" "run") (.field "r" "id")) (.cmp .ne (.field "a" "approver") (.field "r" "createdBy")))) (.lit .int (.num (2))))))
+]
+
+theorem v_term_form_292_distinct_this_run_fails_json :
+    v_term_form_292_distinct_this_run_fails_json.requirements.map (fun r => r.eval v_term_form_292_distinct_this_run_fails_json.env []) = [.false] ∧
+      WCL2T.evaluate v_term_form_292_distinct_this_run_fails_json.env v_term_form_292_distinct_this_run_fails_json.requirements = .contradicted := by
+  decide
+
+/-- `term-form/293-distinct-other-run-fails.json` -/
+def v_term_form_293_distinct_other_run_fails_json.env : Env where
+  inputs := fun n => if n = "cutoff" then some (.num (1767225600)) else if n = "run" then some (.text "RUN-3") else none
+  params := fun _ => none
+  records := fun k => if k = "approval" then [⟨[("approver", (.text "lea")), ("at", (.num (1766000000))), ("id", (.text "AP-1")), ("run", (.text "RUN-3"))]⟩, ⟨[("approver", (.text "max")), ("at", (.num (1766000000))), ("id", (.text "AP-2")), ("run", (.text "RUN-3"))]⟩, ⟨[("approver", (.text "lea")), ("at", (.num (1766000000))), ("id", (.text "AP-3")), ("run", (.text "RUN-4"))]⟩, ⟨[("approver", (.text "lea")), ("at", (.num (1766000000))), ("id", (.text "AP-4")), ("run", (.text "RUN-4"))]⟩] else if k = "paymentRun" then [⟨[("createdBy", (.text "kim")), ("id", (.text "RUN-3"))]⟩, ⟨[("createdBy", (.text "kim")), ("id", (.text "RUN-4"))]⟩] else []
+  closed := fun k => if k = "approval" then true else if k = "paymentRun" then true else false
+
+def v_term_form_293_distinct_other_run_fails_json.requirements : List WCL2T.Pred := [
+  (.ex "r" "paymentRun" (.and (.cmp .eq (.field "r" "id") (.input "run")) (.cmp .ge (.agg (.countDistinct "approver") "a" "approval" (.and (.cmp .eq (.field "a" "run") (.field "r" "id")) (.cmp .ne (.field "a" "approver") (.field "r" "createdBy")))) (.lit .int (.num (2))))))
+]
+
+theorem v_term_form_293_distinct_other_run_fails_json :
+    v_term_form_293_distinct_other_run_fails_json.requirements.map (fun r => r.eval v_term_form_293_distinct_other_run_fails_json.env []) = [.true] ∧
+      WCL2T.evaluate v_term_form_293_distinct_other_run_fails_json.env v_term_form_293_distinct_other_run_fails_json.requirements = .supported := by
+  decide
+
 end WCL2T.Vectors
