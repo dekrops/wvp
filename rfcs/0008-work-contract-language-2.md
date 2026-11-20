@@ -25,6 +25,8 @@ Work Contract Language 1 can say who approved what, and when. It cannot compute 
 
 The workaround in Language 1 is to have the source compute the value (a recorded `variance` field). That moves the judgement into the system being checked: the contract then verifies that the source said the variance was small, not that it was. The sum and the count cannot be expressed even that way, because a count or a sum is a statement about a set of records, not about one.
 
+Arithmetic needs both amounts in one currency and scale. An invoice in another currency than its order can be compared with it only through a rate the source records, which brings back the computed field from the source; procurement often has this case.
+
 N-of-M approval can be written in Language 1 for a fixed N by nesting N quantifiers with pairwise inequalities. That works for N = 2 and stops scaling at the nesting limit of 3.
 
 ## What changes
@@ -88,7 +90,9 @@ The proposed vectors are in [`0008/vectors`](0008/vectors/work-contract/v2/READM
 - refusals: operands of two currencies or scales, `time + time`, `sum` of a text or optional field, an aggregate variable used outside its body, depth over 3 with aggregates, the arithmetic range on a sum and on an intermediate term, a term out of range under `or(TRUE, …)` and for a record the body does not select, `scale`, `abs` and subtraction of a number on a time, arithmetic nodes over the node limit, `distinct` over an optional or undeclared field, and `distinct` on `sum`;
 - a `sum` over an open kind whose values would leave the range: `unknown`, not a refusal, because it computes nothing;
 - terms evaluated only on the records step 5 keeps: an out-of-range fact in a conflict settled as `unknown` (`UNDETERMINED`), and one that loses under `source-order` (decided on the preferred fact);
-- an out-of-range node under a parent with an absent operand (a refusal), and `scale` by a factor out of range (`CONTRACT_ILL_FORMED`).
+- an out-of-range node under a parent with an absent operand (a refusal), and `scale` by a factor out of range (`CONTRACT_ILL_FORMED`);
+- the key of a summed kind: two equal payments keyed by their own identifier, both summed (`CONTRADICTED`), and the same payments keyed by invoice and amount, one record (`SUPPORTED`, the danger, as 244 shows it for a count);
+- for each contract whose requirements bind the record asked about (`exists … id = input`), a second invoice, credit note or payment run in the environment: the record asked about failing and the other passing (`CONTRADICTED`), and the reverse (`SUPPORTED`).
 
 ## Security considerations
 
@@ -101,6 +105,7 @@ This RFC changes what a verified result may be relied on for, so it needs securi
 - **A refusal from more evidence.** `definite_decision_is_stable` is about evaluation. `ARITHMETIC_RANGE` is outside it, as `WORK_LIMIT` is in Language 1 (its section 13): a source accepted for a kind can admit a fact whose amount puts some term out of range, and the evaluation then refuses where it decided before. Such a source can force a refusal, never a different decision. A relying party should therefore accept a source for a kind that is counted, summed or used in arithmetic only from a system it trusts to keep its values in range, as it already should for the work bound.
 - **Counting listings instead of records.** If a source could list the same approval twice, it could pass a count with one person. Language 1's step 5 makes equal-key facts one record (or a conflict), so that cannot reach evaluation. The model shows both the danger and why it is excluded (`duplicate_approval_counts_twice`, `duplicate_listing_is_not_distinct`).
 - **Counting records instead of people.** A plain `count` over a kind keyed by something other than what the contract means to count still counts records: one person approving under two identifiers passes a four-eyes `count` (vector 244). Language 2 has no warnings, and the typing cannot tell which field a contract means to count, so this is not a refusal. A contract that counts people uses `distinct` (vector 247), and reviewers of a contract check that its counts do.
+- **Summing under a key that merges items.** The counterpart of counting people: there a key finer than what is counted overcounts, here a key coarser than what is summed undercounts. Language 1's step 5 makes accepted facts with equal keys and identical fields one record, silently, and a fact carries no field its kind does not declare. A summed kind must therefore be keyed by the identity of each item it sums (for example a payment's own identifier), never by fields two real items can share. Otherwise two equal items are one record and `sum` undercounts: keyed by invoice and amount, two payments of 60.00 against one invoice sum to 60.00, and an overpayment passes (vector 283; keyed by the payment's identifier, both are summed, vector 282). The language cannot detect this, since the typing cannot tell which key is fine enough, so reviewers of a contract check that each summed kind is keyed by its items' identity.
 - **One person under two identifiers.** `distinct` compares values. If a source names one person by two values (`lea` and `l.mueller`), they are two approvers. Mapping identities is the source's or the relying party's registry's concern, outside the language.
 
 ## Formal semantics
@@ -143,10 +148,12 @@ Decided in review (Srishti, in this RFC's pull request), and moved into the sect
 - *The package version:* a new one, with RFC 0003 or on its own; not a revision of v0.2.
 - *Counting the same record twice:* excluded by one record per key, which Language 1's step 5 already gives.
 - *Counting the same person twice* (raised by Srishti in review, `same_approver_under_two_ids_is_counted_twice`): `count` with `distinct` over the field that names them. A static rule that a counted kind's key must cover what is counted was the alternative; it was not chosen, because `count` names no field to check the key against, and keying by the person turns a re-approval into a conflict (vector 246).
+- *Summing under a key that merges items* (raised by Srishti in review, from shadowplay's F007, `studies/F007-invoice-to-payment-landscape`, merged on shadowplay's `main` at `8f8cdcd`): a summed kind is keyed by the identity of each item it sums, stated in Security considerations, with vectors 282 (two equal payments keyed by their own identifier: both summed, `NOT_OVERPAID` `CONTRADICTED`) and 283 (the same payments keyed by invoice and amount: one record, `SUPPORTED`). Not a static rule: as for counting people, the typing cannot tell which key is fine enough.
+- *Which record a requirement reads* (raised by Srishti in review, from shadowplay's S023): every contract whose requirements bind the record asked about with `exists … id = input` (`invoice-arithmetic`, `credit-note`, `invoice-not-overpaid` and two of the `four-eyes` contracts) had one such record per environment, so a contract that dropped the binding, or quantified it with `forall`, passed every vector. Vectors 284–293 add a second invoice, credit note or payment run: the record asked about failing and the other passing (`CONTRADICTED`), and the reverse (`SUPPORTED`).
 
 Still open:
 
-1. **Lower-bound counts** over open kinds (`count ≥ n` is monotone without a completeness statement). Wanted for approvals, but as a separate RFC, so that `count` always means one thing.
+1. **Lower bounds** over open kinds (`count ≥ n` is monotone without a completeness statement). Wanted for approvals, but as a separate RFC, so that `count` always means one thing. The question extends to `sum`, with a condition (Srishti, in review): a `sum` over an open kind is a lower bound only if every record not yet seen is non-negative, and money fields can be negative (credit notes, vector 209, and refunds). A polarity-aware rule therefore needs the field declared non-negative, a schema or profile assumption, trusted as a completeness statement is, and the aggregate in a position where a lower bound suffices, with no other term subtracting from it. F007 (shadowplay's `main` at `8f8cdcd`) proves which completeness each verdict of such a comparison needs (`T5_env`, `T6_*`). [RFC 0009](https://github.com/dekrops/wvp/pull/52) (wvp#52) proposes the rule.
 
 ## Decision
 

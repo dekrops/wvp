@@ -613,9 +613,13 @@ import WCL2
 #print axioms WCL2.Vectors.v_cases_206_paid_one_second_late_json
 #print axioms WCL2.Vectors.v_cases_207_not_paid_yet_json
 #print axioms WCL2.Vectors.v_cases_208_paid_before_due_json
+#print axioms WCL2.Vectors.v_cases_284_this_invoice_fails_json
+#print axioms WCL2.Vectors.v_cases_285_other_invoice_fails_json
 #print axioms WCL2.Vectors.v_cases_209_credit_note_json
 #print axioms WCL2.Vectors.v_cases_210_credit_note_too_large_json
 #print axioms WCL2.Vectors.v_cases_211_not_a_credit_json
+#print axioms WCL2.Vectors.v_cases_286_this_note_fails_json
+#print axioms WCL2.Vectors.v_cases_287_other_note_fails_json
 #print axioms WCL2.Vectors.v_cases_220_sum_of_none_json
 #print axioms WCL2.Vectors.v_cases_221_sum_of_one_json
 #print axioms WCL2.Vectors.v_cases_222_paid_in_two_parts_json
@@ -628,6 +632,10 @@ import WCL2
 #print axioms WCL2.Vectors.v_cases_229_untrusted_match_ignored_json
 #print axioms WCL2.Vectors.v_cases_230_exact_before_the_range_json
 #print axioms WCL2.Vectors.v_cases_231_open_sum_not_range_checked_json
+#print axioms WCL2.Vectors.v_cases_282_equal_payments_own_identifiers_json
+#print axioms WCL2.Vectors.v_cases_283_equal_payments_keyed_by_content_json
+#print axioms WCL2.Vectors.v_cases_288_this_invoice_overpaid_json
+#print axioms WCL2.Vectors.v_cases_289_other_invoice_overpaid_json
 #print axioms WCL2.Vectors.v_cases_240_two_other_approvers_json
 #print axioms WCL2.Vectors.v_cases_241_creator_not_counted_json
 #print axioms WCL2.Vectors.v_cases_242_no_approvals_json
@@ -638,6 +646,10 @@ import WCL2
 #print axioms WCL2.Vectors.v_cases_247_distinct_same_approver_two_identifiers_json
 #print axioms WCL2.Vectors.v_cases_248_distinct_reapproval_json
 #print axioms WCL2.Vectors.v_cases_249_distinct_open_approvals_json
+#print axioms WCL2.Vectors.v_cases_290_this_run_fails_json
+#print axioms WCL2.Vectors.v_cases_291_other_run_fails_json
+#print axioms WCL2.Vectors.v_cases_292_distinct_this_run_fails_json
+#print axioms WCL2.Vectors.v_cases_293_distinct_other_run_fails_json
 #print axioms WCL2.Vectors.v_cases_278_conflict_not_evaluated_json
 #print axioms WCL2.Vectors.v_cases_279_source_order_loser_not_evaluated_json
 -- End of generated vector theorems.

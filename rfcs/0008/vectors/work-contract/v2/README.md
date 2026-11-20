@@ -7,9 +7,9 @@ acceptance they become `test-vectors/work-contract/v2`.
 - `cases/` and `differential/` with the names of Language 1's: every published Language 1 case,
   restated (`language` is `work-contract-2`), with its Language 1 expectation. Case 27 names
   `work-contract-1` instead, the language this one does not define.
-- `cases/2*`: new. Arithmetic (`20x`, `21x`), sums (`22x`, `230`), counts (`24x`, with `distinct` from `247`) and refusals (`26x`, `27x`, `280`, `281`); `231` is an open sum, not range-checked; `278` and `279` evaluate terms on the records step 5 keeps only.
+- `cases/2*`: new. Arithmetic (`20x`, `21x`), sums (`22x`, `230`), counts (`24x`, with `distinct` from `247`) and refusals (`26x`, `27x`, `280`, `281`); `231` is an open sum, not range-checked; `278` and `279` evaluate terms on the records step 5 keeps only; `282` and `283` sum equal payments under a key by identifier and a key by content; `284`–`293` put a second invoice, credit note or payment run in the environment, so that each requirement must read the one asked about.
 
-**Checked against the model.** 605 cases have a result. For each, `formal/WCL2/Vectors.lean`
+**Checked against the model.** 617 cases have a result. For each, `formal/WCL2/Vectors.lean`
 states that the Lean model of RFC 0008 gives exactly its requirement values and decision, proved by
 `decide` and audited by `formal/check.sh`.
 

@@ -393,15 +393,15 @@ PAID_WITHIN_TERM = the_invoice(
 )
 
 
-def invoice(amount, net, tax, paid_at=None, due_at="1764633600"):
-    fields = {"amount": str(amount), "dueAt": due_at, "id": "INV-1", "net": str(net), "order": "PO-7", "tax": str(tax)}
+def invoice(amount, net, tax, paid_at=None, due_at="1764633600", id_="INV-1", order_id="PO-7"):
+    fields = {"amount": str(amount), "dueAt": due_at, "id": id_, "net": str(net), "order": order_id, "tax": str(tax)}
     if paid_at is not None:
         fields["paidAt"] = paid_at
     return ("invoice", fields)
 
 
-def order(amount):
-    return ("purchaseOrder", {"amount": str(amount), "id": "PO-7"})
+def order(amount, id_="PO-7"):
+    return ("purchaseOrder", {"amount": str(amount), "id": id_})
 
 
 def build_arithmetic():
@@ -444,6 +444,19 @@ def build_arithmetic():
     run("208-paid-before-due", "Paid before the due date: a negative difference is within the term.",
         invoice(10050, 8445, 1605, str(int(due) - 86400)), order(10000), ["TRUE", "TRUE", "TRUE"], "SUPPORTED")
 
+    # A second invoice in the environment: each requirement must read the invoice asked about, and
+    # only that one (shadowplay S023; dekrops/wvp#47).
+    passes = [invoice(10050, 8445, 1605, on_time, id_="INV-2", order_id="PO-8"), order(10000, "PO-8")]
+    fails = [invoice(10150, 8530, 1619, late, id_="INV-2", order_id="PO-8"), order(10000, "PO-8")]
+    for name, description, this, other, values, decision in [
+        ("284-this-invoice-fails", "A second invoice: INV-1, the invoice asked about, is a cent off net plus tax, paid a second late and 1.5 % above its order; INV-2 passes all three. Each requirement reads INV-1 only.",
+         [invoice(10150, 8530, 1619, late), order(10000)], passes, ["FALSE", "FALSE", "FALSE"], "CONTRADICTED"),
+        ("285-other-invoice-fails", "A second invoice: INV-1 passes all three; INV-2 fails all three. Each requirement reads INV-1 only.",
+         [invoice(10050, 8445, 1605, on_time), order(10000)], fails, ["TRUE", "TRUE", "TRUE"], "SUPPORTED"),
+    ]:
+        env = environment({"invoice": "INV-1"}, facts(*this, *other), both)
+        new_case(name, description, c, env, result(c, env, values, decision))
+
     # scale by a negative factor, abs of a negative amount: a credit note.
     credit_kinds = {"creditNote": {"fields": {"amount": eur(), "id": text()}, "key": ["id"]}}
     note = {"exists": "n", "in": "creditNote", "where": cmp("eq", field("n", "id"), {"input": "note"})}
@@ -462,6 +475,14 @@ def build_arithmetic():
         ("211-not-a-credit", 500, ["TRUE", "FALSE"], "CONTRADICTED", "A positive amount: −1 × 500 > 0 is false."),
     ]:
         env = environment({"note": "CN-1"}, facts(("creditNote", {"amount": str(amount), "id": "CN-1"})), {"creditNote"})
+        new_case(name, description, credit, env, result(credit, env, values, decision))
+    # A second credit note: each requirement must read the note asked about, and only that one.
+    for name, this, other, values, decision, description in [
+        ("286-this-note-fails", 1500, -500, ["FALSE", "FALSE"], "CONTRADICTED", "A second credit note: CN-1, the note asked about, is positive and too large (1500); CN-2 (−500) passes both."),
+        ("287-other-note-fails", -500, 1500, ["TRUE", "TRUE"], "SUPPORTED", "A second credit note: CN-1 (−500) passes both; CN-2 (1500) fails both."),
+    ]:
+        notes = facts(("creditNote", {"amount": str(this), "id": "CN-1"}), ("creditNote", {"amount": str(other), "id": "CN-2"}))
+        env = environment({"note": "CN-1"}, notes, {"creditNote"})
         new_case(name, description, credit, env, result(credit, env, values, decision))
 
 
@@ -548,6 +569,29 @@ def build_sums():
     run("231-open-sum-not-range-checked", "The matches would sum out of range (9e18 + 9e18), but no source declared them complete: the sum has no value, so nothing is summed or checked, and the requirement is UNKNOWN, not a refusal.",
         [match("M-1", big, status="cleared"), match("M-2", big, status="cleared")], ["UNKNOWN", "UNKNOWN"], "UNDETERMINED", complete={"invoice"})
 
+    # The pair to 244 and 245 for a sum: a summed kind is only as good as its key.
+    run("282-equal-payments-own-identifiers", "Two payments of 60.00 against INV-1, equal in every field but their own identifier. paymentMatch is keyed by id, so they are two records and the sum is 120.00 > 100.50.",
+        [match("M-1", 6000, status="cleared"), match("M-2", 6000, status="cleared")], ["TRUE", "FALSE"], "CONTRADICTED")
+    by_content = contract(
+        "invoice-not-overpaid",
+        {"invoice": text()},
+        dict(PAYMENT_KINDS, paymentMatch={"fields": {k: v for k, v in PAYMENT_KINDS["paymentMatch"]["fields"].items() if k != "id"}, "key": ["invoice", "amount"]}),
+        [{"id": "AT_MOST_ONE_POSTED_MATCH", "predicate": POSTED_MATCHES}, {"id": "NOT_OVERPAID", "predicate": NOT_OVERPAID}],
+    )
+    payment = ("paymentMatch", {"amount": "6000", "invoice": "INV-1", "status": "cleared"})
+    env = environment({"invoice": "INV-1"}, facts(inv, payment, payment), closed)
+    new_case("283-equal-payments-keyed-by-content", "Where the key decides: the same two payments, with paymentMatch keyed by invoice and amount and no identifier of its own. Their facts are identical, so step 5 makes them one record, the sum is 60.00, and an overpayment passes. A summed kind is keyed by each item's own identity (282).",
+             by_content, env, result(by_content, env, ["TRUE", "TRUE"], "SUPPORTED"))
+
+    # A second invoice in the environment: the sum must be of the invoice asked about, and only
+    # that one (shadowplay S023; dekrops/wvp#47).
+    other = ("invoice", {"amount": "10050", "id": "INV-2"})
+    run("288-this-invoice-overpaid", "A second invoice: INV-1, the invoice asked about, is overpaid by one cent (6000 + 4051); INV-2 is paid exactly.",
+        [match("M-1", 6000, status="cleared"), match("M-2", 4051, status="cleared"), match("M-3", 10050, "INV-2", "cleared")], ["TRUE", "FALSE"], "CONTRADICTED", extra=[other])
+    run("289-other-invoice-overpaid", "A second invoice: INV-1 is paid exactly (6000 + 4050); INV-2 is overpaid by one cent.",
+        [match("M-1", 6000, status="cleared"), match("M-2", 4050, status="cleared"), match("M-3", 6000, "INV-2", "cleared"), match("M-4", 4051, "INV-2", "cleared")],
+        ["TRUE", "TRUE"], "SUPPORTED", extra=[other])
+
 
 APPROVAL_FIELDS = {"approver": text(), "id": text(), "run": text()}
 RUN_KIND = {"fields": {"createdBy": text(), "id": text()}, "key": ["id"]}
@@ -577,8 +621,8 @@ def four_eyes(key, distinct=None):
     return contract("four-eyes", {"run": text()}, kinds, [{"id": "FOUR_EYES", "predicate": pred}])
 
 
-def approval(id_, who, at="1766000000"):
-    return ("approval", {"approver": who, "at": at, "id": id_, "run": "RUN-3"})
+def approval(id_, who, at="1766000000", run="RUN-3"):
+    return ("approval", {"approver": who, "at": at, "id": id_, "run": run})
 
 
 def build_counts():
@@ -586,8 +630,8 @@ def build_counts():
     by_id = four_eyes(["id"])
     by_person = four_eyes(["run", "approver"])
 
-    def run(name, description, c, approvals, value, decision, complete=("approval", "paymentRun"), conflicts=()):
-        env = environment({"run": "RUN-3"}, facts(*approvals, run_record), set(complete))
+    def run(name, description, c, approvals, value, decision, complete=("approval", "paymentRun"), conflicts=(), extra=()):
+        env = environment({"run": "RUN-3"}, facts(*approvals, run_record, *extra), set(complete))
         new_case(name, description, c, env, result(c, env, [value], decision, conflicts=conflicts))
 
     run("240-two-other-approvers", "The worked example: two approvers, neither the creator.", by_id,
@@ -611,6 +655,18 @@ def build_counts():
         [approval("AP-1", "lea", "1766000000"), approval("AP-2", "max"), approval("AP-3", "lea", "1766000100")], "TRUE", "SUPPORTED")
     run("249-distinct-open-approvals", "243 with distinct approver: three approvers seen, listing open, so the count is UNKNOWN.", distinct,
         [approval("AP-1", "lea"), approval("AP-2", "max"), approval("AP-3", "ola")], "UNKNOWN", "UNDETERMINED", complete=("paymentRun",))
+
+    # A second payment run in the environment: each count must be of the run asked about, and only
+    # that one (shadowplay S023; dekrops/wvp#47).
+    other_run = [("paymentRun", {"createdBy": "kim", "id": "RUN-4"})]
+    run("290-this-run-fails", "A second payment run: RUN-3, the run asked about, has one approver besides its creator; RUN-4 has two.", by_id,
+        [approval("AP-1", "kim"), approval("AP-2", "lea"), approval("AP-3", "lea", run="RUN-4"), approval("AP-4", "max", run="RUN-4")], "FALSE", "CONTRADICTED", extra=other_run)
+    run("291-other-run-fails", "A second payment run: RUN-3 has two approvers besides its creator; RUN-4 has one.", by_id,
+        [approval("AP-1", "lea"), approval("AP-2", "max"), approval("AP-3", "kim", run="RUN-4"), approval("AP-4", "lea", run="RUN-4")], "TRUE", "SUPPORTED", extra=other_run)
+    run("292-distinct-this-run-fails", "A second payment run, with distinct approver: RUN-3 has Lea under two identifiers, one approver; RUN-4 has Lea and Max.", distinct,
+        [approval("AP-1", "lea"), approval("AP-2", "lea"), approval("AP-3", "lea", run="RUN-4"), approval("AP-4", "max", run="RUN-4")], "FALSE", "CONTRADICTED", extra=other_run)
+    run("293-distinct-other-run-fails", "A second payment run, with distinct approver: RUN-3 has Lea and Max; RUN-4 has Lea under two identifiers.", distinct,
+        [approval("AP-1", "lea"), approval("AP-2", "max"), approval("AP-3", "lea", run="RUN-4"), approval("AP-4", "lea", run="RUN-4")], "TRUE", "SUPPORTED", extra=other_run)
 
 
 def build_bindings():
@@ -750,7 +806,7 @@ def readme():
         "- `cases/` and `differential/` with the names of Language 1's: every published Language 1 case,",
         "  restated (`language` is `work-contract-2`), with its Language 1 expectation. Case 27 names",
         "  `work-contract-1` instead, the language this one does not define.",
-        "- `cases/2*`: new. Arithmetic (`20x`, `21x`), sums (`22x`, `230`), counts (`24x`, with `distinct` from `247`) and refusals (`26x`, `27x`, `280`, `281`); `231` is an open sum, not range-checked; `278` and `279` evaluate terms on the records step 5 keeps only.",
+        "- `cases/2*`: new. Arithmetic (`20x`, `21x`), sums (`22x`, `230`), counts (`24x`, with `distinct` from `247`) and refusals (`26x`, `27x`, `280`, `281`); `231` is an open sum, not range-checked; `278` and `279` evaluate terms on the records step 5 keeps only; `282` and `283` sum equal payments under a key by identifier and a key by content; `284`–`293` put a second invoice, credit note or payment run in the environment, so that each requirement must read the one asked about.",
         "",
         f"**Checked against the model.** {len(CHECKED)} cases have a result. For each, `formal/WCL2/Vectors.lean`",
         "states that the Lean model of RFC 0008 gives exactly its requirement values and decision, proved by",
