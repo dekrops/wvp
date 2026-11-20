@@ -1,0 +1,19 @@
+name = "wcl2t"
+version = "0.1.0"
+defaultTargets = ["WCL2T"]
+
+[leanOptions]
+warningAsError = true
+
+# Work Contract Language 1 (formal/lean) and Language 2 as RFC 0008 proposes it (rfcs/0008/formal):
+# this model extends Language 2, and is proved to mean the same on every Language 2 contract.
+[[require]]
+name = "verified"
+path = "../../../formal/lean"
+
+[[require]]
+name = "wcl2"
+path = "../../0008/formal"
+
+[[lean_lib]]
+name = "WCL2T"

@@ -1,0 +1,353 @@
+{
+  "contract": {
+    "evaluation": {
+      "cutoff": "cutoff",
+      "semantics": "kleene-1"
+    },
+    "evidence": {
+      "conflicts": "unknown",
+      "sources": {
+        "invoice": [
+          "erp"
+        ],
+        "rateGroup": [
+          "erp"
+        ]
+      }
+    },
+    "identity": {
+      "id": "invoice-rate-groups",
+      "version": "1"
+    },
+    "inputs": {
+      "cutoff": {
+        "type": "time"
+      },
+      "invoice": {
+        "type": "text"
+      }
+    },
+    "kinds": {
+      "invoice": {
+        "fields": {
+          "gross": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          },
+          "id": {
+            "type": "text"
+          }
+        },
+        "key": [
+          "id"
+        ]
+      },
+      "rateGroup": {
+        "fields": {
+          "id": {
+            "type": "text"
+          },
+          "invoice": {
+            "type": "text"
+          },
+          "net": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          },
+          "rateBps": {
+            "type": "int"
+          },
+          "tax": {
+            "currency": "EUR",
+            "scale": 2,
+            "type": "money"
+          }
+        },
+        "key": [
+          "id"
+        ]
+      }
+    },
+    "language": "work-contract-2",
+    "policy": {},
+    "requires": [
+      {
+        "id": "AMOUNTS_ADD_UP",
+        "predicate": {
+          "exists": "i",
+          "in": "invoice",
+          "where": {
+            "and": [
+              {
+                "cmp": "eq",
+                "left": {
+                  "field": "id",
+                  "var": "i"
+                },
+                "right": {
+                  "input": "invoice"
+                }
+              },
+              {
+                "cmp": "eq",
+                "left": {
+                  "add": [
+                    {
+                      "aggregate": "sum",
+                      "field": "net",
+                      "in": "rateGroup",
+                      "of": "g",
+                      "where": {
+                        "cmp": "eq",
+                        "left": {
+                          "field": "invoice",
+                          "var": "g"
+                        },
+                        "right": {
+                          "field": "id",
+                          "var": "i"
+                        }
+                      }
+                    },
+                    {
+                      "aggregate": "sum",
+                      "field": "tax",
+                      "in": "rateGroup",
+                      "of": "g",
+                      "where": {
+                        "cmp": "eq",
+                        "left": {
+                          "field": "invoice",
+                          "var": "g"
+                        },
+                        "right": {
+                          "field": "id",
+                          "var": "i"
+                        }
+                      }
+                    }
+                  ]
+                },
+                "right": {
+                  "field": "gross",
+                  "var": "i"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "TAX_AT_GROUP_RATE",
+        "predicate": {
+          "forall": "g",
+          "holds": {
+            "or": [
+              {
+                "not": {
+                  "cmp": "eq",
+                  "left": {
+                    "field": "invoice",
+                    "var": "g"
+                  },
+                  "right": {
+                    "input": "invoice"
+                  }
+                }
+              },
+              {
+                "and": [
+                  {
+                    "cmp": "le",
+                    "left": {
+                      "of": {
+                        "sub": [
+                          {
+                            "field": "tax",
+                            "var": "g"
+                          },
+                          {
+                            "lit": "1",
+                            "of": {
+                              "currency": "EUR",
+                              "scale": 2,
+                              "type": "money"
+                            }
+                          }
+                        ]
+                      },
+                      "scale": "10000"
+                    },
+                    "right": {
+                      "add": [
+                        {
+                          "mul": [
+                            {
+                              "field": "rateBps",
+                              "var": "g"
+                            },
+                            {
+                              "field": "net",
+                              "var": "g"
+                            }
+                          ]
+                        },
+                        {
+                          "lit": "5000",
+                          "of": {
+                            "currency": "EUR",
+                            "scale": 2,
+                            "type": "money"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "cmp": "lt",
+                    "left": {
+                      "add": [
+                        {
+                          "mul": [
+                            {
+                              "field": "rateBps",
+                              "var": "g"
+                            },
+                            {
+                              "field": "net",
+                              "var": "g"
+                            }
+                          ]
+                        },
+                        {
+                          "lit": "5000",
+                          "of": {
+                            "currency": "EUR",
+                            "scale": 2,
+                            "type": "money"
+                          }
+                        }
+                      ]
+                    },
+                    "right": {
+                      "of": {
+                        "add": [
+                          {
+                            "field": "tax",
+                            "var": "g"
+                          },
+                          {
+                            "lit": "2",
+                            "of": {
+                              "currency": "EUR",
+                              "scale": 2,
+                              "type": "money"
+                            }
+                          }
+                        ]
+                      },
+                      "scale": "10000"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "in": "rateGroup"
+        }
+      }
+    ]
+  },
+  "description": "This invoice's gross is a cent off; another invoice, which adds up, is in the environment.",
+  "environment": {
+    "complete": [
+      {
+        "asOf": "1767225600",
+        "kind": "invoice",
+        "source": "erp"
+      },
+      {
+        "asOf": "1767225600",
+        "kind": "rateGroup",
+        "source": "erp"
+      }
+    ],
+    "facts": [
+      {
+        "fields": {
+          "gross": "30697",
+          "id": "INV-1"
+        },
+        "id": "f01-invoice",
+        "kind": "invoice",
+        "source": "erp"
+      },
+      {
+        "fields": {
+          "id": "G-1",
+          "invoice": "INV-1",
+          "net": "16803",
+          "rateBps": "1900",
+          "tax": "3193"
+        },
+        "id": "f02-rateGroup",
+        "kind": "rateGroup",
+        "source": "erp"
+      },
+      {
+        "fields": {
+          "id": "G-2",
+          "invoice": "INV-1",
+          "net": "10000",
+          "rateBps": "700",
+          "tax": "700"
+        },
+        "id": "f03-rateGroup",
+        "kind": "rateGroup",
+        "source": "erp"
+      },
+      {
+        "fields": {
+          "gross": "11900",
+          "id": "INV-2"
+        },
+        "id": "f04-invoice",
+        "kind": "invoice",
+        "source": "erp"
+      },
+      {
+        "fields": {
+          "id": "G-3",
+          "invoice": "INV-2",
+          "net": "10000",
+          "rateBps": "1900",
+          "tax": "1900"
+        },
+        "id": "f05-rateGroup",
+        "kind": "rateGroup",
+        "source": "erp"
+      }
+    ],
+    "inputs": {
+      "cutoff": "1767225600",
+      "invoice": "INV-1"
+    }
+  },
+  "expected": {
+    "conflicts": [],
+    "decision": "CONTRADICTED",
+    "ignored": [],
+    "requirements": [
+      {
+        "id": "AMOUNTS_ADD_UP",
+        "value": "FALSE"
+      },
+      {
+        "id": "TAX_AT_GROUP_RATE",
+        "value": "TRUE"
+      }
+    ]
+  }
+}
