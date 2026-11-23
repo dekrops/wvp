@@ -8,4 +8,4 @@ Nothing is assigned while RFC 0014 is a draft.
 
 | Identifier | Specification                                                   | Assigned by             | Date    |
 | ---------- | --------------------------------------------------------------- | ----------------------- | ------- |
-| `gate`     | `gate-1`, proposed by [RFC 0016](../rfcs/0016-gate-decision.md) | RFC 0016, on acceptance | Pending |
+| `gate`     | `gate-1`, proposed by [RFC 0018](../rfcs/0018-gate-decision.md) | RFC 0018, on acceptance | Pending |
