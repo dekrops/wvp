@@ -86,7 +86,7 @@ A public key is registered at most once, ever. A **service key** registration is
 
 An override leaves the decision `UNDETERMINED`: it records that a threshold of approvers let one request proceed, and why. Sharing the decision's basis, it lapses with any trust change. `CONTRADICTED` cannot be overridden; that is a change of contract or mode.
 
-**A decision is not final; a request is.** Under Language 1, an `UNDETERMINED` answer can become `SUPPORTED` when missing evidence arrives. A request names its cutoff and evidence (section 9), so a re-ask is a new request with its own decision, and a gate reads the latest request for a subject. `supersedes`, the entry digest of the request's last decision, marks that decision recorded in error, in place of a general withdrawal; the superseded decision's override lapses, and none can follow. No core kind withdraws any other entry (open question 6).
+**A decision is not final; a request is.** Under Language 1, an `UNDETERMINED` answer can become `SUPPORTED` when missing evidence arrives. Each request is unique by its nonce (section 9), so a re-ask is a new request with its own decision. `supersedes`, the entry digest of the request's last decision, marks that decision recorded in error, in place of a general withdrawal; the superseded decision's override lapses, and none can follow. No core kind withdraws any other entry (open question 6).
 
 ### 5. Extension kinds
 
@@ -94,7 +94,7 @@ Another specification may define kinds named `<identifier>/<name>`. The identifi
 
 A verifier runs every step on an extension entry except the kind's own rules, and lists it `UNINTERPRETED`, which is not a refusal. The defining specification reports its own result beside the ledger's and never changes it. So one input has one `ledger-1` result, whatever extensions a verifier knows. A gate must not act on an entry that is `UNINTERPRETED`: only its signers and shape were checked.
 
-The ledger shows what was decided, not what a gate did. A gate-decision extension, RFC 0016, written next to this one, records whether a gate acted on a decision; only such a record shows that a `decision.override` let a request proceed.
+The ledger shows what was decided, not what a gate did. A gate-decision extension, [RFC 0018](https://github.com/dekrops/wvp/pull/60), written next to this one, records whether a gate acted on a decision; only such a record shows that a `decision.override` let a request proceed.
 
 ### 6. One writer
 
@@ -148,18 +148,18 @@ An **export** is one ledger's signed entries from 0 to _n_, with checkpoints, co
 
 External objects are named by **references**, in the shape of [work relation v1](../protocols/work-relation/v1/SPEC.md), section 2: `{ kind, digest }`, with an optional `id` that finds the object and never names it.
 
-| Kind           | Object                                                               | Digest                        |
-| -------------- | -------------------------------------------------------------------- | ----------------------------- |
-| `contract`     | A Work Contract Language contract                                    | As the language defines it    |
-| `package`      | A WVP package                                                        | Its package commitment        |
-| `record`       | An evidence statement                                                | Its statement digest          |
-| `request`      | What a decision answers (below)                                      | SHA-256 of its canonical form |
-| `system-model` | A system model, in RFC 0015's `system-model-1` format. `id` required | Its model digest              |
-| `document`     | Anything else                                                        | SHA-256 of its octets         |
+| Kind           | Object                                                               | Digest                     |
+| -------------- | -------------------------------------------------------------------- | -------------------------- |
+| `contract`     | A Work Contract Language contract                                    | As the language defines it |
+| `package`      | A WVP package                                                        | Its package commitment     |
+| `record`       | An evidence statement                                                | Its statement digest       |
+| `request`      | What a decision answers (below)                                      | As RFC 0016 defines it     |
+| `system-model` | A system model, in RFC 0015's `system-model-1` format. `id` required | Its model digest           |
+| `document`     | Anything else                                                        | SHA-256 of its octets      |
 
 Other specifications add kinds as they add entry kinds.
 
-**The request** is an object with exactly `subject`, what is decided as the system of record names it (a repository and a pull request, say), at most 256 octets; `cutoff`, the instant evidence was gathered up to; `evidence`, SHA-256 of the canonical array of the statement digests asked about, ascending; and `nonce`, the base64 of 16 random octets, as RFC 0015 gives parts. Its digest is SHA-256 of its canonical text, so "one decision per request" holds across producers. It is kept with the package, never in the ledger, and its nonce keeps its digest from confirming a guess.
+**The request** has the form [RFC 0016](https://github.com/dekrops/wvp/pull/59) defines, `request-1`. `ledger-1` reads none of it: a decision names it by digest, and there is one decision per request, unless it supersedes the request's last (section 4). The request is kept with the package; only its digest enters the ledger. RFC 0016's nonce makes each request's digest unique and keeps it from confirming a guess.
 
 **Replay never opens a reference.** Append validity is a function of the entries alone: a ledger verifies with every package, record and model deleted, and nothing kept beside it makes it valid or invalid. `ledger-1` defines no kind or member of any system; the model format is `system-model-1`, and a model's content may be licensed separately.
 
@@ -265,7 +265,7 @@ This RFC touches signing inputs, digests, key validity, time and authority (RFC 
 
 **What a verifier needs from a referenced system model.** To check entries, nothing. To recompute a decision that uses a model's rules, exactly those parts, at exactly the referenced digest. `system-model-1` commits to each part, so those parts travel with the package and nobody is trusted for content (open question 1).
 
-**Privacy and tenancy.** A digest of a guessable value discloses it, so such a value is salted wherever it is digested, the ledger included: a request, a model part and the genesis carry a nonce, and a subject never enters the ledger. Names, reasons, keys and times are in clear to anyone given the export. Deleting material leaves the ledger valid and its decisions `NOT_RECOMPUTABLE`. A witness learns size, root and rate, and at a handover the trust chain. Tenants are separated by genesis.
+**Privacy and tenancy.** A digest of a guessable value discloses it, so such a value is salted wherever it is digested, the ledger included: a request (RFC 0016), a model part and the genesis carry a nonce, and only a request's digest enters the ledger. Names, reasons, keys and times are in clear to anyone given the export. Deleting material leaves the ledger valid and its decisions `NOT_RECOMPUTABLE`. A witness learns size, root and rate, and at a handover the trust chain. Tenants are separated by genesis.
 
 **Primitives.** Ed25519 (RFC 8032, under RFC 0002, rule 1); ECDSA P-256 (FIPS 186-5) and RSASSA-PKCS1-v1_5 (RFC 8017) within Web Authentication Level 2; SHA-256 (FIPS 180-4); RFC 9162's tree and proofs. None is new.
 
@@ -308,7 +308,7 @@ Nothing is proved with this RFC, and nothing rests on the reference's own model,
 8. **Limits.** Proposed: 16 KiB of canonical entry, 32 KiB signed, 32 signatures, 64 approvers of 8 keys, 16 identifiers and origins.
 9. **Claim registration v2** kept as a `ledger-1` ledger.
 10. **Extension kinds that need approvers.** An extension kind is authorized through a service key; one that needs a threshold of people needs a core rule.
-11. **The latest request.** A gate knows the order of its own requests. Whether a request names the one it follows, so that a relying party reads the latest from the ledger.
+11. **The latest request.** A gate knows the order of its own requests. Whether RFC 0016's request names the one it follows, so that a relying party reads the latest from the ledger.
 
 ## Decision
 
