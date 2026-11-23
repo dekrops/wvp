@@ -9,5 +9,6 @@
 | [Publication](publication.md)                          | How this repository is written and published, and the path to the specifications being written here                             |
 | [Assurance map](assurance-map.md)                      | For each thing a relying party may conclude, whether it is proved, tested, assumed or outside the protocol                      |
 | [Open questions](open-questions.md)                    | The unresolved design questions, in priority order, and the RFCs they need                                                      |
+| [Ledger extensions](ledger-extensions.md)              | The identifiers `ledger-1` extension kinds are named under, and how one is assigned                                             |
 
 These documents are informative. Only RFC 0001 binds, and only the specifications and vectors define the protocol.
