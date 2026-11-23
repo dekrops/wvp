@@ -6,5 +6,6 @@ The identifiers under which other specifications name `ledger-1` extension kinds
 
 Nothing is assigned while RFC 0014 is a draft.
 
-| Identifier | Specification | Assigned by | Date |
-| ---------- | ------------- | ----------- | ---- |
+| Identifier | Specification                                                   | Assigned by             | Date    |
+| ---------- | --------------------------------------------------------------- | ----------------------- | ------- |
+| `gate`     | `gate-1`, proposed by [RFC 0018](../rfcs/0018-gate-decision.md) | RFC 0018, on acceptance | Pending |
