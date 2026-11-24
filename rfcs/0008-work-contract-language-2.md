@@ -3,7 +3,7 @@
 |            |                                                                                             |
 | ---------- | ------------------------------------------------------------------------------------------- |
 | RFC        | 0008                                                                                        |
-| Status     | Review, from 2026-11-10 (the review period runs at least until 2026-11-24)                  |
+| Status     | Accepted, on 2026-11-24                                                                     |
 | Author     | Zin Nam                                                                                     |
 | Created    | 2026-10-29                                                                                  |
 | Affects    | New: `work-contract-2`. `work-contract-1` is unchanged. A WVP package version to carry it.  |
@@ -157,7 +157,30 @@ Still open:
 
 ## Decision
 
-Not yet decided. There is one maintainer ([`governance/MAINTAINERS.md`](../governance/MAINTAINERS.md)), so the decision will rest on the review period alone and say so ([RFC 0001](0001-standards-process.md), section 12.3), and it will say whether there was review from outside the steward (section 7, rule 4).
+**Accepted**, on 2026-11-24, on the text of `b80a2ee`.
+
+**The review period.** The RFC entered Review on 2026-11-10 (`6070f55`). Two changes of substance followed the same day, from the review, and the period restarted with each ([RFC 0001](0001-standards-process.md), section 5, rule 2): `1cfbe0b` (where the range is checked, what is evaluated, the numeric types) and `547c708` (terms on the records step 5 keeps only, each node with a value checked, `scale`'s factor in range). The period therefore ran 14 days, from 2026-11-10 to 2026-11-24, in this RFC's pull request (wvp#47). The one later change, `b80a2ee` (2026-11-20), added a security consideration that follows from Language 1's step 5, twelve vectors that test the semantics as written (282–293), an extension of open question 1 and a line of motivation. No rule of the language and no expectation changed, so it is not a change of substance, as the maintainer stated in the pull request and the reviewer agreed.
+
+**The review.** Srishti (GitHub `SrishtiCode`) reviewed the RFC, its security considerations included, from 2026-10-29 to 2026-11-20, as the reviewer other than the author that section 9.1 requires, and approved it at `b80a2ee` on 2026-11-23. At that commit she checked that no published vector changed, that `generate.py --check` reproduces all 155 vector files, that `check.sh` audits 649 theorems, and that the vectors kill all 16 binding mutants that shadowplay's S023 found. She works on the steward's projects, so the RFC had no review from outside the steward (section 7, rule 4).
+
+**Reasons.**
+
+1. **It states the controls Language 1 cannot.** Arithmetic and aggregation are the first gaps Language 1 lists (its section 12). With them, a tolerance, an overpayment and four eyes are computed by the contract from accepted values, not taken from a source's own computed field.
+2. **It changes no published outcome.** `work-contract-2` is a new identifier, with its own vectors; Language 1 and its vectors are unchanged (invariants 1 to 3). The model proves that a Language 1 contract decides as it did (`same_decision_as_language_1`).
+3. **Missing evidence still never becomes a pass.** An aggregate has a value only over a closed kind, with its body settled for every record (`aggregate_open_kind_is_unknown`), and a supported or contradicted decision stays so as evidence is added (`definite_decision_is_stable`). Stability rests on one record per key, which Language 1's step 5 gives; it is proved, not assumed.
+4. **Implementations decide and refuse alike.** Arithmetic is exact, with no division and no rounding. The range is checked on every node and on each aggregate's value, and only on the finished total inside a `sum`. Every term is evaluated, on the records step 5 keeps. So the order of evaluation changes no outcome, and 128 bits suffice.
+5. **It is checked beyond its text.** The model proves the expected result of all 617 cases that have one, by `decide`, and `check.sh` audits 649 theorems. All five checks of the pull request pass at `b80a2ee`. The refusals are outside the model; an implementation written from this text (verified-cli#61, at `be064f0`) reproduces 697 of the 698 cases of `547c708`. The one it does not, `72-scale-not-whole`, is a fractional number that `verified-json-v1` cannot represent, as in Language 1.
+
+**Objections not adopted, and the answer to each.** Every other point raised in review was adopted; "Decided in review", under Open questions, records each.
+
+- *Lower bounds over open kinds* (Srishti, 2026-10-29, 11-15 and 11-17; the F007 input of 11-16). `count ≥ n`, or a `sum` of non-negative values, is a lower bound over a kind nobody declared complete. Not in this RFC, so that an aggregate always means one thing; open question 1 states the conditions such a rule needs. [RFC 0009](https://github.com/dekrops/wvp/pull/52) (wvp#52) proposes it, as a separate RFC.
+- *Aggregates as terms.* F007's net paid (settlements minus settled reversals, at most the approved amount, input of 11-16) and Σ(net + tax) = gross need a sum inside arithmetic, or a sum compared with a sum. Here an aggregate is a predicate compared with a term, so neither can be written. [RFC 0011](https://github.com/dekrops/wvp/pull/54) (wvp#54) makes an aggregate a term, and proves that every contract of this RFC keeps its meaning (`extends_language_2`). It stays a separate RFC: folding it in would have been a change of substance.
+- *A key rule instead of `distinct`* (Srishti, 2026-10-29): a static rule that a counted kind's key covers what is counted. Not chosen, because `count` names no field to check a key against, and keying by the person turns a re-approval into a conflict (vector 246). `count` with `distinct` was adopted (vector 247).
+- *The mutants that still survive* (Srishti, 2026-11-20): 16 mutants of the new contracts, none of them binding, 10 of them told apart by one boundary case each. Not for this decision, since no rule changes; the boundary vectors are added when these vectors move to `test-vectors/work-contract/v2`.
+
+**One maintainer.** There is one maintainer ([`governance/MAINTAINERS.md`](../governance/MAINTAINERS.md)), who is also the author. Under RFC 0001, section 12.3, this decision therefore stands on the review period alone. Srishti's review is the review section 9.1 requires, not a second maintainer's approval.
+
+**What follows.** Nothing normative has changed yet. The specification text of `work-contract-2` and the vectors, as `test-vectors/work-contract/v2`, follow in a pull request that names this RFC (section 11). The RFC becomes Implemented when section 8.1 holds, and the section below then names them.
 
 ## Implementation
 
